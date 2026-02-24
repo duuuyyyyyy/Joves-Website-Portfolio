@@ -80,36 +80,97 @@ body {
   line-height: 1.6;
 }
 
-/* ===== HEADER & NAVIGATION (Scalar-inspired) ===== */
+/* =========================
+   ULTRA-LIGHT PREMIUM GLASS
+   Smooth Extended Fade
+   ========================= */
+
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom: none;
-  transition: background-color 0.5s ease, box-shadow 0.5s ease, backdrop-filter 0.5s ease;
+
+  /* Very light glass tint */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.03)
+  );
+
+  /* Softer, more transparent blur */
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+
+  /* Extended ultra-smooth fade (no harsh cutoff) */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 70%,
+    rgba(0, 0, 0, 0.85) 80%,
+    rgba(0, 0, 0, 0.55) 90%,
+    rgba(0, 0, 0, 0.25) 96%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 70%,
+    rgba(0, 0, 0, 0.85) 80%,
+    rgba(0, 0, 0, 0.55) 90%,
+    rgba(0, 0, 0, 0.25) 96%,
+    transparent 100%
+  );
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+  transition: background 0.4s ease,
+              backdrop-filter 0.4s ease,
+              box-shadow 0.4s ease;
 }
 
+/* Slightly stronger when scrolled */
 .header.scrolled {
-  background-color: rgba(13, 21, 32, 0.6);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 32px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
 }
 
+/* Light mode */
 html:not(.dark) .header {
-  background-color: transparent;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.10),
+    rgba(255, 255, 255, 0.03)
+  );
 }
 
 html:not(.dark) .header.scrolled {
-  background-color: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  box-shadow: 0 1px 0 rgba(20, 32, 46, 0.06), 0 4px 32px rgba(20, 32, 46, 0.08);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.45),
+    rgba(255, 255, 255, 0.20)
+  );
+  box-shadow: 0 4px 20px rgba(20, 32, 46, 0.05);
+}
+
+/* Dark mode */
+html.dark .header {
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 21, 32, 0.45),
+    rgba(13, 21, 32, 0.18)
+  );
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+html.dark .header.scrolled {
+  background: linear-gradient(
+    to bottom,
+    rgba(13, 21, 32, 0.65),
+    rgba(13, 21, 32, 0.35)
+  );
 }
 
 .navbar {
@@ -173,7 +234,7 @@ html:not(.dark) .nav-links {
 /* Sliding highlight element */
 .nav-highlight-slider {
   position: absolute;
-  top: 2.3px;
+  top: 2.38px;
   left: 6px;
   height: 32px;
   background: var(--accent);
@@ -442,7 +503,10 @@ html.dark .toggle-icon {
   text-align: center;
   overflow: hidden;
   background: #0d1520;
-  padding: 6rem var(--spacing-lg) 8rem;
+  padding: 4rem var(--spacing-lg) 8rem;
+  margin-top: -70px;
+  padding-top: calc(70px + 6rem);
+  z-index: 1;
 }
 
 html:not(.dark) .hero-scalar {
