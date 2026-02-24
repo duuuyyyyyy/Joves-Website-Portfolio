@@ -66,10 +66,11 @@ function Home() {
       if (orb2) orb2.style.transform = `translate(${xPercent * -15}px, ${yPercent * -10}px)`;
       if (orb3) orb3.style.transform = `translate(${xPercent * 10}px, ${yPercent * -20}px)`;
       
-      // Store mouse position for delayed cursor glow
+      // Store mouse position for delayed cursor glow — offset so glow appears below cursor
       const rect = hero.getBoundingClientRect();
-      currentX = clientX - rect.left - 175;
-      currentY = clientY - rect.top - 175;
+      const radius = 125; // Half of glow size (80px) for centering
+      currentX = clientX - rect.left - radius;   // horizontally centered on cursor
+      currentY = clientY - rect.top - radius;     // cursor sits near top of glow → glow extends below
     };
 
     // Animation loop for delayed cursor glow (1 second lag)
