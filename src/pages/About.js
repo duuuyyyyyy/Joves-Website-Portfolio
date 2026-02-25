@@ -1,36 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 function About() {
   const [activeFilter, setActiveFilter] = useState('technical');
-
-  useEffect(() => {
-    document.title = 'About | Portfolio';
-
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    const cards = document.querySelectorAll('.skill-card, .dynamic-grid-item, .service-card');
-    cards.forEach(card => {
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(20px)';
-      card.style.transition = 'all 0.6s ease';
-      observer.observe(card);
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const heroRef = useRef(null);
+  const certCarouselRef = useRef(null);
 
   // Technical Skills Data
   const technicalSkills = [
@@ -54,89 +28,138 @@ function About() {
     { name: 'Adaptability', icon: 'fas fa-sync-alt', category: 'soft' },
   ];
 
-  const getDisplayedSkills = () => {
-    if (activeFilter === 'technical') {
-      return technicalSkills;
-    } else {
-      return softSkills;
+  const displayedSkills = activeFilter === 'technical' ? technicalSkills : softSkills;
+
+  useEffect(() => {
+    document.title = 'About | Portfolio';
+
+    // Mouse follow logic for the glow circle
+    const handleMouseMove = (e) => {
+      const glow = document.querySelector('.hero-cursor-glow');
+      if (glow && heroRef.current) {
+        const rect = heroRef.current.getBoundingClientRect();
+        const radius = 125;
+        const x = e.clientX - rect.left - radius;
+        const y = e.clientY - rect.top - radius;
+        glow.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      }
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    // Certifications carousel auto-scroll
+    const carousel = certCarouselRef.current;
+    if (carousel) {
+      let scrollInterval = setInterval(() => {
+        carousel.scrollLeft += 320;
+        if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+          carousel.scrollLeft = 0;
+        }
+      }, 4000);
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        clearInterval(scrollInterval);
+      };
     }
-  };
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   return (
     <>
-      {/* Page Header */}
-      <section className="page-header">
-        <h1>About Me</h1>
-        <p>Passionate developer with a focus on creating elegant, user-centric digital solutions</p>
+      {/* CENTERED HERO WITH GRID, ROTATING CIRCLE, AND GLASS TEXT CONTAINERS */}
+      <section className="about-hero-center-wrapper" ref={heroRef}>
+        {/* Floating Background Orbs */}
+        <div className="about-orb about-orb-1"></div>
+        <div className="about-orb about-orb-2"></div>
+        <div className="about-orb about-orb-3"></div>
+        <div className="about-orb about-orb-4"></div>
+        
+        <div className="hero-cursor-glow"></div>
+        
+        <div className="visual-stack">
+          {/* Rotating Broken Lines Circle */}
+          <div className="broken-circle-border"></div>
+          
+          {/* Glow Underlay */}
+          <div className="image-glow-underlay"></div>
+          
+          {/* Circular Main Image */}
+          <div className="about-main-image-circular">
+            <img src={process.env.PUBLIC_URL + '/about-me-image.png'} alt="Carla Joves" style={{ height: '100%', objectFit: 'cover' }} />
+          </div>
+          
+          {/* Glass Text Container Left: Who I Am - Large */}
+          <div className="glass-text-container large reveal-on-scroll">
+            <h3>Who I Am</h3>
+            <p>
+              I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems. With expertise in full-stack development, I turn ideas into impactful solutions.
+            </p>
+          </div>
+          
+          {/* Glass Text Container Right: Location - Small */}
+          <div className="glass-text-container small reveal-on-scroll">
+            <h3>Based In</h3>
+            <p>
+              Philippines, available for worldwide collaboration and remote partnerships.
+            </p>
+          </div>
+        </div>
       </section>
 
-      {/* Main Content */}
-      <main className="about-container">
-        
-        {/* Bio Section */}
-        <section className="about-bio-section">
-          <div className="about-bio-grid">
-            <div className="about-bio-image-container">
-              <img src={process.env.PUBLIC_URL + '/about-me-image.png'} alt="Carla Dulay Joves" className="about-profile-pic" />
-            </div>
-            <div className="about-bio-content">
-              <h2 className="about-title">Who I Am</h2>
-              <p className="about-text">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-              </p>
-              <p className="about-text">
-                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Technical & Soft Skills - Scalar Style */}
-        <div className="section-divider">
-          <span className="section-divider-label">Skills & Expertise</span>
-        </div>
-
-        <section className="skills-showcase-section">
-          <div className="skills-showcase-header">
-            <span className="skills-showcase-label">What I can offer</span>
-            <h2 className="skills-showcase-title">Skills</h2>
-          </div>
-
-          {/* Toggle Switch */}
-          <div className="skills-toggle-wrapper">
-            <div className="skills-toggle">
+      <main className="container">
+        <div className="glass-container about-skills-glass">
+          {/* Skills Navigation with Gliding Animation */}
+          <div className="skills-nav-wrapper">
+            <div className="skills-nav">
               <button 
-                className={`toggle-option ${activeFilter === 'technical' ? 'active' : ''}`}
+                className={`nav-btn ${activeFilter === 'technical' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('technical')}
               >
-                Technical
+                Technical Skills
               </button>
               <button 
-                className={`toggle-option ${activeFilter === 'soft' ? 'active' : ''}`}
+                className={`nav-btn ${activeFilter === 'soft' ? 'active' : ''}`}
                 onClick={() => setActiveFilter('soft')}
               >
-                Soft
+                Soft Skills
               </button>
+              {/* Gliding Underline */}
+              <div 
+                className="nav-glider"
+                style={{
+                  transform: `translateX(${activeFilter === 'technical' ? '0%' : '100%'})`
+                }}
+              ></div>
             </div>
           </div>
-
-          {/* Skills Grid */}
-          <div className="skills-grid-container">
-            {getDisplayedSkills().map((skill, index) => (
-              <div key={index} className="skill-card">
-                <div className="skill-icon-wrapper">
-                  <div className="icon-glow-bg"></div>
-                  <i className={`${skill.icon} skill-icon`}></i>
-                </div>
-                <h3 className="skill-name">{skill.name}</h3>
+          
+          {/* Skills List - Simple Rows that Slide Up */}
+          <div className="skills-list-container">
+            {displayedSkills.map((skill, index) => (
+              <div 
+                key={`${activeFilter}-${index}`}
+                className="skill-item-row"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <i className={`${skill.icon}`}></i>
+                <span>{skill.name}</span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section className="certifications-section">
+        <section className="certifications-section" style={{ marginTop: '3rem' }}>
           <h2>Certifications &amp; Credentials</h2>
-          <div className="cert-list">
+          <div className="cert-carousel-wrapper" ref={certCarouselRef}>
+            <div className="cert-item">
+              <h3>Web Development Certificate</h3>
+              <p>Completed comprehensive web development training covering HTML, CSS, JavaScript, and modern frameworks.</p>
+              <a href="cert1.pdf" target="_blank" rel="noopener noreferrer" className="cert-link">View Certificate</a>
+            </div>
+            <div className="cert-item">
+              <h3>React Specialist Certification</h3>
+              <p>Advanced certification in React development, including state management, hooks, and best practices.</p>
+              <a href="cert2.pdf" target="_blank" rel="noopener noreferrer" className="cert-link">View Certificate</a>
+            </div>
             <div className="cert-item">
               <h3>Web Development Certificate</h3>
               <p>Completed comprehensive web development training covering HTML, CSS, JavaScript, and modern frameworks.</p>

@@ -34,16 +34,19 @@ function Blog() {
   return (
     <>
       {/* Page Header */}
-      <section className="page-header">
-        <h1>Blog</h1>
-        <p>Thoughts, insights, and stories about web development, design, and technology</p>
+      <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
+        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+        <div className="hero-scalar-content">
+          <span className="hero-label">RESOURCES & INSIGHTS</span>
+          <h1 className="hero-scalar-title">Blog & Articles</h1>
+        </div>
       </section>
 
       {/* Main Content */}
       <main>
         
         {/* Blog Grid */}
-        <section className="blog-grid">
+        <section className={`blog-grid ${showAll ? 'blog-grid-bento' : ''}`}>
           
           <article className="blog-card">
             <p className="blog-meta">February 20, 2026</p>

@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ProjectModal, useProjectModal } from '../components/ProjectModal';
 
 function Projects() {
   const [showAll, setShowAll] = useState(false);
   const { activeProject, openModal, closeModal } = useProjectModal();
+  const carouselRef = useRef(null);
+  const [isDown, setIsDown] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   useEffect(() => {
     document.title = 'Projects | Portfolio';
@@ -17,6 +21,29 @@ function Projects() {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [activeProject, closeModal]);
+
+  // Carousel drag handlers
+  const handleMouseDown = (e) => {
+    setIsDown(true);
+    setStartX(e.pageX - carouselRef.current.offsetLeft);
+    setScrollLeft(carouselRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDown(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carouselRef.current.offsetLeft;
+    const walk = (x - startX) * -1;
+    carouselRef.current.scrollLeft = scrollLeft + walk;
+  };
 
   useEffect(() => {
     const observerOptions = {
@@ -54,122 +81,111 @@ function Projects() {
   return (
     <>
       {/* Page Header */}
-      <section className="page-header">
-        <h1>My Projects</h1>
-        <p>A selection of recent work showcasing my skills and creativity</p>
+      <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
+        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+        <div className="hero-scalar-content">
+          <span className="hero-label">EXPLORE</span>
+          <h1 className="hero-scalar-title">Projects & <em>Creations</em></h1>
+        </div>
       </section>
 
       {/* Main Content */}
       <main className="projects-main">
         
-        {/* Projects Grid */}
-        <section>
-          <div className="projects-grid">
-            <div className="project-card" data-project="1" onClick={(e) => handleCardClick(e, '1')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-1-wander.png)` }}>
-                <span className="project-placeholder">Project 1</span>
-              </div>
-              <div className="project-info">
-                <h3>E-Commerce Platform</h3>
-                <p>A full-featured e-commerce solution with product catalog, shopping cart, and secure payment integration. Built with React and Node.js.</p>
-                <div className="project-tags">
-                  <span className="tag">React</span>
-                  <span className="tag">Node.js</span>
-                  <span className="tag">MongoDB</span>
-                  <span className="tag">Stripe</span>
-                </div>
+        {/* Header and Description */}
+        <section className="projects-intro">
+          <h2>Find your dream <em>project</em></h2>
+          <p>You should feel safe when working with me, and you shouldn't be able to recognise any sway, give or flex in my approach to delivering quality solutions.</p>
+        </section>
+
+        {/* Projects Curved Carousel */}
+        <section className="projects-carousel-wrapper">
+          <div 
+            className="projects-carousel"
+            ref={carouselRef}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
+            {/* Project 1 */}
+            <div className="carousel-item" onClick={() => openModal('1')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-1-wander.png)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
 
-            <div className="project-card" data-project="2" onClick={(e) => handleCardClick(e, '2')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-2-jzone-motorcycle-red.png)` }}>
-                <span className="project-placeholder">Project 2</span>
-              </div>
-              <div className="project-info">
-                <h3>Task Management App</h3>
-                <p>A collaborative task management application with real-time updates, user authentication, and team features. Powered by Firebase.</p>
-                <div className="project-tags">
-                  <span className="tag">Vue.js</span>
-                  <span className="tag">Firebase</span>
-                  <span className="tag">Tailwind CSS</span>
-                </div>
+            {/* Project 2 */}
+            <div className="carousel-item" onClick={() => openModal('2')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-2-jzone-motorcycle-red.png)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
 
-            <div className={`project-card${showAll ? '' : ' project-hidden'}`} data-project="3" onClick={(e) => handleCardClick(e, '3')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-3.svg)` }}>
-                <span className="project-placeholder">Project 3</span>
-              </div>
-              <div className="project-info">
-                <h3>Weather Dashboard</h3>
-                <p>Real-time weather information dashboard with geolocation support, forecast data, and interactive maps. Clean, responsive design.</p>
-                <div className="project-tags">
-                  <span className="tag">React</span>
-                  <span className="tag">OpenWeather API</span>
-                  <span className="tag">Mapbox</span>
-                </div>
+            {/* Project 3 */}
+            <div className="carousel-item" onClick={() => openModal('3')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-3.svg)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
 
-            <div className={`project-card${showAll ? '' : ' project-hidden'}`} data-project="4" onClick={(e) => handleCardClick(e, '4')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-4.svg)` }}>
-                <span className="project-placeholder">Project 4</span>
-              </div>
-              <div className="project-info">
-                <h3>Social Media Analytics</h3>
-                <p>Advanced analytics platform for social media metrics with data visualization, trend analysis, and detailed reporting features.</p>
-                <div className="project-tags">
-                  <span className="tag">React</span>
-                  <span className="tag">D3.js</span>
-                  <span className="tag">Python</span>
-                  <span className="tag">PostgreSQL</span>
-                </div>
+            {/* Project 4 */}
+            <div className="carousel-item" onClick={() => openModal('4')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-4.svg)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
 
-            <div className={`project-card${showAll ? '' : ' project-hidden'}`} data-project="5" onClick={(e) => handleCardClick(e, '5')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-5.svg)` }}>
-                <span className="project-placeholder">Project 5</span>
-              </div>
-              <div className="project-info">
-                <h3>Personal Blog Platform</h3>
-                <p>A headless CMS blog platform with markdown support, SEO optimization, and static site generation for optimal performance.</p>
-                <div className="project-tags">
-                  <span className="tag">Next.js</span>
-                  <span className="tag">Markdown</span>
-                  <span className="tag">Contentful</span>
-                </div>
+            {/* Project 5 */}
+            <div className="carousel-item" onClick={() => openModal('5')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-5.svg)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
 
-            <div className={`project-card${showAll ? '' : ' project-hidden'}`} data-project="6" onClick={(e) => handleCardClick(e, '6')}>
-              <div className="project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-6.svg)` }}>
-                <span className="project-placeholder">Project 6</span>
-              </div>
-              <div className="project-info">
-                <h3>Fitness Tracking App</h3>
-                <p>Mobile-ready fitness tracking application with workout logging, progress tracking, and personalized recommendations.</p>
-                <div className="project-tags">
-                  <span className="tag">React Native</span>
-                  <span className="tag">Firebase</span>
-                  <span className="tag">Redux</span>
-                </div>
+            {/* Project 6 */}
+            <div className="carousel-item" onClick={() => openModal('6')}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-6.svg)` }}>
+                <div className="carousel-overlay"></div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Show All Projects Button */}
-        {!showAll && (
-          <div style={{ textAlign: 'center', padding: 'var(--spacing-3xl) 0' }}>
-            <button className="show-all-projects-btn" id="show-more-projects" onClick={() => setShowAll(true)}>Show All Projects</button>
+        {/* Stream Lines Section with Characteristics */}
+        <section className="projects-stream-section">
+          <svg className="stream-lines" viewBox="0 0 1000 300" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style={{ stopColor: 'var(--accent)', stopOpacity: 0.6 }} />
+                <stop offset="50%" style={{ stopColor: '#d946a6', stopOpacity: 0.4 }} />
+                <stop offset="100%" style={{ stopColor: 'var(--accent)', stopOpacity: 0.6 }} />
+              </linearGradient>
+            </defs>
+            <path d="M 0 80 Q 250 20, 500 80 T 1000 80" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.8" />
+            <path d="M 0 120 Q 250 60, 500 120 T 1000 120" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.6" />
+            <path d="M 0 160 Q 250 100, 500 160 T 1000 160" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.4" />
+          </svg>
+
+          {/* Characteristic Pills */}
+          <div className="characteristic-pill" style={{ animationDelay: '0s', left: '15%' }}>
+            <span>Mindful Design</span>
           </div>
-        )}
+          <div className="characteristic-pill" style={{ animationDelay: '1.5s', left: '35%', top: '40%' }}>
+            <span>Attention to Detail</span>
+          </div>
+          <div className="characteristic-pill" style={{ animationDelay: '3s', left: '65%', top: '45%' }}>
+            <span>User-Centered</span>
+          </div>
+          <div className="characteristic-pill" style={{ animationDelay: '4.5s', left: '85%', top: '20%' }}>
+            <span>Pixel Perfect</span>
+          </div>
+        </section>
 
         {/* CTA */}
         <section className="projects-cta">
-          <h2 className="projects-cta-title">Have a Project in Mind?</h2>
-          <p className="projects-cta-text">I'm always interested in new challenges and collaborations. Let's create something amazing together.</p>
+          <h2 className="projects-cta-title">Let's Create Something <em>Amazing</em></h2>
+          <p className="projects-cta-text">Ready to bring your vision to life? Let's collaborate and build something extraordinary.</p>
           <Link to="/contact" className="btn btn-primary">Start Your Project</Link>
         </section>
       </main>
