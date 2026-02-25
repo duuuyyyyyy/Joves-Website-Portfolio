@@ -136,19 +136,6 @@ function Projects() {
               </div>
             </div>
 
-            {/* Project 5 */}
-            <div className="carousel-item" onClick={() => openModal('5')}>
-              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-5.svg)` }}>
-                <div className="carousel-overlay"></div>
-              </div>
-            </div>
-
-            {/* Project 6 */}
-            <div className="carousel-item" onClick={() => openModal('6')}>
-              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-6.svg)` }}>
-                <div className="carousel-overlay"></div>
-              </div>
-            </div>
           </div>
         </section>
 

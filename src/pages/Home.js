@@ -155,15 +155,15 @@ function Home() {
         <div className="hero-glow"></div>
 
         <div className="hero-scalar-content">
-          <span className="hero-label reveal-on-scroll">UI/UX DEVELOPER & CREATIVE TECHNOLOGIST</span>
+          <span className="hero-label reveal-on-scroll">UI/UX DESIGNER</span>
           <h1 className="hero-scalar-title reveal-on-scroll">
             <span className="hero-line-1">Carla Dulay Joves.</span>
             <span className="hero-line-2">Building the Web</span>
             <span className="hero-line-3">with Human <em>Touch.</em></span>
           </h1>
           <p className="hero-scalar-subtitle reveal-on-scroll">
-            A product-minded developer who crafts meaningful digital
-            experiences — bridging design thinking with clean, scalable code.
+            An output focused developer who crafts meaningful user
+            experiences — bridging design thinking with what user needs.
           </p>
           <div className="hero-scalar-actions reveal-on-scroll">
             <Link to="/projects" className="btn-scalar-primary">
@@ -184,7 +184,7 @@ function Home() {
           <div className="home-projects-header reveal-on-scroll">
           <span className="section-label">SELECTED WORK</span>
           <h2 className="home-projects-title">Featured Projects</h2>
-          <p className="home-projects-subtitle">Showcasing my individual work</p>
+          <p className="home-projects-subtitle">Showcasing my individual works</p>
         </div>
 
         <div className="home-projects-track" ref={trackRef}>
@@ -193,11 +193,9 @@ function Home() {
             </div>
             <div className="home-project-info">
               <div className="home-project-meta">
-                <span className="home-project-number">01</span>
-                <span className="tag">Figma</span>
               </div>
               <h3>Wander Blog Mockup</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <p>Wander Luzon is an interactive travel hub that pairs curated Top 10 destination snippets with integrated mapping prototypes for seamless navigation. Its dedicated community forum anchors user discussions directly to blog content, creating a functional ecosystem for exploring Luzon’s premier landmarks.</p>
             </div>
           </article>
 
@@ -206,11 +204,9 @@ function Home() {
             </div>
             <div className="home-project-info">
               <div className="home-project-meta">
-                <span className="home-project-number">02</span>
-                <span className="tag">Wordpress</span>
               </div>
-              <h3>J-Zone Motorcycle Parts E-Commerce CMS Website</h3>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              <h3>J-Zone E-Commerce CMS Website</h3>
+              <p>J-Zone Motorcycle Parts is a streamlined e-commerce CMS platform designed for the efficient distribution of high-quality motorcycle components and accessories. The site leverages robust content management tools to provide riders with real-time inventory updates and a user-friendly shopping experience tailored to specific bike models.</p>
             </div>
           </article>
         </div>

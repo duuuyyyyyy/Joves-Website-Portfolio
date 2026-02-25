@@ -4,13 +4,6 @@ import { Link } from 'react-router-dom';
 const blogArticles = [
   { slug: 'my-journey-as-a-web-developer', title: 'My Journey as a Web Developer', date: 'February 20, 2026', excerpt: 'How I started learning web development, the challenges I faced, and key lessons I learned along the way.' },
   { slug: 'tips-for-building-responsive-websites', title: 'Tips for Building Responsive Websites', date: 'February 18, 2026', excerpt: 'A comprehensive guide to responsive web design and best practices for all device sizes.' },
-  { slug: 'understanding-react-hooks', title: 'Understanding React Hooks', date: 'February 15, 2026', excerpt: 'Deep dive into React Hooks, including useState, useEffect, and custom hooks.' },
-  { slug: 'css-grid-vs-flexbox', title: 'CSS Grid vs Flexbox: When to Use Each', date: 'February 12, 2026', excerpt: 'Understanding the differences between CSS Grid and Flexbox for optimal layouts.' },
-  { slug: 'web-performance-optimization', title: 'Web Performance Optimization Techniques', date: 'February 10, 2026', excerpt: 'Practical strategies for improving website performance and user experience.' },
-  { slug: 'building-accessible-web-applications', title: 'Building Accessible Web Applications', date: 'February 8, 2026', excerpt: 'A guide to creating inclusive web experiences with ARIA and semantic HTML.' },
-  { slug: 'nodejs-best-practices', title: 'Node.js Best Practices for APIs', date: 'February 5, 2026', excerpt: 'Building robust and scalable REST APIs with Node.js best practices.' },
-  { slug: 'getting-started-with-docker', title: 'Getting Started with Docker', date: 'February 2, 2026', excerpt: 'An introduction to containerization with Docker for consistent environments.' },
-  { slug: 'version-control-with-git', title: 'Version Control with Git: Advanced Techniques', date: 'January 30, 2026', excerpt: 'Master branching strategies, rebasing, cherry-picking, and merge conflicts.' },
 ];
 
 function Blog() {
@@ -55,8 +48,12 @@ function Blog() {
 
         </section>
 
-        {!showAll && (
-          <button className="show-more-btn" onClick={() => setShowAll(true)}>Show All Articles</button>
+        {!showAll && blogArticles.length > 3 && (
+          <div className="button-container">
+             <button className="show-more-btn" onClick={() => setShowAll(true)}>
+               Show All Articles
+             </button>
+          </div>
         )}
 
       </main>

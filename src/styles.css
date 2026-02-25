@@ -3042,10 +3042,13 @@ html:not(.dark) .contact-icon {
   font-weight: 700;
 }
 
+/* Update this block around line 3045 */
 .contact-info-content p {
   color: var(--text-secondary);
   margin: 0 0 var(--spacing-xs) 0;
   font-size: 1rem;
+  overflow-wrap: anywhere; /* Allows the email to break and wrap */
+  word-break: break-word;   /* Fallback for older browsers */
 }
 
 .contact-info-content p.small {
@@ -5569,7 +5572,7 @@ html:not(.dark) .form-input-icon select:focus {
 /* Select dropdown arrow */
 .form-input-icon select {
   cursor: pointer;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a9390' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: ("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a9390' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1rem;
@@ -5577,7 +5580,7 @@ html:not(.dark) .form-input-icon select:focus {
 }
 
 html.dark .form-input-icon select {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7a8e' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: ("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7a8e' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
 
 /* Textarea icon positioning */

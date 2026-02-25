@@ -2,58 +2,40 @@ import React, { useState } from 'react';
 
 const projectsData = {
   '1': {
-    name: 'E-Commerce Platform',
-    purpose: 'A full-featured e-commerce solution with product catalog, shopping cart, and secure payment integration.',
-    features: ['Product management', 'Shopping cart', 'Payment processing with Stripe', 'User authentication', 'Order management'],
-    technologies: ['React', 'Node.js', 'MongoDB', 'Stripe API'],
+    name: 'Wander',
+    purpose: 'The purpose of Wander Luzon is to provide an all-in-one digital toolkit that seamlessly bridges the gap between travel inspiration, navigation, and community-based advice for Luzons top destinations.',
+    features: ['Curated "Top 10" Showcase', 'Interactive Info Snippets', 'Map Integration Prototype', 'Linked Community Forum', 'Responsive Navigation'],
+    technologies: ['Figma', 'External Integration (Mocked)'],
     images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-ecommerce.com',
-    githubLink: 'https://github.com/yourname/ecommerce-platform'
+    liveLink: 'https://www.figma.com/proto/gkKdqo5oP8w45e1gkrJBC8/Wander?node-id=1-2&t=0F7N4gmyIADJGLwN-1',
+    githubLink: 'https://github.com/duuuyyyyyy/Wander.git'
   },
   '2': {
-    name: 'Task Management App',
-    purpose: 'A collaborative task management application with real-time updates and team features.',
-    features: ['Real-time task updates', 'User authentication', 'Team collaboration', 'Task assignments', 'Progress tracking'],
-    technologies: ['Vue.js', 'Firebase', 'Tailwind CSS'],
+    name: 'J-Zone Motorcycle Parts',
+    purpose: 'Provide a professional, easy-to-manage digital storefront that centralizes product information and connects the motorcycling community to high-quality components across multiple online marketplaces.',
+    features: ['Dynamic Product Catalog', 'Administrative Dashboard', 'Social Commerce Integration', 'Built-in Engagement Tools', 'Search Engine Optimization (SEO)'],
+    technologies: ['WordPress CMS', 'PHP & MySQL', 'Gutenberg / Block Editor', 'Jetpack', 'HTML5/CSS3'],
     images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-taskapp.com',
-    githubLink: 'https://github.com/yourname/task-management'
+    liveLink: 'https://jzonemotorparts.wordpress.com/',
+    githubLink: 'https://github.com/yourname/task-management'/* N/A */
   },
   '3': {
-    name: 'Weather Dashboard',
-    purpose: 'Real-time weather information dashboard with geolocation support and interactive maps.',
-    features: ['Real-time weather data', 'Geolocation support', 'Forecast visualization', 'Interactive maps', 'Location search'],
-    technologies: ['React', 'OpenWeather API', 'Mapbox'],
+    name: 'Endless Charms',
+    purpose: 'A sleek and user-centric e-commerce platform that simplifies the discovery and purchase of unique accessories while offering a seamless administrative workflow for inventory management.',
+    features: ['Dynamic Product Catalog', 'Interactive Shopping Cart', 'Customer Account Management', 'Responsive UI/UX', 'Search and Discovery'],
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Figma', 'Frameworks/Libraries', 'MongoDB', 'GitHub'],
     images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-weather.com',
-    githubLink: 'https://github.com/yourname/weather-dashboard'
+    liveLink: 'https://www.endlesscharms.store',
+    githubLink: 'https://github.com/duuuyyyyyy/Endless-Charms.git'
   },
   '4': {
-    name: 'Social Media Analytics',
-    purpose: 'Advanced analytics platform for social media metrics with data visualization and trend analysis.',
-    features: ['Real-time analytics', 'Data visualization', 'Trend analysis', 'Custom reports', 'Multi-platform support'],
-    technologies: ['React', 'D3.js', 'Python', 'PostgreSQL'],
+    name: 'ShareSource',
+    purpose: 'A collaborative open-source platform that enables users to easily upload, categorize, and share valuable digital resources within a community.',
+    features: ['File Upload & Categorization', 'Collaborative Contribution', 'User Authentication', 'Search and Filter', 'Responsive Dashboard'],
+    technologies: ['HTML5', 'CSS3', 'JavaScript', 'MySQL', 'GitHub', 'Bootstrap', 'Node.js'],
     images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-analytics.com',
-    githubLink: 'https://github.com/yourname/social-analytics'
-  },
-  '5': {
-    name: 'Personal Blog Platform',
-    purpose: 'A headless CMS blog platform with markdown support, SEO optimization, and static site generation.',
-    features: ['Markdown support', 'SEO optimization', 'Static generation', 'Content management', 'Comment system'],
-    technologies: ['Next.js', 'Markdown', 'Contentful', 'Vercel'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-blog.com',
-    githubLink: 'https://github.com/yourname/blog-platform'
-  },
-  '6': {
-    name: 'Fitness Tracking App',
-    purpose: 'Mobile-ready fitness tracking application with workout logging and personalized recommendations.',
-    features: ['Workout logging', 'Progress tracking', 'Personalized plans', 'Social sharing', 'Leaderboards'],
-    technologies: ['React Native', 'Firebase', 'Redux', 'Node.js'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-fitness.com',
-    githubLink: 'https://github.com/yourname/fitness-app'
+    liveLink: 'https://example-analytics.com', /* N/A */
+    githubLink: 'https://github.com/GR4C3FR/Sharesource.git'
   }
 };
 

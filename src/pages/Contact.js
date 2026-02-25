@@ -107,7 +107,7 @@ function Contact() {
         <section className="contact-socials-section">
           <h2 className="socials-heading">Connect With Me</h2>
           <div className="contact-socials-grid">
-            <a href="https://www.linkedin.com/in/carla-joves-2b7a2b309/" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+            <a href="https://www.linkedin.com/in/carla-joves-832059351/" target="_blank" rel="noopener noreferrer" className="contact-social-item">
               <div className="social-icon">
                 <i className="fab fa-linkedin"></i>
               </div>
@@ -117,7 +117,7 @@ function Contact() {
               </div>
             </a>
 
-            <a href="https://github.com/CarlaJoves" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+            <a href="https://github.com/duuuyyyyyy" target="_blank" rel="noopener noreferrer" className="contact-social-item">
               <div className="social-icon">
                 <i className="fab fa-github"></i>
               </div>
@@ -127,7 +127,7 @@ function Contact() {
               </div>
             </a>
 
-            <a href="https://www.facebook.com/carla.joves" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+            <a href="https://www.facebook.com/carla.joves.71/" target="_blank" rel="noopener noreferrer" className="contact-social-item">
               <div className="social-icon">
                 <i className="fab fa-facebook"></i>
               </div>

@@ -49,7 +49,7 @@ function Footer() {
             <ul>
               <li><a href="https://www.linkedin.com/in/carla-joves-832059351/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
               <li><a href="https://github.com/duuuyyyyyy" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-              <li><a href="https://www.facebook.com/carla.joves" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+              <li><a href="https://www.facebook.com/carla.joves.71/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
             </ul>
           </div>
 
