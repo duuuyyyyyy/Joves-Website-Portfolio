@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
 import Blog from './pages/Blog';
+import BlogArticle from './pages/BlogArticle';
 import Contact from './pages/Contact';
 
 function ScrollToTop() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<BlogArticle />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/resume" element={<Navigate to="/contact" replace />} />
       </Routes>

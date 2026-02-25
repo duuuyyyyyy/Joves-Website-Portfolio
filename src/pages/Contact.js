@@ -5,6 +5,10 @@ function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    organization: '',
+    phone: '',
+    purpose: '',
+    description: '',
     message: ''
   });
   const [formStatus, setFormStatus] = useState('');
@@ -12,32 +16,7 @@ function Contact() {
 
   useEffect(() => {
     document.title = 'Contact | Portfolio';
-    
     emailjs.init('V4q5Zz_bGpZjiQJfu');
-
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -100px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.opacity = '1';
-          entry.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, observerOptions);
-
-    const animatedElements = document.querySelectorAll('.contact-info-wrapper, .contact-form-wrapper, .contact-socials-section, .resume-download');
-    animatedElements.forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(20px)';
-      el.style.transition = 'all 0.6s ease';
-      observer.observe(el);
-    });
-
-    return () => observer.disconnect();
   }, []);
 
   const handleChange = useCallback((e) => {
@@ -64,7 +43,7 @@ function Contact() {
     )
       .then(() => {
         setFormStatus('Message sent successfully! I\'ll get back to you soon.');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', organization: '', phone: '', purpose: '', description: '', message: '' });
         setTimeout(() => setFormStatus(''), 5000);
         setIsSubmitting(false);
       })
@@ -78,25 +57,23 @@ function Contact() {
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
-        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+      {/* Hero Section - extends under header */}
+      <section className="hero-scalar contact-hero" style={{ minHeight: '35vh', paddingBottom: '2rem' }}>
         <div className="hero-scalar-content">
-          <h1 className="hero-scalar-title">Let's <em>Get In Touch</em></h1>
+          <h1 className="hero-scalar-title contact-hero-title">Let's <em>Get In Touch</em></h1>
         </div>
       </section>
 
       {/* Main Content */}
       <main className="contact-main">
         
-        {/* Contact Info Grid - Top 3 Boxes */}
+        {/* Contact Info - 3 icons in a row */}
         <section className="contact-info-grid">
           <div className="contact-info-item">
             <div className="contact-icon">
               <i className="fas fa-phone"></i>
             </div>
             <div className="contact-info-content">
-              <h3>Phone</h3>
               <p>+63 998 446 8639</p>
               <p className="small">+63 (Alternative)</p>
             </div>
@@ -107,7 +84,6 @@ function Contact() {
               <i className="fas fa-envelope"></i>
             </div>
             <div className="contact-info-content">
-              <h3>Email</h3>
               <p>carlajoves23@gmail.com</p>
               <p className="small">hello@carlajoves.dev</p>
             </div>
@@ -118,95 +94,137 @@ function Contact() {
               <i className="fas fa-map-marker-alt"></i>
             </div>
             <div className="contact-info-content">
-              <h3>Location</h3>
               <p>Arayat, Pampanga</p>
               <p className="small">Philippines</p>
             </div>
           </div>
         </section>
 
-        {/* Socials Grid - Bottom 3 Boxes */}
-        <section className="contact-socials-grid">
+        {/* Divider */}
+        <div className="contact-divider"></div>
+
+        {/* Socials Grid - 3 boxes */}
+        <section className="contact-socials-section">
           <h2 className="socials-heading">Connect With Me</h2>
-          
-          <div className="contact-social-item">
-            <div className="social-icon">
-              <i className="fab fa-linkedin"></i>
-            </div>
-            <div className="social-info">
-              <h3>LinkedIn</h3>
-              <p>Professional network and updates</p>
-              <a href="https://www.linkedin.com/in/carla-joves-2b7a2b309/" target="_blank" rel="noopener noreferrer" className="social-link">Visit Profile →</a>
-            </div>
-          </div>
+          <div className="contact-socials-grid">
+            <a href="https://www.linkedin.com/in/carla-joves-2b7a2b309/" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+              <div className="social-icon">
+                <i className="fab fa-linkedin"></i>
+              </div>
+              <div className="social-info">
+                <h3>LinkedIn</h3>
+                <p>Professional network</p>
+              </div>
+            </a>
 
-          <div className="contact-social-item">
-            <div className="social-icon">
-              <i className="fab fa-github"></i>
-            </div>
-            <div className="social-info">
-              <h3>GitHub</h3>
-              <p>Code and project repositories</p>
-              <a href="https://github.com/CarlaJoves" target="_blank" rel="noopener noreferrer" className="social-link">View Profile →</a>
-            </div>
-          </div>
+            <a href="https://github.com/CarlaJoves" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+              <div className="social-icon">
+                <i className="fab fa-github"></i>
+              </div>
+              <div className="social-info">
+                <h3>GitHub</h3>
+                <p>Code repositories</p>
+              </div>
+            </a>
 
-          <div className="contact-social-item">
-            <div className="social-icon">
-              <i className="fab fa-facebook"></i>
-            </div>
-            <div className="social-info">
-              <h3>Facebook</h3>
-              <p>Follow for updates and insights</p>
-              <a href="https://www.facebook.com/carla.joves" target="_blank" rel="noopener noreferrer" className="social-link">Visit Page →</a>
-            </div>
+            <a href="https://www.facebook.com/carla.joves" target="_blank" rel="noopener noreferrer" className="contact-social-item">
+              <div className="social-icon">
+                <i className="fab fa-facebook"></i>
+              </div>
+              <div className="social-info">
+                <h3>Facebook</h3>
+                <p>Updates & insights</p>
+              </div>
+            </a>
           </div>
         </section>
 
-        {/* Contact Form */}
+        {/* Divider */}
+        <div className="contact-divider"></div>
+
+        {/* Contact Form - matches reference layout */}
         <section className="contact-form-section">
-          <h2 className="form-title">Send Me a Message</h2>
-          <form className="contact-form" id="contactForm" onSubmit={handleSubmit}>
+          <h2 className="form-title">Or fill out the form below</h2>
+          <form className="contact-form" onSubmit={handleSubmit}>
+            {/* Row 1: Two dropdowns */}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="purpose">Inquiry Purpose <span className="required">*</span></label>
+                <div className="form-input-icon">
+                  <i className="fas fa-question-circle"></i>
+                  <select id="purpose" name="purpose" value={formData.purpose} onChange={handleChange} required>
+                    <option value="">Choose one option...</option>
+                    <option value="project">New Project</option>
+                    <option value="collaboration">Collaboration</option>
+                    <option value="hiring">Hiring / Job Opportunity</option>
+                    <option value="consultation">Consultation</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="description">Description that fits you <span className="required">*</span></label>
+                <div className="form-input-icon">
+                  <i className="fas fa-user-tag"></i>
+                  <select id="description" name="description" value={formData.description} onChange={handleChange}>
+                    <option value="">Choose one option...</option>
+                    <option value="individual">Individual / Freelancer</option>
+                    <option value="startup">Startup</option>
+                    <option value="business">Business / Company</option>
+                    <option value="agency">Agency</option>
+                    <option value="student">Student</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2: Full Name + Email */}
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="name">Full Name <span className="required">*</span></label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="Enter your full name..."
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                />
+                <div className="form-input-icon">
+                  <i className="fas fa-user"></i>
+                  <input type="text" id="name" name="name" placeholder="Enter your full name..." required value={formData.name} onChange={handleChange} />
+                </div>
               </div>
               <div className="form-group">
                 <label htmlFor="email">Email Address <span className="required">*</span></label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email address..."
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                />
+                <div className="form-input-icon">
+                  <i className="fas fa-envelope"></i>
+                  <input type="email" id="email" name="email" placeholder="Enter your email address..." required value={formData.email} onChange={handleChange} />
+                </div>
               </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="message">Message <span className="required">*</span></label>
-              <textarea
-                id="message"
-                name="message"
-                rows="6"
-                placeholder="Your message here..."
-                required
-                value={formData.message}
-                onChange={handleChange}
-              ></textarea>
+
+            {/* Row 3: Organization + Phone */}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="organization">Organization</label>
+                <div className="form-input-icon">
+                  <i className="fas fa-building"></i>
+                  <input type="text" id="organization" name="organization" placeholder="Enter your organization..." value={formData.organization} onChange={handleChange} />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number</label>
+                <div className="form-input-icon">
+                  <i className="fas fa-phone"></i>
+                  <input type="tel" id="phone" name="phone" placeholder="Enter your phone number..." value={formData.phone} onChange={handleChange} />
+                </div>
+              </div>
             </div>
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending...' : 'Submit Form'} <i className="fas fa-arrow-right"></i>
+
+            {/* Row 4: Full-width Message */}
+            <div className="form-group">
+              <label htmlFor="message">Your Message <span className="required">*</span></label>
+              <div className="form-input-icon textarea-icon">
+                <i className="fas fa-comment-dots"></i>
+                <textarea id="message" name="message" rows="5" placeholder="Enter your message here..." required value={formData.message} onChange={handleChange}></textarea>
+              </div>
+            </div>
+
+            <button type="submit" className="btn btn-primary contact-submit-btn" disabled={isSubmitting}>
+              {isSubmitting ? 'Sending...' : 'Submit Form'} <i className="fas fa-paper-plane"></i>
             </button>
             {formStatus && <div className={`form-status ${formStatus.includes('success') ? 'success' : 'error'}`}>{formStatus}</div>}
           </form>
@@ -222,12 +240,6 @@ function Contact() {
         </section>
 
       </main>
-
-      {/* Optional CTA before footer */}
-      <section className="contact-cta" style={{ marginBottom: '4rem', marginTop: '3rem' }}>
-        <h2>Let's Create Something Amazing</h2>
-        <p>Whether you have a project in mind or just want to connect, I'd love to hear from you.</p>
-      </section>
     </>
   );
 }
