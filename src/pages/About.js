@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function About() {
+  const [activeFilter, setActiveFilter] = useState('technical');
+
   useEffect(() => {
     document.title = 'About | Portfolio';
 
@@ -19,7 +21,7 @@ function About() {
       });
     }, observerOptions);
 
-    const cards = document.querySelectorAll('.dynamic-grid-item, .service-card');
+    const cards = document.querySelectorAll('.skill-card, .dynamic-grid-item, .service-card');
     cards.forEach(card => {
       card.style.opacity = '0';
       card.style.transform = 'translateY(20px)';
@@ -29,6 +31,36 @@ function About() {
 
     return () => observer.disconnect();
   }, []);
+
+  // Technical Skills Data
+  const technicalSkills = [
+    { name: 'Idea validation', icon: 'fas fa-lightbulb', category: 'technical' },
+    { name: 'API integrations & external systems', icon: 'fas fa-project-diagram', category: 'technical' },
+    { name: 'Long-term support & tech strategy', icon: 'fas fa-chart-line', category: 'technical' },
+    { name: 'Cloud architecture & deployment', icon: 'fas fa-cloud', category: 'technical' },
+    { name: 'MVP development', icon: 'fas fa-rocket', category: 'technical' },
+    { name: 'UX/UI design with a conversion focus', icon: 'fas fa-paint-brush', category: 'technical' },
+    { name: 'Analytics & user tracking', icon: 'fas fa-chart-pie', category: 'technical' },
+    { name: 'Fullstack SaaS / Custom Software Development', icon: 'fas fa-code', category: 'technical' },
+    { name: 'Performance optimization', icon: 'fas fa-tachometer-alt', category: 'technical' },
+  ];
+
+  // Soft Skills Data
+  const softSkills = [
+    { name: 'Project Management', icon: 'fas fa-tasks', category: 'soft' },
+    { name: 'Communication', icon: 'fas fa-comments', category: 'soft' },
+    { name: 'Problem Solving', icon: 'fas fa-puzzle-piece', category: 'soft' },
+    { name: 'Leadership', icon: 'fas fa-users', category: 'soft' },
+    { name: 'Adaptability', icon: 'fas fa-sync-alt', category: 'soft' },
+  ];
+
+  const getDisplayedSkills = () => {
+    if (activeFilter === 'technical') {
+      return technicalSkills;
+    } else {
+      return softSkills;
+    }
+  };
 
   return (
     <>
@@ -59,111 +91,46 @@ function About() {
           </div>
         </section>
 
-        {/* Technical Skills */}
+        {/* Technical & Soft Skills - Scalar Style */}
         <div className="section-divider">
-          <span className="section-divider-label">Technical Skills</span>
+          <span className="section-divider-label">Skills & Expertise</span>
         </div>
 
-        <section className="skills-section">
-          <div className="skills-grid">
-            <div className="skill-group">
-              <h3>Frontend Development</h3>
-              <ul className="skill-list">
-                <li>HTML5 &amp; CSS3</li>
-                <li>JavaScript (ES6+)</li>
-                <li>React &amp; Vue.js</li>
-                <li>Responsive Design</li>
-                <li>UI/UX Implementation</li>
-              </ul>
-            </div>
+        <section className="skills-showcase-section">
+          <div className="skills-showcase-header">
+            <span className="skills-showcase-label">What I can offer</span>
+            <h2 className="skills-showcase-title">Skills</h2>
+          </div>
 
-            <div className="skill-group">
-              <h3>Backend Development</h3>
-              <ul className="skill-list">
-                <li>Node.js &amp; Express</li>
-                <li>Python &amp; Django</li>
-                <li>Database Design</li>
-                <li>REST APIs</li>
-                <li>Server Configuration</li>
-              </ul>
-            </div>
-
-            <div className="skill-group">
-              <h3>Tools &amp; Platforms</h3>
-              <ul className="skill-list">
-                <li>Git &amp; GitHub</li>
-                <li>Docker &amp; DevOps</li>
-                <li>AWS &amp; Cloud Services</li>
-                <li>Figma Design Tools</li>
-                <li>VS Code &amp; IDEs</li>
-              </ul>
-            </div>
-
-            <div className="skill-group">
-              <h3>Databases</h3>
-              <ul className="skill-list">
-                <li>MongoDB</li>
-                <li>PostgreSQL</li>
-                <li>MySQL</li>
-                <li>Firebase</li>
-                <li>Redis</li>
-              </ul>
-            </div>
-
-            <div className="skill-group">
-              <h3>Languages</h3>
-              <ul className="skill-list">
-                <li>JavaScript</li>
-                <li>Python</li>
-                <li>PHP</li>
-                <li>SQL</li>
-                <li>Java</li>
-              </ul>
-            </div>
-
-            <div className="skill-group">
-              <h3>Methodologies</h3>
-              <ul className="skill-list">
-                <li>Agile &amp; Scrum</li>
-                <li>Test-Driven Development</li>
-                <li>CI/CD Pipelines</li>
-                <li>Web Performance</li>
-                <li>Security Best Practices</li>
-              </ul>
+          {/* Toggle Switch */}
+          <div className="skills-toggle-wrapper">
+            <div className="skills-toggle">
+              <button 
+                className={`toggle-option ${activeFilter === 'technical' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('technical')}
+              >
+                Technical
+              </button>
+              <button 
+                className={`toggle-option ${activeFilter === 'soft' ? 'active' : ''}`}
+                onClick={() => setActiveFilter('soft')}
+              >
+                Soft
+              </button>
             </div>
           </div>
-        </section>
 
-        {/* Soft Skills */}
-        <div className="section-divider">
-          <span className="section-divider-label">Soft Skills</span>
-        </div>
-
-        <section className="soft-skills-section">
-          <div className="dynamic-grid">
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Problem Solving</h3>
-            </div>
-
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Communication</h3>
-            </div>
-
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Collaboration</h3>
-            </div>
-
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Adaptability</h3>
-            </div>
-
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Leadership</h3>
-            </div>
-
-            <div className="dynamic-grid-item">
-              <h3 className="skill-item-title">Time Management</h3>
-            </div>
+          {/* Skills Grid */}
+          <div className="skills-grid-container">
+            {getDisplayedSkills().map((skill, index) => (
+              <div key={index} className="skill-card">
+                <div className="skill-icon-wrapper">
+                  <div className="icon-glow-bg"></div>
+                  <i className={`${skill.icon} skill-icon`}></i>
+                </div>
+                <h3 className="skill-name">{skill.name}</h3>
+              </div>
+            ))}
           </div>
         </section>
 

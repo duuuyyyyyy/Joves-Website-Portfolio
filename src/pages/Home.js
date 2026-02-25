@@ -173,9 +173,15 @@ function Home() {
         </div>
       </section>
 
-      {/* Featured Projects - Horizontal sliding cards */}
+      {/* THE GRADIENT BRIDGE */}
+      <div className="section-bridge">
+        <div className="bridge-glow-orb"></div>
+      </div>
+
+      {/* Featured Projects - with Glass Container */}
       <section className="home-projects-section" id="projects" ref={projectsRef}>
-        <div className="home-projects-header reveal-on-scroll">
+        <div className="glass-container">
+          <div className="home-projects-header reveal-on-scroll">
           <span className="section-label">SELECTED WORK</span>
           <h2 className="home-projects-title">Featured Projects</h2>
           <p className="home-projects-subtitle">Showcasing my individual work</p>
@@ -207,6 +213,7 @@ function Home() {
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
             </div>
           </article>
+        </div>
         </div>
       </section>
 
