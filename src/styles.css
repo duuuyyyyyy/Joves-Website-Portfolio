@@ -736,7 +736,7 @@ html:not(.dark) .hero-label {
   font-size: clamp(2rem, 4.5vw, 3.5rem);
   font-weight: 700;
   line-height: 1.2;
-  margin-bottom: var(--spacing-xl);
+  margin-top: var(--spacing-3xl);
   color: #f0f0f5;
   letter-spacing: -0.5px;
 }
@@ -2993,40 +2993,21 @@ html.dark .form-textarea:focus {
 .contact-info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-2xl);
-  margin: var(--spacing-3xl) 0;
   padding: var(--spacing-3xl) 0;
-}
-
-.contact-info-item {
-  display: flex;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-xl);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-card);
-  background: rgba(255, 255, 255, 0.02);
-  transition: all var(--transition-smooth);
 }
 
 .contact-info-item:hover {
   transform: translateY(-4px);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-md);
-}
-
-html:not(.dark) .contact-info-item {
-  background: rgba(212, 165, 116, 0.08);
-  border-color: rgba(212, 165, 116, 0.3);
 }
 
 .contact-icon {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   color: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 80px;
-  min-height: 80px;
+  width: 55px;
+  min-height: 55px;
   border-radius: 12px;
   background: rgba(99, 102, 241, 0.1);
 }
@@ -3045,8 +3026,8 @@ html:not(.dark) .contact-icon {
 /* Update this block around line 3045 */
 .contact-info-content p {
   color: var(--text-secondary);
-  margin: 0 0 var(--spacing-xs) 0;
-  font-size: 1rem;
+  margin: var(--spacing-xs) 0 var(--spacing-xs) 0;
+  font-size: 14px;
   overflow-wrap: anywhere; /* Allows the email to break and wrap */
   word-break: break-word;   /* Fallback for older browsers */
 }
@@ -4819,7 +4800,7 @@ html:not(.dark) .characteristic-pill {
 /* Glass Container for Skills consistency */
 .about-skills-glass {
   background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(3px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 24px;
   padding: var(--spacing-2xl);
@@ -4958,25 +4939,93 @@ html:not(.dark) .about-orb-4 {
   overflow: visible;
 }
 
-/* Rotating Broken/Dashed Circle Border - Enhanced 6rem effect */
-.broken-circle-border {
+/* Shows only the TOP half (bottom half hidden) */
+.broken-circle-clip {
   position: absolute;
   width: 95%;
   height: 95%;
-  border: 8px dashed var(--accent);
-  border-radius: 50%;
-  opacity: 0.7;
-  filter: blur(0.5px);
-  animation: rotateClockwise 60s linear infinite;
   pointer-events: none;
-  stroke-dasharray: 96 96;
+
+  /* hard clip: only top 50% is visible */
+  overflow: hidden;
+  clip-path: inset(0 0 50% 0);
+}
+
+/* HUD / Blueprint Arc Container
+   - Larger than the profile image (halo)
+   - Centered behind subject
+   - Soft fade-out near the bottom for blending */
+.broken-circle-clip {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+
+  /* halo sizing: tweak this value */
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+
+  pointer-events: none;
+  overflow: hidden;
+
+  /* Fade-out so bottom edge blends (instead of a rough cut) */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0,0,0,1) 0%,
+    rgba(0,0,0,1) 55%,
+    rgba(0,0,0,0) 100%
+  );
+
+  /* Optional: keep it mostly top-heavy while still fading
+     (uncomment if you want stricter arc coverage)
+  */
+  /* clip-path: inset(0 0 35% 0); */
+}
+
+/* Rotate the SVG (keep HUD look) */
+.broken-circle-border {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  animation: rotateClockwise 60s linear infinite;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+
+/* Hairline, mechanical dashes, low opacity, light color */
+.broken-circle-border circle {
+  fill: none;
+
+  /* light grey/white HUD line */
+  stroke: rgba(240, 240, 240, 0.35);
+
+  /* hairline */
+  stroke-width: 1.5;
+
+  /* precise dash pattern */
+  stroke-dasharray: 14 10;
+
+  /* mechanical ends */
+  stroke-linecap: butt;
+
+  /* subtle */
+  opacity: 4.25;
+
+  /* keep crisp even while rotating */
+  shape-rendering: geometricPrecision;
+  vector-effect: non-scaling-stroke;
 }
 
 @keyframes rotateClockwise {
   from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to   { transform: rotate(360deg); }
 }
-
 /* Glow Blur Underneath Image */
 .image-glow-underlay {
   position: absolute;
@@ -5063,27 +5112,12 @@ html:not(.dark) .text-container {
 
 /* Glass Text Containers with Sandy Blur Effect */
 .glass-text-container {
-  position: absolute;
-  background: rgba(212, 165, 116, 0.35);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  position: absolute; 
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
   padding: 2.5rem;
-  border-radius: 20px;
-  border: 2px solid rgba(212, 165, 116, 0.5);
+  border-radius: 10px;
   z-index: 10;
-  box-shadow: 0 12px 40px rgba(212, 165, 116, 0.2);
-}
-
-html.dark .glass-text-container {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.25);
-  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.1);
-}
-
-html:not(.dark) .glass-text-container {
-  background: rgba(212, 165, 116, 0.35);
-  border-color: rgba(180, 140, 80, 0.6);
-  box-shadow: 0 12px 40px rgba(212, 165, 116, 0.25);
 }
 
 /* Large container - bottom left inside hero */
@@ -5249,6 +5283,52 @@ html:not(.dark) .skill-item-row:hover {
   border-bottom: none;
 }
 
+/* Make skill rows clickable without losing existing .skill-item-row styling */
+.skill-item-btn{
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  background: inherit;
+  color: inherit;
+  font: inherit;
+}
+
+.skill-item-btn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.skill-item-btn.active{
+  transform: translateY(-2px);
+}
+
+/* Expanded details panel that appears at the bottom of the skills container */
+.skill-detail-panel{
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.25s ease;
+}
+
+html:not(.dark) .skill-detail-panel{
+  background: rgba(255,255,255,0.5);
+}
+
+.skill-detail-title{
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.35rem;
+}
+
+.skill-detail-text{
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 /* Responsive Design */
 @media (max-width: 1199px) {
   .skills-list-container {
@@ -5316,7 +5396,6 @@ html:not(.dark) .skill-item-row:hover {
     position: static;
     width: 100%;
     margin: 2rem 0;
-    background: rgba(212, 165, 116, 0.2);
   }
   
   .glass-text-container.large,
@@ -5500,164 +5579,110 @@ html:not(.dark) .skill-item-row:hover {
   border-top: 1px solid var(--border-color);
 }
 
-/* ===== CONTACT HERO TITLE ===== */
-.contact-hero-title em {
-  color: var(--accent);
-  font-style: normal;
+/* ===========================
+   CONTACT FORM – BALANCED SPACING
+   =========================== */
+
+.contact-form-section {
+  max-width: 900px;              /* was 1300px (too wide) */
+  margin: 1.75rem auto 0;        /* tighter top spacing */
+  padding: 2rem;                 /* slightly reduced */
 }
 
-/* ===== CONTACT DIVIDER ===== */
-.contact-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-  margin: var(--spacing-xl) 0;
+/* Title spacing */
+.form-title {
+  margin: 0 0 1.5rem;            /* reduced from 1.75rem */
+  text-align: center;
+  font-size: 1.8rem;             /* slightly smaller for proportion */
 }
 
-/* ===== FORM INPUT WITH ICON ===== */
+/* Clean vertical rhythm */
+.contact-form {
+  display: grid;
+  gap: 1.2rem;                   /* tighter than 1.35rem */
+}
+
+/* Fields full width */
+.form-group {
+  width: 100%;
+}
+
+/* Label spacing */
+.form-group label {
+  display: inline-block;
+  margin-bottom: 0.5rem;         /* slightly tighter */
+  font-size: 0.9rem;
+}
+
+/* Input wrapper */
 .form-input-icon {
+  width: 100%;
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
+/* Inputs */
+.form-input-icon input,
+.form-input-icon select,
+.form-input-icon textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+
+  min-height: 50px;              /* slightly reduced */
+  padding: 0.9rem 1rem 0.9rem 2.8rem;
+  border-radius: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.95rem;
+}
+
+/* Light mode */
+html:not(.dark) .form-input-icon input,
+html:not(.dark) .form-input-icon select,
+html:not(.dark) .form-input-icon textarea {
+  border: 1px solid rgba(20, 32, 46, 0.12);
+  background: rgba(255, 255, 255, 0.92);
+}
+
+/* Textarea sizing */
+.form-input-icon textarea {
+  min-height: 150px;             /* slightly reduced */
+  padding-top: 1rem;
+  resize: vertical;
+}
+
+/* Icon alignment */
 .form-input-icon i {
   position: absolute;
   left: 1rem;
-  color: var(--text-muted);
-  font-size: 1rem;
-  pointer-events: none;
-  z-index: 2;
-  transition: color var(--transition-fast);
-}
-
-.form-input-icon input,
-.form-input-icon select {
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  padding-left: 2.8rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-button);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  transition: all var(--transition-fast);
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-html:not(.dark) .form-input-icon input,
-html:not(.dark) .form-input-icon select {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(212, 165, 116, 0.3);
-}
-
-.form-input-icon input:focus,
-.form-input-icon select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-html:not(.dark) .form-input-icon input:focus,
-html:not(.dark) .form-input-icon select:focus {
-  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
-}
-
-.form-input-icon input:focus + i,
-.form-input-icon select:focus ~ i {
-  color: var(--accent);
-}
-
-/* Select dropdown arrow */
-.form-input-icon select {
-  cursor: pointer;
-  background-image: ("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239a9390' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 1rem;
-  padding-right: 2.5rem;
-}
-
-html.dark .form-input-icon select {
-  background-image: ("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7a8e' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-}
-
-/* Textarea icon positioning */
-.form-input-icon.textarea-icon {
-  align-items: flex-start;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .form-input-icon.textarea-icon i {
   top: 1.2rem;
+  transform: none;
 }
 
-.form-input-icon textarea {
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  padding-left: 2.8rem;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-button);
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 1rem;
-  transition: all var(--transition-fast);
-  resize: vertical;
-  min-height: 120px;
-}
-
-html:not(.dark) .form-input-icon textarea {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(212, 165, 116, 0.3);
-}
-
-.form-input-icon textarea:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-html:not(.dark) .form-input-icon textarea:focus {
-  box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.15);
-}
-
-/* Contact Submit Button */
+/* Button */
 .contact-submit-btn {
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: 1.05rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
+  width: auto;
+  min-width: 180px;
+  padding: 0.9rem 1.25rem;
+  border-radius: 12px;
+  margin-top: 0.75rem;
+
+  justify-self: end;
 }
 
-/* ===== CERT CAROUSEL INFINITE SCROLL ===== */
-.cert-carousel-wrapper {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
+/* Responsive */
+@media (max-width: 720px) {
+  .contact-form-section {
+    padding: 1.5rem 1.25rem;
+  }
 
-.cert-carousel-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.cert-item {
-  cursor: pointer;
-}
-
-.cert-item:hover {
-  border-color: var(--accent);
-}
-
-/* ===== CONTACT SOCIAL ITEM AS LINK ===== */
-.contact-social-item {
-  text-decoration: none;
-  color: inherit;
-}
-
-.contact-social-item:hover {
-  text-decoration: none;
-  color: inherit;
+  .contact-submit-btn {
+    width: 100%;
+    justify-self: stretch;
+  }
 }

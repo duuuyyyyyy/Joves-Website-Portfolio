@@ -3,33 +3,28 @@ import { Link } from 'react-router-dom';
 
 function About() {
   const [activeFilter, setActiveFilter] = useState('technical');
+  const [expandedSkill, setExpandedSkill] = useState(null);
   const heroRef = useRef(null);
   const certCarouselRef = useRef(null);
   const [certScrollPaused, setCertScrollPaused] = useState(false);
 
-  // Technical Skills Data
+    // Technical Skills Data
   const technicalSkills = [
-    { name: 'Idea validation', icon: 'fas fa-lightbulb', category: 'technical' },
-    { name: 'API integrations & external systems', icon: 'fas fa-project-diagram', category: 'technical' },
-    { name: 'Long-term support & tech strategy', icon: 'fas fa-chart-line', category: 'technical' },
-    { name: 'Cloud architecture & deployment', icon: 'fas fa-cloud', category: 'technical' },
-    { name: 'MVP development', icon: 'fas fa-rocket', category: 'technical' },
-    { name: 'UX/UI design with a conversion focus', icon: 'fas fa-paint-brush', category: 'technical' },
-    { name: 'Analytics & user tracking', icon: 'fas fa-chart-pie', category: 'technical' },
-    { name: 'Fullstack SaaS / Custom Software Development', icon: 'fas fa-code', category: 'technical' },
-    { name: 'Performance optimization', icon: 'fas fa-tachometer-alt', category: 'technical' },
+    { title: 'Frontend Development', details: 'HTML, CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
+    { title: 'Design & UI', details: 'Responsive Web Design, UI/UX Implementation', icon: 'fas fa-paint-brush', category: 'technical' },
+    { title: 'Backend Development', details: 'Node.js, Express.js, RESTful API Development', icon: 'fas fa-server', category: 'technical' },
+    { title: 'Database Management', details: 'MongoDB, Mongoose, Database Design and Management', icon: 'fas fa-database', category: 'technical' },
+    { title: 'Tools & Version Control', details: 'Git, GitHub, VS Code', icon: 'fas fa-tools', category: 'technical' },
   ];
 
-  // Soft Skills Data
-  const softSkills = [
-    { name: 'Project Management', icon: 'fas fa-tasks', category: 'soft' },
-    { name: 'Communication', icon: 'fas fa-comments', category: 'soft' },
-    { name: 'Problem Solving', icon: 'fas fa-puzzle-piece', category: 'soft' },
-    { name: 'Leadership', icon: 'fas fa-users', category: 'soft' },
-    { name: 'Adaptability', icon: 'fas fa-sync-alt', category: 'soft' },
+  // Creative & Professional Skills Data
+  const creativeProfessionalSkills = [
+    { title: 'Creative Media', details: 'Graphic Design, Multimedia Editing, Physical Asset Creation', icon: 'fas fa-photo-video', category: 'soft' },
+    { title: 'Communication & Strategy', details: 'Public Relations Support, Information Dissemination', icon: 'fas fa-bullhorn', category: 'soft' },
+    { title: 'Execution & Collaboration', details: 'Team Collaboration, Agility, Stakeholder Management', icon: 'fas fa-people-arrows', category: 'soft' },
   ];
 
-  const displayedSkills = activeFilter === 'technical' ? technicalSkills : softSkills;
+  const displayedSkills = activeFilter === 'technical' ? technicalSkills : creativeProfessionalSkills;
 
   // Certifications data (duplicated for seamless loop)
   const certifications = [
@@ -75,7 +70,7 @@ function About() {
       }
       animationId = requestAnimationFrame(step);
     };
-    
+
     animationId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animationId);
   }, [certScrollPaused]);
@@ -89,16 +84,20 @@ function About() {
         <div className="about-orb about-orb-2"></div>
         <div className="about-orb about-orb-3"></div>
         <div className="about-orb about-orb-4"></div>
-        
+
         <div className="hero-cursor-glow"></div>
-        
+
         <div className="visual-stack">
-          {/* Rotating Broken Lines Circle */}
-          <div className="broken-circle-border"></div>
-          
+          {/* Rotating Broken Lines Circle (TOP HALF ONLY via clip wrapper) */}
+          <div className="broken-circle-clip">
+            <svg className="broken-circle-border" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="47" />
+            </svg>
+          </div>
+
           {/* Glow Underlay */}
           <div className="image-glow-underlay"></div>
-          
+
           {/* Circular Main Image - overlays circle */}
           <div className="about-main-image-circular">
             <img src={process.env.PUBLIC_URL + '/about-me-image.png'} alt="Carla Joves" />
@@ -127,20 +126,26 @@ function About() {
           {/* Skills Navigation with Gliding Animation */}
           <div className="skills-nav-wrapper">
             <div className="skills-nav">
-              <button 
+              <button
                 className={`nav-btn ${activeFilter === 'technical' ? 'active' : ''}`}
-                onClick={() => setActiveFilter('technical')}
+                onClick={() => {
+                  setActiveFilter('technical');
+                  setExpandedSkill(null);
+                }}
               >
                 Technical Skills
               </button>
-              <button 
+              <button
                 className={`nav-btn ${activeFilter === 'soft' ? 'active' : ''}`}
-                onClick={() => setActiveFilter('soft')}
+                onClick={() => {
+                  setActiveFilter('soft');
+                  setExpandedSkill(null);
+                }}
               >
-                Soft Skills
+                Creative &amp; Professional Skills
               </button>
               {/* Gliding Underline */}
-              <div 
+              <div
                 className="nav-glider"
                 style={{
                   transform: `translateX(${activeFilter === 'technical' ? '0%' : '100%'})`
@@ -148,38 +153,52 @@ function About() {
               ></div>
             </div>
           </div>
-          
+
           {/* Skills List */}
           <div className="skills-list-container">
-            {displayedSkills.map((skill, index) => (
-              <div 
-                key={`${activeFilter}-${index}`}
-                className="skill-item-row"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <i className={`${skill.icon}`}></i>
-                <span>{skill.name}</span>
+            {displayedSkills.map((skill, index) => {
+              const isActive = expandedSkill?.title === skill.title;
+
+              return (
+                <button
+                  type="button"
+                  key={`${activeFilter}-${index}`}
+                  className={`skill-item-row skill-item-btn ${isActive ? 'active' : ''}`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                  onClick={() => setExpandedSkill(isActive ? null : skill)}
+                >
+                  <i className={`${skill.icon}`}></i>
+                  <span>{skill.title}</span>
+                </button>
+              );
+            })}
+
+            {/* Expands at the bottom of the container */}
+            {expandedSkill && (
+              <div className="skill-detail-panel" role="region" aria-live="polite">
+                <div className="skill-detail-title">{expandedSkill.title}</div>
+                <div className="skill-detail-text">{expandedSkill.details}</div>
               </div>
-            ))}
+            )}
           </div>
         </div>
 
         {/* Certifications Carousel - Continuously loops */}
         <section className="certifications-section">
           <h2>Certifications &amp; Credentials</h2>
-          <div 
-            className="cert-carousel-wrapper" 
+          <div
+            className="cert-carousel-wrapper"
             ref={certCarouselRef}
             onMouseEnter={() => setCertScrollPaused(true)}
             onMouseLeave={() => setCertScrollPaused(false)}
           >
             {/* Duplicate items for seamless infinite loop */}
             {[...certifications, ...certifications].map((cert, i) => (
-              <a 
-                key={i} 
-                href={cert.link} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                key={i}
+                href={cert.link}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="cert-item"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >

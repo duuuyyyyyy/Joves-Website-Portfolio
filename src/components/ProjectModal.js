@@ -71,7 +71,7 @@ function ProjectModal({ projectId, onClose }) {
 
         <div className="project-modal-section" data-section="features">
           <h3 className="project-modal-section-title">Features</h3>
-          <ul style={{ listStylePosition: 'inside', color: 'var(--text-secondary)', paddingLeft: 0 }}>
+          <ul style={{ listStylePosition: 'inside', color: 'var(--text-secondary)', paddingLeft: 0, listStyleType: 'none' }}>
             {data.features.map((feature, i) => (
               <li key={i} style={{ marginBottom: '8px' }}>• {feature}</li>
             ))}

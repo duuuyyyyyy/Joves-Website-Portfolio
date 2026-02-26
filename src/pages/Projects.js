@@ -110,21 +110,21 @@ function Projects() {
           >
             {/* Project 1 */}
             <div className="carousel-item" onClick={() => openModal('1')}>
-              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-1-wander.png)` }}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}>
                 <div className="carousel-overlay"></div>
               </div>
             </div>
 
             {/* Project 2 */}
             <div className="carousel-item" onClick={() => openModal('2')}>
-              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-2-jzone-motorcycle-red.png)` }}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}>
                 <div className="carousel-overlay"></div>
               </div>
             </div>
 
             {/* Project 3 */}
             <div className="carousel-item" onClick={() => openModal('3')}>
-              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-placeholder-3.svg)` }}>
+              <div className="carousel-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/jewelry-ecommerce-landing-page.png)` }}>
                 <div className="carousel-overlay"></div>
               </div>
             </div>

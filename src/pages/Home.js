@@ -189,7 +189,7 @@ function Home() {
 
         <div className="home-projects-track" ref={trackRef}>
           <article className="home-project-card" data-project="1" onClick={() => openModal('1')}>
-            <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-1-wander.png)` }}>
+            <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}>
             </div>
             <div className="home-project-info">
               <div className="home-project-meta">
@@ -200,7 +200,7 @@ function Home() {
           </article>
 
           <article className="home-project-card" data-project="2" onClick={() => openModal('2')}>
-            <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-2-jzone-motorcycle-red.png)` }}>
+            <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}>
             </div>
             <div className="home-project-info">
               <div className="home-project-meta">
