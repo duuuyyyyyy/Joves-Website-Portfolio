@@ -144,36 +144,6 @@ function Projects() {
           </div>
         </section>
 
-        {/* Stream Lines Section with Characteristics */}
-        <section className="projects-stream-section">
-          <svg className="stream-lines" viewBox="0 0 1000 300" preserveAspectRatio="none">
-            <defs>
-              <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style={{ stopColor: 'var(--accent)', stopOpacity: 0.6 }} />
-                <stop offset="50%" style={{ stopColor: '#d946a6', stopOpacity: 0.4 }} />
-                <stop offset="100%" style={{ stopColor: 'var(--accent)', stopOpacity: 0.6 }} />
-              </linearGradient>
-            </defs>
-            <path d="M 0 80 Q 250 20, 500 80 T 1000 80" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.8" />
-            <path d="M 0 120 Q 250 60, 500 120 T 1000 120" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.6" />
-            <path d="M 0 160 Q 250 100, 500 160 T 1000 160" fill="none" stroke="url(#wave-gradient)" strokeWidth="2" opacity="0.4" />
-          </svg>
-
-          {/* Characteristic Pills */}
-          <div className="characteristic-pill" style={{ animationDelay: '0s', left: '15%' }}>
-            <span>Mindful Design</span>
-          </div>
-          <div className="characteristic-pill" style={{ animationDelay: '1.5s', left: '35%', top: '40%' }}>
-            <span>Attention to Detail</span>
-          </div>
-          <div className="characteristic-pill" style={{ animationDelay: '3s', left: '65%', top: '45%' }}>
-            <span>User-Centered</span>
-          </div>
-          <div className="characteristic-pill" style={{ animationDelay: '4.5s', left: '85%', top: '20%' }}>
-            <span>Pixel Perfect</span>
-          </div>
-        </section>
-
         {/* CTA */}
         <section className="projects-cta">
           <h2 className="projects-cta-title">Let's Create Something <em>Amazing</em></h2>

@@ -4465,10 +4465,10 @@ html:not(.dark) .skill-card:hover .skill-name {
 .cert-toggle-btn {
   width: 34px;
   height: 34px;
-  border: 1px solid var(--border-color);
+  border: 2px solid var(--border-color);
   background: transparent;
   color: var(--text-primary);
-  border-radius: 0;
+  border-radius: 50%;
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
@@ -4581,27 +4581,155 @@ html:not(.dark) .cert-accordion-item.active {
   }
 }
 
-/* ===== ABOUT PAGE CTA ===== */
-.about-cta {
+/* ===== ABOUT FLOW SECTION ===== */
+.about-flow-section {
+  margin: var(--spacing-3xl) auto 4rem;
+  padding: 0 var(--spacing-lg) 1.5rem;
+  max-width: 1200px;
   text-align: center;
-  margin-bottom: var(--spacing-3xl);
-  padding-bottom: var(--spacing-2xl);
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.about-cta-title {
-  font-family: var(--font-heading);
-  font-size: 2rem;
+.about-flow-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.about-flow-cta-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.05rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
   color: var(--text-primary);
-  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
-.about-cta-text {
+html:not(.dark) .about-flow-cta-pill {
+  background: rgba(212, 165, 116, 0.12);
+  border-color: rgba(212, 165, 116, 0.35);
+}
+
+.about-flow-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.2vw, 3.3rem);
+  color: var(--text-primary);
+  line-height: 1.12;
+  margin-bottom: 1rem;
+}
+
+.about-flow-title span {
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 46%, #f97316 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+html:not(.dark) .about-flow-title span {
+  background: linear-gradient(90deg, #c89860 0%, #9a6fb8 55%, #d1774a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.about-flow-subtitle {
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
   color: var(--text-secondary);
-  font-size: 1.1rem;
-  margin-bottom: var(--spacing-xl);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+  line-height: 1.7;
+  animation: aboutFlowTextSwap 0.28s ease;
+}
+
+.about-flow-canvas {
+  position: relative;
+  width: 160%;
+  height: 380px;
+  margin-left: -13rem;
+  overflow: hidden;
+}
+
+.about-flow-lines {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.about-flow-line {
+  fill: none;
+  stroke-width: 1;
+  stroke: rgba(153, 69, 255, 0.64);
+}
+
+html:not(.dark) .about-flow-line {
+  stroke: rgba(177, 118, 67, 0.65);
+}
+
+.about-flow-pill {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(18, 24, 38, 0.28);
+  color: var(--text-primary);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-transform: lowercase;
+  cursor: pointer;
+  outline: none;
+  opacity: 0;
+  animation: aboutFlowPillIn 0.42s ease forwards;
+  animation-delay: calc(0.5s + var(--pill-delay));
+}
+
+.about-flow-pill.active {
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.26);
+}
+
+html:not(.dark) .about-flow-pill {
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(0.5px);
+  border-color: rgba(145, 122, 97, 0.28);
+}
+
+html:not(.dark) .about-flow-pill.active {
+  background: rgba(212, 165, 116, 0.34);
+  border-color: rgba(200, 152, 96, 0.58);
+}
+
+@keyframes aboutFlowPillIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -35%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes aboutFlowTextSwap {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== PROJECTS PAGE STYLES ===== */
@@ -4703,69 +4831,6 @@ html.dark .carousel-overlay {
 
 html:not(.dark) .carousel-overlay {
   background: linear-gradient(135deg, rgba(212, 165, 116, 0.25) 0%, rgba(184, 138, 92, 0.25) 100%);
-}
-
-/* Stream Lines Section */
-.projects-stream-section {
-  position: relative;
-  height: 400px;
-  margin: var(--spacing-3xl) 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stream-lines {
-  position: absolute;
-  width: 100%;
-  height: 300px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 1;
-}
-
-/* Characteristic Pills */
-.characteristic-pill {
-  position: absolute;
-  background: rgba(99, 102, 241, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(99, 102, 241, 0.5);
-  border-radius: 25px;
-  padding: 8px 16px;
-  color: var(--text-primary);
-  font-weight: 600;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  z-index: 2;
-  animation: fadeInPill 0.6s ease-out forwards;
-  opacity: 0;
-  top: 30%;
-}
-
-@keyframes fadeInPill {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-html.dark .characteristic-pill {
-  background: rgba(168, 85, 247, 0.25);
-  border: 1px solid rgba(168, 85, 247, 0.6);
-}
-
-html:not(.dark) .characteristic-pill {
-  background: rgba(212, 165, 116, 0.25);
-  border: 1px solid rgba(212, 165, 116, 0.6);
-}
-
-.characteristic-pill span {
-  display: block;
 }
 
 /* Projects CTA */
@@ -5311,7 +5376,7 @@ html:not(.dark) .characteristic-pill {
   backdrop-filter: blur(10px);
   border-radius: 24px;
   padding: var(--spacing-2xl);
-  margin-top: -132px;
+  margin-top: -150px;
   position: relative;
   z-index: 20;
 }
@@ -5355,6 +5420,8 @@ html:not(.dark) .about-skills-glass {
 /* --- UNIFIED ABOUT HERO: CENTERED STACK WITH GRID, ROTATING BORDER, AND SIDE BOXES --- */
 .about-page-grid {
   position: relative;
+  padding-bottom: 4rem;
+  min-height: calc(100vh - 70px);
   background-image:
     linear-gradient(90deg, rgba(68, 93, 120, 0.22) 1px, transparent 1px),
     linear-gradient(0deg, rgba(68, 93, 120, 0.22) 1px, transparent 1px);
@@ -5373,9 +5440,9 @@ html:not(.dark) .about-page-grid {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 2rem var(--spacing-lg);
-  margin-top: -5rem;
-  padding-top: 8rem;
+  padding: 2rem var(--spacing-lg) 3rem;
+  margin-top: -70px;
+  padding-top: calc(70px + 3.5rem);
   background: transparent;
   overflow: visible;
 }
@@ -5688,7 +5755,6 @@ html:not(.dark) .text-container {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50px;
-  padding: 8px;
   gap: 0;
   position: relative;
   z-index: 2;

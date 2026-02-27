@@ -6,8 +6,11 @@ function About() {
   const [expandedSkill, setExpandedSkill] = useState(null);
   const [activeCert, setActiveCert] = useState(0);
   const [certSectionVisible, setCertSectionVisible] = useState(false);
+  const [flowSectionVisible, setFlowSectionVisible] = useState(false);
+  const [activeFlowPill, setActiveFlowPill] = useState('capacity');
   const heroRef = useRef(null);
   const certSectionRef = useRef(null);
+  const flowSectionRef = useRef(null);
 
   const technicalSkills = [
     { title: 'Frontend Development', details: 'HTML, CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
@@ -52,6 +55,20 @@ function About() {
     },
   ];
 
+  const flowLines = Array.from({ length: 34 }, (_, i) => i);
+  const flowPills = [
+    { label: 'capacity', x: '13%', y: '38%', delay: '0s' },
+    { label: 'clarity', x: '29%', y: '54%', delay: '0.12s' },
+    { label: 'consistency', x: '47%', y: '71%', delay: '0.24s' },
+    { label: 'momentum', x: '69%', y: '58%', delay: '0.36s' },
+  ];
+  const flowPillContent = {
+    capacity: 'Placeholder: Capacity grows when work is repeatable and priorities are consistently clear.',
+    clarity: 'Placeholder: Clear direction reduces friction, speeds execution, and improves output quality.',
+    consistency: 'Placeholder: Consistency compounds over time, creating stable progress with fewer resets.',
+    momentum: 'Placeholder: Momentum forms when each completed step naturally feeds the next action.'
+  };
+
   useEffect(() => {
     document.title = 'About | Portfolio';
   }, []);
@@ -64,6 +81,23 @@ function About() {
       (entries) => {
         if (entries[0].isIntersecting) {
           setCertSectionVisible(true);
+        }
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const section = flowSectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setFlowSectionVisible(true);
         }
       },
       { threshold: 0.2 }
@@ -211,7 +245,7 @@ function About() {
                           aria-label={isActive ? `Collapse ${cert.title}` : `Expand ${cert.title}`}
                           onClick={(e) => handleCertToggleClick(e, index)}
                         >
-                          {isActive ? '−' : '+'}
+                          {isActive ? '-' : '+'}
                         </button>
                       </div>
                       <div className="cert-accordion-body">
@@ -238,10 +272,42 @@ function About() {
             </div>
           </section>
 
-          <section className="about-cta" style={{ marginBottom: '4rem', paddingBottom: '3rem' }}>
-            <h2 className="about-cta-title">Let's Work Together</h2>
-            <p className="about-cta-text">I'm always interested in hearing about new opportunities and challenges.</p>
-            <Link to="/contact" className="btn btn-primary">Get In Touch</Link>
+          <section
+            className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
+            ref={flowSectionRef}
+          >
+            <Link to="/contact" className="about-flow-cta-pill">Get In Touch</Link>
+            <h2 className="about-flow-title">
+              You steadily gain <span>impactful momentum.</span>
+            </h2>
+            <p className="about-flow-subtitle" key={activeFlowPill}>
+              {flowPillContent[activeFlowPill]}
+            </p>
+
+            <div className="about-flow-canvas">
+              <svg className="about-flow-lines" viewBox="0 0 1200 380" preserveAspectRatio="none" aria-hidden="true">
+                {flowLines.map((line) => (
+                  <path
+                    key={line}
+                    className="about-flow-line"
+                    d={`M 0 ${150 + line * 7} C 220 ${20 + line * 4}, 430 ${290 + line * 3}, 650 ${180 + line * 4} C 830 ${100 + line * 3}, 1000 ${70 + line * 5}, 1200 ${155 + line * 3}`}
+                    style={{ opacity: 0.2 + line * 0.035 }}
+                  />
+                ))}
+              </svg>
+
+              {flowPills.map((pill) => (
+                <button
+                  key={pill.label}
+                  type="button"
+                  className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
+                  style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
+                  onClick={() => setActiveFlowPill(pill.label)}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
           </section>
         </main>
       </div>
