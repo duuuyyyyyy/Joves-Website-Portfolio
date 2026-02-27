@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import GlobalBackground from './components/GlobalBackground';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -20,7 +21,7 @@ function ScrollToTop() {
 function App() {
   return (
     <>
-      <div className="bg-texture"></div>
+      <GlobalBackground />
       <ScrollToTop />
       <Header />
       <Routes>

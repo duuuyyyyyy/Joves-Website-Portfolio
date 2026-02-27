@@ -19,7 +19,9 @@ function Blog() {
     <>
       {/* Page Header */}
       <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
-        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+        {/* Localized Immersive Orbs */}
+        <div className="hero-orb orb-v3 orb-color-4" style={{ top: '-10%', right: '15%' }}></div>
+        <div className="hero-orb orb-v4 orb-color-2" style={{ bottom: '10%', left: '20%' }}></div>
         <div className="hero-scalar-content">
           <span className="hero-label">RESOURCES & INSIGHTS</span>
           <h1 className="hero-scalar-title">Blog & Articles</h1>
@@ -28,14 +30,14 @@ function Blog() {
 
       {/* Main Content */}
       <main className="blog-main">
-        
+
         {/* Blog Grid */}
         <section className={`blog-grid ${showAll ? 'blog-grid-bento' : ''}`}>
-          
+
           {displayedArticles.map((article, index) => (
-            <Link 
-              to={`/blog/${article.slug}`} 
-              key={article.slug} 
+            <Link
+              to={`/blog/${article.slug}`}
+              key={article.slug}
               className={`blog-card ${!showAll && index >= 3 ? 'blog-hidden' : ''}`}
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
@@ -50,9 +52,9 @@ function Blog() {
 
         {!showAll && blogArticles.length > 3 && (
           <div className="button-container">
-             <button className="show-more-btn" onClick={() => setShowAll(true)}>
-               Show All Articles
-             </button>
+            <button className="show-more-btn" onClick={() => setShowAll(true)}>
+              Show All Articles
+            </button>
           </div>
         )}
 

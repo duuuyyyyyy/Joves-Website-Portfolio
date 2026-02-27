@@ -8,7 +8,7 @@ function About() {
   const certCarouselRef = useRef(null);
   const [certScrollPaused, setCertScrollPaused] = useState(false);
 
-    // Technical Skills Data
+  // Technical Skills Data
   const technicalSkills = [
     { title: 'Frontend Development', details: 'HTML, CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
     { title: 'Design & UI', details: 'Responsive Web Design, UI/UX Implementation', icon: 'fas fa-paint-brush', category: 'technical' },
@@ -36,20 +36,6 @@ function About() {
 
   useEffect(() => {
     document.title = 'About | Portfolio';
-
-    // Mouse follow logic for the glow circle
-    const handleMouseMove = (e) => {
-      const glow = document.querySelector('.hero-cursor-glow');
-      if (glow && heroRef.current) {
-        const rect = heroRef.current.getBoundingClientRect();
-        const radius = 125;
-        const x = e.clientX - rect.left - radius;
-        const y = e.clientY - rect.top - radius;
-        glow.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   // Certifications infinite scroll
@@ -79,13 +65,11 @@ function About() {
     <>
       {/* HERO SECTION - extends under header */}
       <section className="about-hero-center-wrapper" ref={heroRef}>
-        {/* Floating Background Orbs */}
-        <div className="about-orb about-orb-1"></div>
-        <div className="about-orb about-orb-2"></div>
-        <div className="about-orb about-orb-3"></div>
-        <div className="about-orb about-orb-4"></div>
-
-        <div className="hero-cursor-glow"></div>
+        {/* Localized Immersive Orbs */}
+        <div className="hero-orb orb-v1 orb-color-1" style={{ top: '5%', right: '5%' }}></div>
+        <div className="hero-orb orb-v2 orb-color-2" style={{ bottom: '15%', left: '10%' }}></div>
+        <div className="hero-orb orb-v3 orb-color-3" style={{ top: '40%', left: '25%' }}></div>
+        <div className="hero-orb orb-v4 orb-color-4" style={{ bottom: '25%', right: '20%' }}></div>
 
         <div className="visual-stack">
           {/* Rotating Broken Lines Circle (TOP HALF ONLY via clip wrapper) */}
@@ -100,7 +84,7 @@ function About() {
 
           {/* Circular Main Image - overlays circle */}
           <div className="about-main-image-circular">
-            <img src={process.env.PUBLIC_URL + '/about-me-image.png'} alt="Carla Joves" />
+            <img src={process.env.PUBLIC_URL + '/professional-photo.svg'} alt="Carla Joves" />
           </div>
         </div>
 

@@ -82,7 +82,9 @@ function Projects() {
     <>
       {/* Page Header */}
       <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
-        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+        {/* Localized Immersive Orbs */}
+        <div className="hero-orb orb-v5 orb-color-1" style={{ top: '-10%', right: '10%' }}></div>
+        <div className="hero-orb orb-v2 orb-color-3" style={{ bottom: '5%', left: '5%' }}></div>
         <div className="hero-scalar-content">
           <span className="hero-label">EXPLORE</span>
           <h1 className="hero-scalar-title">Projects & <em>Creations</em></h1>
@@ -91,7 +93,7 @@ function Projects() {
 
       {/* Main Content */}
       <main className="projects-main">
-        
+
         {/* Header and Description */}
         <section className="projects-intro">
           <h2>Find your dream <em>project</em></h2>
@@ -100,7 +102,7 @@ function Projects() {
 
         {/* Projects Curved Carousel */}
         <section className="projects-carousel-wrapper">
-          <div 
+          <div
             className="projects-carousel"
             ref={carouselRef}
             onMouseDown={handleMouseDown}
