@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 function About() {
   const [activeFilter, setActiveFilter] = useState('technical');
   const [expandedSkill, setExpandedSkill] = useState(null);
+  const [activeCert, setActiveCert] = useState(0);
+  const [certSectionVisible, setCertSectionVisible] = useState(false);
   const heroRef = useRef(null);
-  const certCarouselRef = useRef(null);
-  const [certScrollPaused, setCertScrollPaused] = useState(false);
+  const certSectionRef = useRef(null);
 
-  // Technical Skills Data
   const technicalSkills = [
     { title: 'Frontend Development', details: 'HTML, CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
     { title: 'Design & UI', details: 'Responsive Web Design, UI/UX Implementation', icon: 'fas fa-paint-brush', category: 'technical' },
@@ -17,56 +17,84 @@ function About() {
     { title: 'Tools & Version Control', details: 'Git, GitHub, VS Code', icon: 'fas fa-tools', category: 'technical' },
   ];
 
-  // Creative & Professional Skills Data
-  const creativeProfessionalSkills = [
+  const softSkills = [
     { title: 'Creative Media', details: 'Graphic Design, Multimedia Editing, Physical Asset Creation', icon: 'fas fa-photo-video', category: 'soft' },
     { title: 'Communication & Strategy', details: 'Public Relations Support, Information Dissemination', icon: 'fas fa-bullhorn', category: 'soft' },
     { title: 'Execution & Collaboration', details: 'Team Collaboration, Agility, Stakeholder Management', icon: 'fas fa-people-arrows', category: 'soft' },
   ];
 
-  const displayedSkills = activeFilter === 'technical' ? technicalSkills : creativeProfessionalSkills;
+  const displayedSkills = activeFilter === 'technical' ? technicalSkills : softSkills;
 
-  // Certifications data (duplicated for seamless loop)
   const certifications = [
-    { title: 'Web Development Certificate', desc: 'Comprehensive web development training covering HTML, CSS, JavaScript, and modern frameworks.', link: 'cert1.pdf' },
-    { title: 'React Specialist Certification', desc: 'Advanced certification in React development, state management, hooks, and best practices.', link: 'cert2.pdf' },
-    { title: 'Cloud Architecture Certificate', desc: 'Cloud infrastructure design and deployment on AWS, Azure, and GCP platforms.', link: 'cert3.pdf' },
-    { title: 'UX/UI Design Fundamentals', desc: 'Design thinking, wireframing, prototyping, and user-centered design principles.', link: 'cert4.pdf' },
+    {
+      title: 'Frontend Foundations Certificate',
+      issued: 'March 2024',
+      desc: 'Placeholder: Completed a structured program on modern UI development, component architecture, and accessibility fundamentals.',
+      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+    },
+    {
+      title: 'React Development Certificate',
+      issued: 'July 2024',
+      desc: 'Placeholder: Focused on hooks, reusable state patterns, performance optimization, and scalable React project structure.',
+      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+    },
+    {
+      title: 'UX Design Fundamentals Certificate',
+      issued: 'November 2024',
+      desc: 'Placeholder: Covered user research, wireframing, interaction design, and handoff workflows for developer-ready screens.',
+      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+    },
+    {
+      title: 'Web Systems Certificate',
+      issued: 'February 2025',
+      desc: 'Placeholder: Introduced deployment pipelines, project documentation standards, and practical frontend-backend integration.',
+      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+    },
   ];
 
   useEffect(() => {
     document.title = 'About | Portfolio';
   }, []);
 
-  // Certifications infinite scroll
   useEffect(() => {
-    const carousel = certCarouselRef.current;
-    if (!carousel) return;
+    const section = certSectionRef.current;
+    if (!section) return;
 
-    let animationId;
-    const scrollSpeed = 1;
-
-    const step = () => {
-      if (!certScrollPaused) {
-        carousel.scrollLeft += scrollSpeed;
-        // Reset scroll to create infinite loop
-        if (carousel.scrollLeft >= carousel.scrollWidth / 2) {
-          carousel.scrollLeft = 0;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setCertSectionVisible(true);
         }
-      }
-      animationId = requestAnimationFrame(step);
-    };
+      },
+      { threshold: 0.2 }
+    );
 
-    animationId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animationId);
-  }, [certScrollPaused]);
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleCertClick = (index) => {
+    setActiveCert((prev) => (prev === index ? -1 : index));
+  };
+
+  const handleCertToggleClick = (e, index) => {
+    e.stopPropagation();
+    handleCertClick(index);
+  };
+
+  const handleCertKeyDown = (e, index) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleCertClick(index);
+    }
+  };
+
+  const currentCert = activeCert >= 0 ? certifications[activeCert] : certifications[0];
 
   return (
     <>
       <div className="about-page-grid">
-        {/* HERO SECTION - extends under header */}
         <section className="about-hero-center-wrapper" ref={heroRef}>
-          {/* Localized Immersive Orbs */}
           <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
           <div className="hero-orb orb-v2 orb-color-2 orb-shape-blob" style={{ bottom: '15%', left: '10%' }}></div>
           <div className="hero-orb orb-v3 orb-color-3 orb-shape-squircle" style={{ top: '40%', left: '25%' }}></div>
@@ -76,23 +104,17 @@ function About() {
           <div className="hero-orb orb-v8 orb-color-5 orb-shape-ellipse orb-anim-orbit" style={{ top: '24%', right: '34%' }}></div>
 
           <div className="visual-stack">
-            {/* Rotating Broken Lines Circle (TOP HALF ONLY via clip wrapper) */}
             <div className="broken-circle-clip">
               <svg className="broken-circle-border" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="47" />
               </svg>
             </div>
-
-            {/* Glow Underlay */}
             <div className="image-glow-underlay"></div>
-
-            {/* Circular Main Image - overlays circle */}
             <div className="about-main-image-circular">
               <img src={process.env.PUBLIC_URL + '/professional-photo.svg'} alt="Carla Joves" />
             </div>
           </div>
 
-          {/* Glass Text Container - Bottom left of hero section */}
           <div className="glass-text-container hero-bottom-left">
             <h3>Who I Am</h3>
             <p>
@@ -100,7 +122,6 @@ function About() {
             </p>
           </div>
 
-          {/* Small Glass Container - Right side */}
           <div className="glass-text-container hero-top-right">
             <h3>Based In</h3>
             <p>
@@ -111,7 +132,6 @@ function About() {
 
         <main className="container">
           <div className="glass-container about-skills-glass">
-            {/* Skills Navigation with Gliding Animation */}
             <div className="skills-nav-wrapper">
               <div className="skills-nav">
                 <button
@@ -130,9 +150,8 @@ function About() {
                     setExpandedSkill(null);
                   }}
                 >
-                  Creative &amp; Professional Skills
+                  Soft Skills
                 </button>
-                {/* Gliding Underline */}
                 <div
                   className="nav-glider"
                   style={{
@@ -142,63 +161,83 @@ function About() {
               </div>
             </div>
 
-            {/* Skills List */}
             <div className="skills-list-container">
               {displayedSkills.map((skill, index) => {
                 const isActive = expandedSkill?.title === skill.title;
-
                 return (
-                  <button
-                    type="button"
-                    key={`${activeFilter}-${index}`}
-                    className={`skill-item-row skill-item-btn ${isActive ? 'active' : ''}`}
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                    onClick={() => setExpandedSkill(isActive ? null : skill)}
-                  >
-                    <i className={`${skill.icon}`}></i>
-                    <span>{skill.title}</span>
-                  </button>
+                  <div key={`${activeFilter}-${index}`} className={`skill-dropdown ${isActive ? 'open' : ''}`}>
+                    <button
+                      type="button"
+                      className={`skill-item-row skill-item-btn ${isActive ? 'active' : ''}`}
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                      onClick={() => setExpandedSkill(isActive ? null : skill)}
+                    >
+                      <i className={`${skill.icon}`}></i>
+                      <span>{skill.title}</span>
+                    </button>
+                    <div className="skill-inline-details" role="region" aria-live="polite">
+                      <div className="skill-detail-text">{skill.details}</div>
+                    </div>
+                  </div>
                 );
               })}
-
-              {/* Expands at the bottom of the container */}
-              {expandedSkill && (
-                <div className="skill-detail-panel" role="region" aria-live="polite">
-                  <div className="skill-detail-title">{expandedSkill.title}</div>
-                  <div className="skill-detail-text">{expandedSkill.details}</div>
-                </div>
-              )}
             </div>
           </div>
 
-          {/* Certifications Carousel - Continuously loops */}
-          <section className="certifications-section">
+          <section
+            className={`certifications-section cert-showcase ${certSectionVisible ? 'revealed' : ''}`}
+            ref={certSectionRef}
+          >
             <h2>Certifications &amp; Credentials</h2>
-            <div
-              className="cert-carousel-wrapper"
-              ref={certCarouselRef}
-              onMouseEnter={() => setCertScrollPaused(true)}
-              onMouseLeave={() => setCertScrollPaused(false)}
-            >
-              {/* Duplicate items for seamless infinite loop */}
-              {[...certifications, ...certifications].map((cert, i) => (
-                <a
-                  key={i}
-                  href={cert.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cert-item"
-                  style={{ textDecoration: 'none', color: 'inherit' }}
-                >
-                  <h3>{cert.title}</h3>
-                  <p>{cert.desc}</p>
-                  <span className="cert-link">View Certificate â†’</span>
-                </a>
-              ))}
+            <div className="cert-showcase-layout">
+              <div className="cert-list-column">
+                {certifications.map((cert, index) => {
+                  const isActive = activeCert === index;
+                  return (
+                    <div
+                      key={cert.title}
+                      className={`cert-accordion-item ${isActive ? 'active' : ''}`}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => handleCertClick(index)}
+                      onKeyDown={(e) => handleCertKeyDown(e, index)}
+                      aria-expanded={isActive}
+                    >
+                      <div className="cert-accordion-header">
+                        <h3>{cert.title}</h3>
+                        <button
+                          type="button"
+                          className="cert-toggle-btn"
+                          aria-label={isActive ? `Collapse ${cert.title}` : `Expand ${cert.title}`}
+                          onClick={(e) => handleCertToggleClick(e, index)}
+                        >
+                          {isActive ? '−' : '+'}
+                        </button>
+                      </div>
+                      <div className="cert-accordion-body">
+                        <p className="cert-date">Issued: {cert.issued}</p>
+                        <p>{cert.desc}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="cert-preview-column" key={activeCert >= 0 ? activeCert : 'default'}>
+                <div className="cert-preview-meta">
+                  <h3>{currentCert.title}</h3>
+                </div>
+                <div className="cert-preview-image-wrap">
+                  <img
+                    src={currentCert.image}
+                    alt={`${currentCert.title} preview`}
+                    className="cert-preview-image"
+                  />
+                </div>
+              </div>
             </div>
           </section>
 
-          {/* CTA - with bottom margin/padding */}
           <section className="about-cta" style={{ marginBottom: '4rem', paddingBottom: '3rem' }}>
             <h2 className="about-cta-title">Let's Work Together</h2>
             <p className="about-cta-text">I'm always interested in hearing about new opportunities and challenges.</p>

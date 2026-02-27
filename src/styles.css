@@ -4407,6 +4407,14 @@ html:not(.dark) .skill-card:hover .skill-name {
   margin: var(--spacing-3xl) auto;
   padding: var(--spacing-3xl) var(--spacing-lg);
   max-width: 1200px;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.certifications-section.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .certifications-section h2 {
@@ -4417,52 +4425,160 @@ html:not(.dark) .skill-card:hover .skill-name {
   text-align: center;
 }
 
-.cert-carousel-wrapper {
-  display: flex;
+.cert-showcase-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(280px, 1fr);
   gap: var(--spacing-2xl);
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: var(--spacing-lg) 0;
-  -webkit-overflow-scrolling: touch;
+  align-items: start;
 }
 
-.cert-item {
-  padding: var(--spacing-lg);
-  border: 1px solid var(--border-color);
-  background: linear-gradient(135deg, rgba(224, 197, 143, 0.05) 0%, rgba(20, 32, 46, 0.02) 100%);
-  border-radius: var(--radius-card);
-  transition: all var(--transition-smooth);
-  min-width: 300px;
-  flex-shrink: 0;
+.cert-list-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  backdrop-filter: blur(3px);
 }
 
-.cert-item:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
+.cert-accordion-item {
+  background: var(--bg-secondary);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  overflow: hidden;
 }
 
-.cert-item h3 {
-  color: var(--accent);
+.cert-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+}
+
+.cert-accordion-header h3 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 700;
-  margin-bottom: var(--spacing-md);
 }
 
-.cert-item p {
-  color: var(--text-secondary);
-  margin-bottom: var(--spacing-md);
-  line-height: 1.6;
+.cert-toggle-btn {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-primary);
+  border-radius: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
 }
 
-.cert-link {
+.cert-accordion-body {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding: 0 1.1rem;
+  transform: translateY(14px);
+  transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.25s ease, transform 0.25s ease;
+}
+
+.cert-accordion-item.active .cert-accordion-body {
+  max-height: 220px;
+  opacity: 1;
+  padding: 0 1.1rem 1rem;
+  transform: translateY(0);
+  animation: certBodySlideUp 0.28s ease;
+}
+
+.cert-accordion-item.active {
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+html:not(.dark) .cert-accordion-item.active {
+  background: rgba(212, 165, 116, 0.18);
+}
+
+.cert-date {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
   color: var(--accent);
-  text-decoration: none;
+  margin-bottom: 0.45rem;
   font-weight: 600;
-  transition: color var(--transition-fast);
-  display: inline-block;
 }
 
-.cert-link:hover {
-  color: var(--gold-muted);
+.cert-accordion-body p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.cert-preview-column {
+  background: var(--bg-secondary);
+  border-radius: 0;
+  padding: 1rem;
+  animation: certPreviewSlideUp 0.35s ease;
+}
+
+.cert-preview-meta h3 {
+  margin: 0 0 0.75rem;
+  color: var(--text-primary);
+}
+
+.cert-preview-image-wrap {
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  overflow: hidden;
+  margin-bottom: 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.cert-preview-image {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.cert-preview-desc {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  animation: certBodySlideUp 0.32s ease;
+}
+
+@keyframes certBodySlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes certPreviewSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .cert-showcase-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cert-preview-image {
+    height: 220px;
+  }
 }
 
 /* ===== ABOUT PAGE CTA ===== */
@@ -5631,6 +5747,13 @@ html:not(.dark) .nav-btn.active {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+  align-items: start;
+}
+
+.skill-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
 }
 
 /* Individual Skill Item - Grid Layout */
@@ -5711,30 +5834,26 @@ html:not(.dark) .skill-item-row:hover {
   transform: translateY(-2px);
 }
 
-/* Expanded details panel that appears at the bottom of the skills container */
-.skill-detail-panel {
-  margin-top: 1rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(8px);
-  animation: fadeInUp 0.25s ease;
+.skill-inline-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0 1.1rem;
+  border-left: 2px solid transparent;
+  transition: max-height 0.28s ease, opacity 0.22s ease, padding 0.22s ease, border-color 0.22s ease;
 }
 
-html:not(.dark) .skill-detail-panel {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.skill-detail-title {
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.35rem;
+.skill-dropdown.open .skill-inline-details {
+  max-height: 180px;
+  opacity: 1;
+  padding: 0.15rem 1.1rem 0.65rem;
+  border-left-color: var(--accent);
 }
 
 .skill-detail-text {
   color: var(--text-secondary);
   line-height: 1.6;
+  font-size: 0.92rem;
 }
 
 /* Responsive Design */
