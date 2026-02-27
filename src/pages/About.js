@@ -55,7 +55,7 @@ function About() {
     },
   ];
 
-  const flowLines = Array.from({ length: 34 }, (_, i) => i);
+  const flowLines = Array.from({ length: 46 }, (_, i) => i);
   const flowPills = [
     { label: 'capacity', x: '13%', y: '38%', delay: '0s' },
     { label: 'clarity', x: '29%', y: '54%', delay: '0.12s' },
@@ -290,8 +290,8 @@ function About() {
                   <path
                     key={line}
                     className="about-flow-line"
-                    d={`M 0 ${150 + line * 7} C 220 ${20 + line * 4}, 430 ${290 + line * 3}, 650 ${180 + line * 4} C 830 ${100 + line * 3}, 1000 ${70 + line * 5}, 1200 ${155 + line * 3}`}
-                    style={{ opacity: 0.2 + line * 0.035 }}
+                    d={`M 0 ${124 + line * 4} C 220 ${24 + line * 2}, 430 ${258 + line * 2}, 650 ${160 + line * 2} C 830 ${88 + line * 2}, 1000 ${54 + line * 3}, 1200 ${132 + line * 2}`}
+                    style={{ opacity: 0.14 + line * 0.015 }}
                   />
                 ))}
               </svg>
