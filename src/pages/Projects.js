@@ -85,6 +85,9 @@ function Projects() {
         {/* Localized Immersive Orbs */}
         <div className="hero-orb orb-v5 orb-color-1" style={{ top: '-10%', right: '10%' }}></div>
         <div className="hero-orb orb-v2 orb-color-3" style={{ bottom: '5%', left: '5%' }}></div>
+        <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '12%', left: '18%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-6 orb-shape-blob orb-anim-rise" style={{ bottom: '18%', right: '28%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-4 orb-shape-squircle orb-anim-orbit" style={{ top: '35%', right: '4%' }}></div>
         <div className="hero-scalar-content">
           <span className="hero-label">EXPLORE</span>
           <h1 className="hero-scalar-title">Projects & <em>Creations</em></h1>

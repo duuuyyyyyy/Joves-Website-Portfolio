@@ -46,14 +46,17 @@ html.dark .global-dots-overlay {
 
 /* Light Theme "Soft Orb" Design */
 html:not(.dark) .global-dots-overlay {
-    opacity: 0.6;
+    opacity: 0.95;
     background-image:
-        radial-gradient(circle at 20% 30%, var(--sand-pale) 0%, transparent 15%),
-        radial-gradient(circle at 80% 10%, var(--sand-light) 0%, transparent 20%),
-        radial-gradient(circle at 40% 80%, var(--sand-primary) 0%, transparent 10%),
-        radial-gradient(circle at 10% 90%, var(--sand-light) 0%, transparent 15%),
-        radial-gradient(circle at 90% 85%, var(--sand-pale) 0%, transparent 12%);
+        radial-gradient(circle at 14% 16%, rgba(212, 165, 116, 0.2) 0%, transparent 14%),
+        radial-gradient(circle at 86% 12%, rgba(200, 152, 96, 0.16) 0%, transparent 16%),
+        radial-gradient(circle at 24% 74%, rgba(150, 120, 180, 0.1) 0%, transparent 13%),
+        radial-gradient(circle at 72% 82%, rgba(100, 120, 200, 0.1) 0%, transparent 15%),
+        radial-gradient(circle at 50% 42%, rgba(212, 165, 116, 0.08) 0%, transparent 12%),
+        radial-gradient(circle at 6% 52%, rgba(210, 170, 130, 0.08) 0%, transparent 11%),
+        radial-gradient(circle at 94% 56%, rgba(186, 152, 116, 0.08) 0%, transparent 11%);
     background-size: 100% 100%;
+    animation: lightOverlayOrbs 24s ease-in-out infinite alternate;
 }
 
 @keyframes orbFloatGlobal1 {
@@ -89,5 +92,19 @@ html:not(.dark) .global-dots-overlay {
 
     50% {
         transform: translate(50px, 50px);
+    }
+}
+
+@keyframes lightOverlayOrbs {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(-1%, 1.5%, 0) scale(1.02);
+    }
+
+    100% {
+        transform: translate3d(1.5%, -1%, 0) scale(1.03);
     }
 }

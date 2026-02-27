@@ -59,6 +59,9 @@ function Contact() {
         <div className="hero-orb orb-v4 orb-color-1" style={{ top: '10%', left: '5%' }}></div>
         <div className="hero-orb orb-v2 orb-color-2" style={{ bottom: '20%', right: '5%' }}></div>
         <div className="hero-orb orb-v3 orb-color-3" style={{ top: '50%', left: '15%', opacity: 0.05 }}></div>
+        <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '12%', right: '22%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-6 orb-shape-blob orb-anim-rise" style={{ bottom: '12%', left: '32%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-4 orb-shape-squircle orb-anim-orbit" style={{ top: '58%', right: '10%' }}></div>
 
         <h1 className="hero-scalar-title contact-hero-title">
           Let's <em>Get In Touch</em>

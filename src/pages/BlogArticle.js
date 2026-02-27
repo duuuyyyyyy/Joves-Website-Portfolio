@@ -62,6 +62,8 @@ function BlogArticle() {
     return (
       <>
         <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
+          <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '-8%', right: '12%' }}></div>
+          <div className="hero-orb orb-v8 orb-color-2 orb-shape-blob orb-anim-orbit" style={{ bottom: '12%', left: '16%' }}></div>
           <div className="hero-scalar-content">
             <h1 className="hero-scalar-title">Article Not Found</h1>
           </div>
@@ -77,7 +79,9 @@ function BlogArticle() {
   return (
     <>
       <section className="hero-scalar" style={{ minHeight: '40vh', paddingBottom: '3rem' }}>
-        <div className="hero-orb hero-orb-1" style={{ width: '400px', height: '400px', top: '-10%' }}></div>
+        <div className="hero-orb orb-v5 orb-color-1 orb-shape-ellipse" style={{ top: '-10%', right: '12%' }}></div>
+        <div className="hero-orb orb-v7 orb-color-5 orb-shape-blob orb-anim-wave" style={{ top: '12%', left: '10%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-6 orb-shape-squircle orb-anim-orbit" style={{ bottom: '14%', right: '36%' }}></div>
         <div className="hero-scalar-content">
           <span className="hero-label">{article.date}</span>
           <h1 className="hero-scalar-title">{article.title}</h1>

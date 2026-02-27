@@ -99,6 +99,14 @@ function Home() {
         <div className="hero-orb orb-v4 orb-color-4" style={{ bottom: '20%', right: '15%' }}></div>
         <div className="hero-orb orb-v5 orb-color-1" style={{ top: '50%', right: '30%' }}></div>
         <div className="hero-orb orb-v2 orb-color-2" style={{ top: '5%', left: '10%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-3" style={{ top: '14%', right: '28%' }}></div>
+        <div className="hero-orb orb-v7 orb-color-4" style={{ bottom: '8%', right: '42%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-1" style={{ top: '62%', left: '34%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-2" style={{ top: '38%', right: '4%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-4" style={{ bottom: '30%', left: '6%' }}></div>
+        <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '8%', right: '40%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-6 orb-shape-blob orb-anim-rise" style={{ bottom: '18%', right: '9%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-5 orb-shape-squircle orb-anim-orbit" style={{ top: '46%', left: '11%' }}></div>
 
         {/* Gradient glow at bottom */}
         <div className="hero-glow"></div>

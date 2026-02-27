@@ -22,6 +22,9 @@ function Blog() {
         {/* Localized Immersive Orbs */}
         <div className="hero-orb orb-v3 orb-color-4" style={{ top: '-10%', right: '15%' }}></div>
         <div className="hero-orb orb-v4 orb-color-2" style={{ bottom: '10%', left: '20%' }}></div>
+        <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '18%', left: '8%' }}></div>
+        <div className="hero-orb orb-v6 orb-color-6 orb-shape-blob orb-anim-rise" style={{ bottom: '16%', right: '20%' }}></div>
+        <div className="hero-orb orb-v8 orb-color-1 orb-shape-squircle orb-anim-orbit" style={{ top: '40%', right: '40%' }}></div>
         <div className="hero-scalar-content">
           <span className="hero-label">RESOURCES & INSIGHTS</span>
           <h1 className="hero-scalar-title">Blog & Articles</h1>
