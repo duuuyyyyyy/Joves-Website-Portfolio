@@ -24,15 +24,17 @@ function App() {
       <GlobalBackground />
       <ScrollToTop />
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogArticle />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/resume" element={<Navigate to="/contact" replace />} />
-      </Routes>
+      <div className="app-content-shell">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogArticle />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/resume" element={<Navigate to="/contact" replace />} />
+        </Routes>
+      </div>
       <Footer />
     </>
   );
