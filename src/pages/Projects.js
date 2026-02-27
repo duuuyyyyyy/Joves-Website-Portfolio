@@ -4,16 +4,25 @@ import { ProjectModal, useProjectModal } from '../components/ProjectModal';
 const DUPLICATE_COPIES = 9;
 const MID_COPY_INDEX = Math.floor(DUPLICATE_COPIES / 2);
 
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
 function Projects() {
   const { activeProject, openModal, closeModal } = useProjectModal();
   const viewportRef = useRef(null);
+  const trackRef = useRef(null);
   const galleryRef = useRef(null);
   const momentumRafRef = useRef(null);
-  const snapTimerRef = useRef(null);
+  const snapRafRef = useRef(null);
   const metricsRef = useRef(null);
-  const momentumRef = useRef({ velocity: 0 });
-  const lastScrollTsRef = useRef(0);
-  const dragRef = useRef({ down: false, x: 0, scroll: 0, lastX: 0, lastT: 0, velocity: 0 });
+  const offsetRef = useRef(0);
+  const velocityRef = useRef(0);
+  const dragRef = useRef({ down: false, startX: 0, startOffset: 0, lastX: 0, lastT: 0, velocity: 0 });
   const [galleryVisible, setGalleryVisible] = useState(false);
 
   const projects = useMemo(
@@ -83,198 +92,190 @@ function Projects() {
     return () => obs.disconnect();
   }, []);
 
-  const getMetrics = useCallback(() => {
+  const readMetrics = useCallback(() => {
     const viewport = viewportRef.current;
-    if (!viewport) return null;
-    const gap = parseFloat(getComputedStyle(viewport).gap || '0') || 0;
-    const visibleCards = 4;
-    const cardWidth = (viewport.clientWidth - gap * (visibleCards - 1)) / visibleCards;
-    const sidePad = viewport.clientWidth / 2 - (cardWidth + gap / 2);
-    viewport.style.setProperty('--card-width', `${cardWidth}px`);
-    viewport.style.setProperty('--carousel-pad', `${Math.max(0, sidePad)}px`);
-    viewport.style.setProperty('--carousel-gap', `${gap}px`);
+    const track = trackRef.current;
+    if (!viewport || !track) return null;
 
-    const firstCard = viewport.querySelector('.arc-card');
+    const firstCard = track.querySelector('.belt-card');
     if (!firstCard) return null;
-    const measuredWidth = firstCard.offsetWidth || cardWidth;
-    const step = measuredWidth + gap;
+
+    const cardWidth = firstCard.getBoundingClientRect().width || 260;
+    const trackStyles = getComputedStyle(track);
+    const gap = parseFloat(trackStyles.columnGap || trackStyles.gap || '16') || 16;
+    const step = cardWidth + gap;
     const stride = step * projects.length;
-    const metrics = { viewport, cardWidth: measuredWidth, gap, step, stride, sidePad: Math.max(0, sidePad) };
+    const viewportWidth = viewport.clientWidth;
+
+    const metrics = {
+      cardWidth,
+      gap,
+      step,
+      stride,
+      viewportWidth
+    };
+
     metricsRef.current = metrics;
     return metrics;
   }, [projects.length]);
 
-  const recenterInfinite = useCallback(() => {
-    const m = metricsRef.current || getMetrics();
-    if (!m) return;
-    const { viewport, stride, sidePad } = m;
-    const safeMin = sidePad + stride * (MID_COPY_INDEX - 1.25);
-    const safeMax = sidePad + stride * (MID_COPY_INDEX + 1.25);
-    if (viewport.scrollLeft > safeMin && viewport.scrollLeft < safeMax) return;
-    const logical = ((viewport.scrollLeft - sidePad) % stride + stride) % stride;
-    viewport.scrollLeft = sidePad + MID_COPY_INDEX * stride + logical;
-  }, [getMetrics]);
+  const normalizeOffset = useCallback((value) => {
+    const metrics = metricsRef.current;
+    if (!metrics || metrics.stride <= 0) return value;
+    let next = value;
+    while (next > metrics.stride) next -= metrics.stride;
+    while (next < -metrics.stride) next += metrics.stride;
+    return next;
+  }, []);
 
-  const updateArc = useCallback(() => {
-    const m = metricsRef.current || getMetrics();
-    if (!m) return;
-    const { viewport, step } = m;
-    const cards = viewport.querySelectorAll('.arc-card');
-    const axisCenter = viewport.scrollLeft + viewport.clientWidth / 2;
+  const applyBeltLayout = useCallback(() => {
+    const metrics = metricsRef.current || readMetrics();
+    const track = trackRef.current;
+    if (!metrics || !track) return;
 
-    // True circular arc in x-z space; perspective projection gives wider outer cards.
-    const radius = Math.max(viewport.clientWidth * 0.92, step * 3.6);
-    const perspectiveDepth = Math.max(viewport.clientWidth * 1.25, 980);
+    offsetRef.current = normalizeOffset(offsetRef.current);
 
-    const distMap = [];
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      const dx = cardCenter - axisCenter;
-      const clampedX = Math.max(-radius * 0.94, Math.min(radius * 0.94, dx));
-      const theta = Math.asin(clampedX / radius);
-      const depthZ = radius * (1 - Math.cos(theta));
-      const perspectiveScale = perspectiveDepth / Math.max(1, perspectiveDepth - depthZ);
-      const projectedX = clampedX * perspectiveScale;
-      const xOffset = projectedX - dx;
-      const rotY = -theta * (180 / Math.PI) * 0.86;
-      const yLift = -depthZ * 0.055;
+    const cards = track.querySelectorAll('.belt-card');
+    const viewportCenterX = metrics.viewportWidth / 2;
+    const radius = metrics.viewportWidth * 0.9;
+    const angleStep = metrics.step / radius;
+    const centerIndex = MID_COPY_INDEX * projects.length + offsetRef.current / metrics.step;
 
-      card.style.setProperty('--arc-x', `${xOffset}px`);
-      card.style.setProperty('--arc-y', `${yLift}px`);
-      card.style.setProperty('--arc-z', `${depthZ}px`);
-      card.style.setProperty('--arc-rot', `${rotY}deg`);
-      distMap.push({ idx, abs: Math.abs(dx) });
-      card.classList.remove('is-focus');
+    cards.forEach((card, orderIndex) => {
+      const virtualIndex = Number(card.dataset.virtualIndex ?? orderIndex);
+      const relativeIndex = virtualIndex - centerIndex;
+      const angle = relativeIndex * angleStep;
+
+      const x = radius * Math.sin(angle);
+      const z = radius * (1 - Math.cos(angle));
+      const rotateY = angle * (180 / Math.PI);
+      const absAngle = Math.abs(angle);
+
+      const opacity = clamp(1 - absAngle * 1.2, 0.45, 1);
+      const scale = clamp(1 - absAngle * 0.25, 0.85, 1);
+      const focusable = absAngle < 0.4;
+
+      card.style.left = `${viewportCenterX - metrics.cardWidth / 2 + x}px`;
+      card.style.transform = `translateZ(${-z}px) rotateY(${rotateY}deg) scale(${scale})`;
+      card.style.opacity = `${opacity}`;
+      card.dataset.focusable = focusable ? '1' : '0';
+      card.style.pointerEvents = 'auto';
+      card.classList.toggle('is-focus', focusable);
     });
+  }, [normalizeOffset, projects.length, readMetrics]);
 
-    distMap.sort((a, b) => a.abs - b.abs);
-    if (cards[distMap[0]?.idx]) cards[distMap[0].idx].classList.add('is-focus');
-    if (cards[distMap[1]?.idx]) cards[distMap[1].idx].classList.add('is-focus');
-  }, [getMetrics]);
-
-  const snapToSplitCenter = useCallback(() => {
-    const m = metricsRef.current || getMetrics();
-    if (!m) return;
-    const { viewport, cardWidth, gap, step, sidePad } = m;
-    const axis = viewport.scrollLeft + viewport.clientWidth / 2;
-
-    // Split-center snaps between two middle cards (mid-gap line)
-    const relativeAxis = axis - sidePad;
-    const k = Math.round((relativeAxis - (cardWidth + gap / 2)) / step);
-    const splitLine = sidePad + k * step + cardWidth + gap / 2;
-    const target = splitLine - viewport.clientWidth / 2;
-    viewport.scrollTo({ left: target, behavior: 'smooth' });
-  }, [getMetrics]);
-
-  const scheduleSnap = useCallback(() => {
-    if (snapTimerRef.current) clearTimeout(snapTimerRef.current);
-    snapTimerRef.current = setTimeout(snapToSplitCenter, 110);
-  }, [snapToSplitCenter]);
-
-  useEffect(() => {
-    const m = getMetrics();
-    if (!m) return;
-    const { viewport, stride, sidePad } = m;
-
-    viewport.scrollLeft = sidePad + MID_COPY_INDEX * stride;
-    recenterInfinite();
-    updateArc();
-    snapToSplitCenter();
-
-    const onScroll = () => {
-      lastScrollTsRef.current = performance.now();
-      recenterInfinite();
-      updateArc();
-      scheduleSnap();
-    };
-
-    const onWheel = (e) => {
-      e.preventDefault();
-      const metric = metricsRef.current || getMetrics();
-      if (!metric) return;
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-      const jumpCards = Math.min(4, Math.max(1, Math.round(Math.abs(delta) / 85)));
-      const impulse = Math.sign(delta) * (metric.step * (0.26 + jumpCards * 0.2));
-      momentumRef.current.velocity = Math.max(-metric.step * 1.75, Math.min(metric.step * 1.75, momentumRef.current.velocity + impulse));
-      if (!momentumRafRef.current) {
-        const tick = () => {
-          const curr = metricsRef.current || getMetrics();
-          const view = curr?.viewport;
-          if (!curr || !view) {
-            momentumRafRef.current = null;
-            return;
-          }
-          view.scrollLeft += momentumRef.current.velocity;
-          momentumRef.current.velocity *= 0.9;
-          recenterInfinite();
-          updateArc();
-          if (Math.abs(momentumRef.current.velocity) < 0.15) {
-            momentumRafRef.current = null;
-            momentumRef.current.velocity = 0;
-            snapToSplitCenter();
-            return;
-          }
-          momentumRafRef.current = requestAnimationFrame(tick);
-        };
-        momentumRafRef.current = requestAnimationFrame(tick);
-      }
-    };
-
-    viewport.addEventListener('scroll', onScroll, { passive: true });
-    viewport.addEventListener('wheel', onWheel, { passive: false });
-
-    const onResize = () => {
-      recenterInfinite();
-      updateArc();
-      snapToSplitCenter();
-    };
-    window.addEventListener('resize', onResize);
-
-    return () => {
-      viewport.removeEventListener('scroll', onScroll);
-      viewport.removeEventListener('wheel', onWheel);
-      window.removeEventListener('resize', onResize);
-      if (snapTimerRef.current) clearTimeout(snapTimerRef.current);
-      if (momentumRafRef.current) cancelAnimationFrame(momentumRafRef.current);
-    };
-  }, [getMetrics, recenterInfinite, snapToSplitCenter, scheduleSnap, updateArc]);
-
-  const stopInertia = () => {
+  const stopMotion = useCallback(() => {
     if (momentumRafRef.current) {
       cancelAnimationFrame(momentumRafRef.current);
       momentumRafRef.current = null;
     }
-    momentumRef.current.velocity = 0;
-  };
+    if (snapRafRef.current) {
+      cancelAnimationFrame(snapRafRef.current);
+      snapRafRef.current = null;
+    }
+  }, []);
 
-  const beginInertia = () => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
-    let v = momentumRef.current.velocity;
-    stopInertia();
-    const tick = () => {
-      v *= 0.93;
-      if (Math.abs(v) < 0.08) {
-        snapToSplitCenter();
-        momentumRafRef.current = null;
+  const snapToStep = useCallback(
+    (animated = true) => {
+      const metrics = metricsRef.current || readMetrics();
+      if (!metrics) return;
+
+      const snappedOffset = normalizeOffset(Math.round(offsetRef.current / metrics.step) * metrics.step);
+      if (!animated) {
+        offsetRef.current = snappedOffset;
+        applyBeltLayout();
         return;
       }
-      viewport.scrollLeft -= v;
-      recenterInfinite();
-      updateArc();
+
+      const start = offsetRef.current;
+      const delta = snappedOffset - start;
+      if (Math.abs(delta) < 0.5) {
+        offsetRef.current = snappedOffset;
+        applyBeltLayout();
+        return;
+      }
+
+      if (snapRafRef.current) cancelAnimationFrame(snapRafRef.current);
+      const startedAt = performance.now();
+      const duration = 340;
+
+      const tick = (now) => {
+        const progress = clamp((now - startedAt) / duration, 0, 1);
+        const eased = easeOutCubic(progress);
+        offsetRef.current = normalizeOffset(start + delta * eased);
+        applyBeltLayout();
+        if (progress < 1) {
+          snapRafRef.current = requestAnimationFrame(tick);
+        } else {
+          snapRafRef.current = null;
+        }
+      };
+
+      snapRafRef.current = requestAnimationFrame(tick);
+    },
+    [applyBeltLayout, normalizeOffset, readMetrics]
+  );
+
+  const startMomentum = useCallback(() => {
+    if (momentumRafRef.current) return;
+
+    const tick = () => {
+      velocityRef.current *= 0.915;
+      if (Math.abs(velocityRef.current) < 0.1) {
+        velocityRef.current = 0;
+        momentumRafRef.current = null;
+        snapToStep(true);
+        return;
+      }
+
+      offsetRef.current += velocityRef.current;
+      applyBeltLayout();
       momentumRafRef.current = requestAnimationFrame(tick);
     };
+
     momentumRafRef.current = requestAnimationFrame(tick);
-  };
+  }, [applyBeltLayout, snapToStep]);
+
+  const onWheel = useCallback(
+    (e) => {
+      e.preventDefault();
+      const metrics = metricsRef.current || readMetrics();
+      if (!metrics) return;
+
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (!delta) return;
+
+      if (snapRafRef.current) {
+        cancelAnimationFrame(snapRafRef.current);
+        snapRafRef.current = null;
+      }
+
+      const cardsToMove = clamp(Math.round(Math.abs(delta) / 140), 1, 3);
+      const impulse = -Math.sign(delta) * (metrics.step * (0.06 + cardsToMove * 0.07));
+
+      velocityRef.current = clamp(
+        velocityRef.current + impulse,
+        -metrics.step * 1.85,
+        metrics.step * 1.85
+      );
+      offsetRef.current += impulse * 0.28;
+      applyBeltLayout();
+      startMomentum();
+    },
+    [applyBeltLayout, readMetrics, startMomentum]
+  );
 
   const onPointerDown = (e) => {
+    if (e.button !== 0) return;
     const viewport = viewportRef.current;
     if (!viewport) return;
-    stopInertia();
+
+    stopMotion();
+    velocityRef.current = 0;
     dragRef.current = {
       down: true,
-      x: e.clientX,
-      scroll: viewport.scrollLeft,
+      startX: e.clientX,
+      startOffset: offsetRef.current,
       lastX: e.clientX,
       lastT: performance.now(),
       velocity: 0
@@ -286,34 +287,95 @@ function Projects() {
   const onPointerMove = (e) => {
     const viewport = viewportRef.current;
     if (!viewport || !dragRef.current.down) return;
+
     const now = performance.now();
-    const dx = e.clientX - dragRef.current.x;
-    viewport.scrollLeft = dragRef.current.scroll - dx;
+    const dx = e.clientX - dragRef.current.startX;
+    offsetRef.current = dragRef.current.startOffset + dx;
 
     const dt = Math.max(1, now - dragRef.current.lastT);
-    dragRef.current.velocity = (e.clientX - dragRef.current.lastX) / dt * 16;
+    dragRef.current.velocity = ((e.clientX - dragRef.current.lastX) / dt) * 16;
     dragRef.current.lastX = e.clientX;
     dragRef.current.lastT = now;
 
-    recenterInfinite();
-    updateArc();
+    applyBeltLayout();
   };
 
   const onPointerUp = (e) => {
     const viewport = viewportRef.current;
     if (!dragRef.current.down) return;
     dragRef.current.down = false;
+
     if (viewport) {
       if (viewport.hasPointerCapture(e.pointerId)) viewport.releasePointerCapture(e.pointerId);
       viewport.classList.remove('dragging');
     }
-    momentumRef.current.velocity = dragRef.current.velocity;
-    beginInertia();
+
+    velocityRef.current = dragRef.current.velocity;
+    if (Math.abs(velocityRef.current) > 0.14) {
+      startMomentum();
+      return;
+    }
+    snapToStep(true);
   };
 
-  const scrollToGallery = () => {
-    if (!galleryRef.current) return;
-    galleryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const metrics = readMetrics();
+    if (!metrics) return;
+
+    offsetRef.current = 0;
+    offsetRef.current = normalizeOffset(offsetRef.current);
+    applyBeltLayout();
+    snapToStep(false);
+
+    viewport.addEventListener('wheel', onWheel, { passive: false });
+
+    const onResize = () => {
+      readMetrics();
+      applyBeltLayout();
+      snapToStep(false);
+    };
+
+    window.addEventListener('resize', onResize);
+    return () => {
+      viewport.removeEventListener('wheel', onWheel);
+      window.removeEventListener('resize', onResize);
+      stopMotion();
+    };
+  }, [applyBeltLayout, normalizeOffset, onWheel, readMetrics, snapToStep, stopMotion]);
+
+  const handleCardClick = useCallback(
+    (e, projectId, virtualIndex) => {
+      const isFocusable = e.currentTarget.dataset.focusable === '1';
+      if (isFocusable) {
+        openModal(projectId);
+        return;
+      }
+
+      // Optional behavior for non-focus cards: nudge them toward center then snap.
+      const metrics = metricsRef.current || readMetrics();
+      if (!metrics) return;
+      const centerIndex = MID_COPY_INDEX * projects.length + offsetRef.current / metrics.step;
+      const relativeIndex = virtualIndex - centerIndex;
+      offsetRef.current = normalizeOffset(offsetRef.current + relativeIndex * metrics.step);
+      snapToStep(true);
+    },
+    [normalizeOffset, openModal, projects.length, readMetrics, snapToStep]
+  );
+
+  const scrollToGallery = useCallback(() => {
+    const gallerySection = document.getElementById('projects-gallery') || galleryRef.current;
+    if (!gallerySection) return;
+    gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
+
+  const onGalleryTriggerKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      scrollToGallery();
+    }
   };
 
   return (
@@ -337,13 +399,15 @@ function Projects() {
             <em> aesthetic</em>
           </h2>
           <p>
-            You should feel safe when sitting in, or leaning on the piece, and you should not be able to recognize any sway, give or flex in it.
+            You should feel safe when sitting in, or leaning on the piece, and you should not be able to recognise any sway,
+            give or flex in it.
           </p>
         </section>
 
         <section className="projects-carousel-wrapper">
+          <div className="projects-focus-zone" aria-hidden="true"></div>
           <div
-            className="projects-carousel arc-carousel"
+            className="projects-carousel projects-viewport"
             ref={viewportRef}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
@@ -351,25 +415,34 @@ function Projects() {
             onPointerCancel={onPointerUp}
             onPointerLeave={onPointerUp}
           >
-            {virtualCarousel.map((item, idx) => (
-              <article
-                key={`${item.id}-${item.virtualIndex}-${idx}`}
-                className="carousel-item arc-card"
-                onClick={() => openModal(item.id)}
-              >
-                <div className="carousel-image" style={{ backgroundImage: `url(${item.image})` }}>
-                  <div className="carousel-overlay"></div>
-                </div>
-              </article>
-            ))}
+            <div className="projects-carousel-track projects-track" ref={trackRef}>
+              {virtualCarousel.map((item, index) => (
+                <article
+                  key={`${item.id}-${item.virtualIndex}-${index}`}
+                  className="carousel-item belt-card"
+                  data-virtual-index={index}
+                  onClick={(e) => handleCardClick(e, item.id, index)}
+                >
+                  <div className="carousel-image" style={{ backgroundImage: `url(${item.image})` }}>
+                    <div className="carousel-overlay"></div>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        <button type="button" className="projects-gallery-anchor" onClick={scrollToGallery}>
-          View Collection
-        </button>
+        <p
+          className="projects-gallery-anchor"
+          onClick={scrollToGallery}
+          onKeyDown={onGalleryTriggerKeyDown}
+          role="button"
+          tabIndex={0}
+        >
+          Scroll to view gallery
+        </p>
 
-        <section className={`projects-bento ${galleryVisible ? 'revealed' : ''}`} ref={galleryRef}>
+        <section className={`projects-bento ${galleryVisible ? 'revealed' : ''}`} ref={galleryRef} id="projects-gallery">
           <div className="projects-bento-grid">
             {projects.map((project, index) => (
               <article
