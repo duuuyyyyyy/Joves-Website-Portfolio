@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { ProjectModal, useProjectModal } from '../components/ProjectModal';
 
 function Home() {
@@ -122,9 +121,9 @@ function Home() {
             experiences — bridging design thinking with what user needs.
           </p>
           <div className="hero-scalar-actions reveal-on-scroll">
-            <Link to="/projects" className="btn-scalar-primary">
+            <a href="#projects-section" className="btn-scalar-primary">
               <span>View My Works</span> <span className="btn-arrow">→</span>
-            </Link>
+            </a>
           </div>
         </div>
       </section>

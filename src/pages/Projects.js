@@ -81,7 +81,7 @@ function Projects() {
   }, [virtualIndex, projects.length]);
 
   return (
-    <>
+    <section id="projects-section" className="page-section projects-page">
       <section
         className="projects-hero"
         style={{ backgroundImage: `linear-gradient(135deg, rgba(20,32,46,0.55), rgba(20,32,46,0.28)), url(${selectedProject.image})` }}
@@ -146,7 +146,7 @@ function Projects() {
       </main>
 
       <ProjectModal projectId={activeProject} onClose={closeModal} />
-    </>
+    </section>
   );
 }
 

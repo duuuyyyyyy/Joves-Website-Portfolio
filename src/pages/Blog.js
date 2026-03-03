@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 const blogArticles = [
   { slug: 'my-journey-as-a-web-developer', title: 'My Journey as a Web Developer', date: 'February 20, 2026', excerpt: 'How I started learning web development, the challenges I faced, and key lessons I learned along the way.' },
@@ -16,7 +15,7 @@ function Blog() {
   const displayedArticles = showAll ? blogArticles : blogArticles.slice(0, 3);
 
   return (
-    <>
+    <section id="blog" className="page-section blog-page">
       {/* Page Header */}
       <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
         {/* Localized Immersive Orbs */}
@@ -38,17 +37,15 @@ function Blog() {
         <section className={`blog-grid ${showAll ? 'blog-grid-bento' : ''}`}>
 
           {displayedArticles.map((article, index) => (
-            <Link
-              to={`/blog/${article.slug}`}
+            <article
               key={article.slug}
               className={`blog-card ${!showAll && index >= 3 ? 'blog-hidden' : ''}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <p className="blog-meta">{article.date}</p>
               <h3>{article.title}</h3>
               <p className="blog-excerpt">{article.excerpt}</p>
               <span className="blog-read-more">Read Article →</span>
-            </Link>
+            </article>
           ))}
 
         </section>
@@ -62,7 +59,7 @@ function Blog() {
         )}
 
       </main>
-    </>
+    </section>
   );
 }
 

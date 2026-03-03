@@ -62,7 +62,7 @@ function Contact() {
   ];
 
   return (
-    <>
+    <section id="contact" className="page-section contact-page">
       <main className="contact-main" style={{ position: 'relative', overflow: 'hidden' }}>
         {/* Localized Immersive Orbs */}
         <div className="hero-orb orb-v4 orb-color-1" style={{ top: '10%', left: '5%' }}></div>
@@ -198,7 +198,7 @@ function Contact() {
         </section>
 
       </main>
-    </>
+    </section>
   );
 }
 

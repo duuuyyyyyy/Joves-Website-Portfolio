@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
 
 function About() {
   const [activeFilter, setActiveFilter] = useState('technical');
@@ -126,7 +125,7 @@ function About() {
   const currentCert = activeCert >= 0 ? certifications[activeCert] : certifications[0];
 
   return (
-    <>
+    <section id="about" className="page-section about-page">
       <div className="about-page-grid">
         <section className="about-hero-center-wrapper" ref={heroRef}>
           <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
@@ -276,7 +275,7 @@ function About() {
             className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
             ref={flowSectionRef}
           >
-            <Link to="/contact" className="about-flow-cta-pill">Get In Touch</Link>
+            <a href="#contact" className="about-flow-cta-pill">Get In Touch</a>
             <h2 className="about-flow-title">
               You steadily gain <span>impactful momentum.</span>
             </h2>
@@ -311,7 +310,7 @@ function About() {
           </section>
         </main>
       </div>
-    </>
+    </section>
   );
 }
 

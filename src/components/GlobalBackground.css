@@ -31,32 +31,24 @@ html.dark .global-cursor-glow {
 
 /* Background Texture Overlay */
 .global-dots-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: -1;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: none;
 }
 
 /* Dark Theme Dots */
 html.dark .global-dots-overlay {
-    opacity: 0.15;
-    background-image: radial-gradient(var(--accent) 1px, transparent 1px);
-    background-size: 40px 40px;
+  opacity: 0;
+  background: none;
 }
 
 /* Light Theme "Soft Orb" Design */
 html:not(.dark) .global-dots-overlay {
-    opacity: 0.95;
-    background-image:
-        radial-gradient(circle at 14% 16%, rgba(212, 165, 116, 0.2) 0%, transparent 14%),
-        radial-gradient(circle at 86% 12%, rgba(200, 152, 96, 0.16) 0%, transparent 16%),
-        radial-gradient(circle at 24% 74%, rgba(150, 120, 180, 0.1) 0%, transparent 13%),
-        radial-gradient(circle at 72% 82%, rgba(100, 120, 200, 0.1) 0%, transparent 15%),
-        radial-gradient(circle at 50% 42%, rgba(212, 165, 116, 0.08) 0%, transparent 12%),
-        radial-gradient(circle at 6% 52%, rgba(210, 170, 130, 0.08) 0%, transparent 11%),
-        radial-gradient(circle at 94% 56%, rgba(186, 152, 116, 0.08) 0%, transparent 11%);
-    background-size: 100% 100%;
-    animation: lightOverlayOrbs 24s ease-in-out infinite alternate;
+  opacity: 0;
+  background: none;
+  animation: none;
 }
 
 @keyframes orbFloatGlobal1 {

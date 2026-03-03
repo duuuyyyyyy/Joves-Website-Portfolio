@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
   const [isDark, setIsDark] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const location = useLocation();
+  const [activeSection, setActiveSection] = useState('hero');
   const navRef = useRef(null);
   const highlightRef = useRef(null);
+  const sectionIds = ['hero', 'about', 'projects-section', 'blog', 'contact'];
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme');
@@ -56,11 +56,6 @@ function Header() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [menuOpen, closeMenu]);
 
-  // Close menu on route change
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [location]);
-
   // Track scroll for header transparency
   useEffect(() => {
     const handleScroll = () => {
@@ -92,45 +87,81 @@ function Header() {
       }
     };
 
-    // Initial update after render
     requestAnimationFrame(updateHighlight);
     
     // Update on window resize
     window.addEventListener('resize', updateHighlight);
     return () => window.removeEventListener('resize', updateHighlight);
-  }, [location.pathname]);
+  }, [activeSection]);
 
-  const currentPath = location.pathname;
+  // Track visible section for nav highlighting
+  useEffect(() => {
+    const handleSectionTracking = () => {
+      let current = 'hero';
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        const offset = 120; // header height buffer
+        if (rect.top <= offset && rect.bottom >= offset) {
+          current = id;
+          break;
+        }
+      }
+      setActiveSection(current);
+    };
+
+    handleSectionTracking();
+    window.addEventListener('scroll', handleSectionTracking, { passive: true });
+    window.addEventListener('resize', handleSectionTracking);
+    return () => {
+      window.removeEventListener('scroll', handleSectionTracking);
+      window.removeEventListener('resize', handleSectionTracking);
+    };
+  }, []);
+
+  const scrollToSection = (e, id) => {
+    e.preventDefault();
+    const el = document.getElementById(id);
+    if (!el) return;
+    const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+    closeMenu();
+  };
 
   const navItems = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/projects', label: 'Projects' },
-    { path: '/blog', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+    { id: 'hero', label: 'Home' },
+    { id: 'about', label: 'About' },
+    { id: 'projects-section', label: 'Projects' },
+    { id: 'blog', label: 'Blog' },
+    { id: 'contact', label: 'Contact' },
   ];
 
   return (
     <header className={`header${scrolled ? ' scrolled' : ''}`}>
       <nav className="navbar">
         <div className="nav-container">
-          <Link to="/" className="logo">
+          <a
+            href="#hero"
+            className="logo"
+            onClick={(e) => scrollToSection(e, 'hero')}
+          >
             <img src={process.env.PUBLIC_URL + '/navy-gold-gradient-transparent-background.png'} alt="Dulay+ Logo" className="logo-mark" />
             <span className="logo-text">Dulay+</span>
-          </Link>
+          </a>
 
           <ul className={`nav-links${menuOpen ? ' active' : ''}`} id="nav-links" ref={navRef}>
             {/* Sliding highlight element */}
             <div className="nav-highlight-slider" ref={highlightRef}></div>
             {navItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={currentPath === item.path ? 'active' : ''}
-                  onClick={closeMenu}
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  className={activeSection === item.id ? 'active' : ''}
+                  onClick={(e) => scrollToSection(e, item.id)}
                 >
                   {item.label}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
