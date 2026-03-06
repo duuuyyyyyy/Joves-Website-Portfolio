@@ -72,51 +72,39 @@ function Contact() {
         <div className="hero-orb orb-v6 orb-color-6 orb-shape-blob orb-anim-rise" style={{ bottom: '12%', left: '32%' }}></div>
         <div className="hero-orb orb-v8 orb-color-4 orb-shape-squircle orb-anim-orbit" style={{ top: '58%', right: '10%' }}></div>
 
-        <h1 className="hero-scalar-title contact-hero-title">
-          Let's <em>Get In Touch</em>
-        </h1>
+        <section className="contact-hero-grid">
+          <div className="contact-hero-left">
+            <p className="eyebrow">Let's collaborate</p>
+            <h1 className="contact-headline">
+              Manage conversations that lead to <span>meaningful work.</span>
+            </h1>
+            <p className="contact-subtext">
+              Share the context of your project, ask a question, or request a walkthrough. I reply within 24 hours.
+            </p>
+            <div className="contact-cta-row">
+              <a
+                className="btn btn-primary hero-cta-top"
+                href={process.env.PUBLIC_URL + '/Resume.pdf'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Resume
+              </a>
+              <a
+                className="btn btn-secondary"
+                href={process.env.PUBLIC_URL + '/Resume.pdf'}
+                download
+              >
+                Download PDF
+              </a>
+            </div>
+          </div>
 
-        {/* Contact Info */}
-        <section className="contact-info-grid">
-          {contactCards.map(({ label, icon, text, href, external }) => {
-            const Wrapper = href ? 'a' : 'div';
-            const wrapperProps = href
-              ? {
-                  href,
-                  target: external ? '_blank' : undefined,
-                  rel: external ? 'noopener noreferrer' : undefined
-                }
-              : {};
-
-            return (
-              <Wrapper key={label} className="contact-card" {...wrapperProps}>
-                <span className="contact-icon">
-                  <i className={icon}></i>
-                </span>
-                <div className="contact-card-copy">
-                  <span className="contact-card-label">{label}</span>
-                  <span className="contact-card-value">{text}</span>
-                </div>
-              </Wrapper>
-            );
-          })}
-        </section>
-
-        <div className="contact-divider"></div>
-
-        {/* Form + Resume side by side */}
-        <section className="contact-form-resume">
-          {/* Simplified Form */}
           <div className="contact-form-section">
             <form className="contact-form" onSubmit={handleSubmit}>
-
-              <h2 className="form-title">Send a Message</h2>
-
-              {/* Name */}
-              <div className="form-group">
-                <label htmlFor="name">Full Name <span className="required">*</span></label>
-                <div className="form-input-icon">
-                  <i className="fas fa-user"></i>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label htmlFor="name">Full Name <span className="required">*</span></label>
                   <input
                     type="text"
                     id="name"
@@ -127,13 +115,9 @@ function Contact() {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
 
-              {/* Email */}
-              <div className="form-group">
-                <label htmlFor="email">Email Address <span className="required">*</span></label>
-                <div className="form-input-icon">
-                  <i className="fas fa-envelope"></i>
+                <div className="form-group">
+                  <label htmlFor="email">Email Address <span className="required">*</span></label>
                   <input
                     type="email"
                     id="email"
@@ -146,21 +130,17 @@ function Contact() {
                 </div>
               </div>
 
-              {/* Message */}
               <div className="form-group">
                 <label htmlFor="message">Your Message <span className="required">*</span></label>
-                <div className="form-input-icon textarea-icon">
-                  <i className="fas fa-comment-dots"></i>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows="6"
-                    placeholder="Enter your message here..."
-                    required
-                    value={formData.message}
-                    onChange={handleChange}
-                  />
-                </div>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="6"
+                  placeholder="Enter your message here..."
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                />
               </div>
 
               <button
@@ -168,7 +148,7 @@ function Contact() {
                 className="btn btn-primary contact-submit-btn"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Sending...' : 'Submit Form'} <i className="fas fa-paper-plane"></i>
+                {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
 
               {formStatus && (
@@ -176,25 +156,36 @@ function Contact() {
                   {formStatus}
                 </div>
               )}
-
             </form>
           </div>
+        </section>
 
-          {/* Resume Download */}
-          <div className="resume-download-card">
-            <h2 className="resume-title">Download Resume</h2>
-            <p className="resume-subtitle">
-              Get a copy of my latest resume for a full overview of my experience and skills.
-            </p>
+        <section className="contact-info-grid social-links-bar">
+          {contactCards.map(({ label, icon, text, href, external }) => {
+            const isNameOnly = ['LinkedIn', 'GitHub', 'Facebook'].includes(label);
+            const Wrapper = isNameOnly ? 'div' : 'a';
+            const props = isNameOnly
+              ? {}
+              : {
+                  href,
+                  target: external ? '_blank' : undefined,
+                  rel: external ? 'noopener noreferrer' : undefined
+                };
 
-            <a
-              href={process.env.PUBLIC_URL + '/Resume.pdf'}
-              className="btn btn-primary btn-large"
-              download
-            >
-              <i className="fas fa-download"></i> Download Resume
-            </a>
-          </div>
+            return (
+              <Wrapper key={label} className="contact-card" {...props}>
+                <span className="contact-icon">
+                  <i className={icon}></i>
+                </span>
+                <div className="contact-card-copy">
+                  <span className="contact-card-label">{label}</span>
+                  <span className="contact-card-value">
+                    {isNameOnly ? 'Carla Joves' : text}
+                  </span>
+                </div>
+              </Wrapper>
+            );
+          })}
         </section>
 
       </main>

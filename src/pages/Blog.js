@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from 'react';
 
 const blogArticles = [
-  { slug: 'my-journey-as-a-web-developer', title: 'My Journey as a Web Developer', date: 'February 20, 2026', excerpt: 'How I started learning web development, the challenges I faced, and key lessons I learned along the way.' },
-  { slug: 'tips-for-building-responsive-websites', title: 'Tips for Building Responsive Websites', date: 'February 18, 2026', excerpt: 'A comprehensive guide to responsive web design and best practices for all device sizes.' },
+  {
+    slug: 'my-journey-as-a-web-developer',
+    title: 'My Journey as a Web Developer',
+    date: 'February 20, 2026',
+    excerpt: 'How I started learning web development, the challenges I faced, and key lessons I learned along the way.',
+    content:
+      "How I started learning web development, the challenges I faced, and key lessons I learned along the way. This article explores my transition from design to full-stack development.\n\nStarting out, I had no idea what I was getting into. The world of web development seemed vast and overwhelming. But with each line of code, I found myself more and more drawn to the craft. From building simple HTML pages to creating complex React applications, every step of the journey has been a learning experience.\n\nThe biggest challenge was learning to think like a developer. It's not just about writing code — it's about solving problems, understanding user needs, and creating experiences that are both beautiful and functional.\n\nToday, I combine design thinking with technical expertise to build solutions that make a real difference. And the journey continues."
+  },
+  {
+    slug: 'tips-for-building-responsive-websites',
+    title: 'Tips for Building Responsive Websites',
+    date: 'February 18, 2026',
+    excerpt: 'A comprehensive guide to responsive web design and best practices for all device sizes.',
+    content:
+      "A comprehensive guide to responsive web design. Learn best practices for creating websites that work seamlessly across all device sizes and screen orientations.\n\nResponsive design is no longer optional — it's a necessity. With users accessing websites from phones, tablets, laptops, and large monitors, your site needs to adapt gracefully to every screen size.\n\nKey principles include mobile-first design, flexible grids, fluid images, and strategic use of media queries. CSS Grid and Flexbox have made responsive layouts more intuitive than ever.\n\nRemember: responsive design isn't just about fitting content on smaller screens. It's about creating the best possible experience for every user, regardless of their device."
+  }
 ];
 
 function Blog() {
   const [showAll, setShowAll] = useState(false);
+  const [activeArticle, setActiveArticle] = useState(null);
 
   useEffect(() => {
     document.title = 'Blog | Portfolio';
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = activeArticle ? 'hidden' : 'auto';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [activeArticle]);
 
   const displayedArticles = showAll ? blogArticles : blogArticles.slice(0, 3);
 
@@ -40,11 +62,29 @@ function Blog() {
             <article
               key={article.slug}
               className={`blog-card ${!showAll && index >= 3 ? 'blog-hidden' : ''}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => setActiveArticle(article)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setActiveArticle(article);
+                }
+              }}
             >
               <p className="blog-meta">{article.date}</p>
               <h3>{article.title}</h3>
               <p className="blog-excerpt">{article.excerpt}</p>
-              <span className="blog-read-more">Read Article →</span>
+              <button
+                type="button"
+                className="blog-read-more link-reset"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveArticle(article);
+                }}
+              >
+                Read Article →
+              </button>
             </article>
           ))}
 
@@ -59,6 +99,24 @@ function Blog() {
         )}
 
       </main>
+
+      {activeArticle && (
+        <div className="project-modal active" onClick={(e) => e.target === e.currentTarget && setActiveArticle(null)}>
+          <div
+            className="project-modal-content blog-article-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="blog-article-title"
+          >
+            <button className="project-modal-close" onClick={() => setActiveArticle(null)} aria-label="Close article">×</button>
+            <p className="blog-meta">{activeArticle.date}</p>
+            <h2 id="blog-article-title">{activeArticle.title}</h2>
+            {activeArticle.content.split('\n\n').map((para, i) => (
+              <p key={i}>{para}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -57,9 +57,9 @@ function About() {
   const flowLines = Array.from({ length: 46 }, (_, i) => i);
   const flowPills = [
     { label: 'capacity', x: '13%', y: '38%', delay: '0s' },
-    { label: 'clarity', x: '29%', y: '54%', delay: '0.12s' },
-    { label: 'consistency', x: '47%', y: '71%', delay: '0.24s' },
-    { label: 'momentum', x: '69%', y: '58%', delay: '0.36s' },
+    { label: 'clarity', x: '33%', y: '54%', delay: '0.12s' },
+    { label: 'consistency', x: '55%', y: '71%', delay: '0.24s' },
+    { label: 'momentum', x: '78%', y: '58%', delay: '0.36s' },
   ];
   const flowPillContent = {
     capacity: 'Placeholder: Capacity grows when work is repeatable and priorities are consistently clear.',
@@ -136,30 +136,31 @@ function About() {
           <div className="hero-orb orb-v7 orb-color-6 orb-shape-squircle orb-anim-rise" style={{ bottom: '6%', left: '28%' }}></div>
           <div className="hero-orb orb-v8 orb-color-5 orb-shape-ellipse orb-anim-orbit" style={{ top: '24%', right: '34%' }}></div>
 
-          <div className="visual-stack">
-            <div className="broken-circle-clip">
-              <svg className="broken-circle-border" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="47" />
-              </svg>
+          <div className="about-hero-layout">
+            <div className="about-photo-stack">
+              <div className="broken-circle-clip">
+                <svg className="broken-circle-border" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="47" />
+                </svg>
+              </div>
+              <div className="about-photo-main">
+                <img src={process.env.PUBLIC_URL + '/carla-joves-public-speaking.jpg'} alt="Carla Joves speaking" />
+              </div>
+              <div className="about-photo-overlay">
+                <img src={process.env.PUBLIC_URL + '/carla-joves-posing-holding-camera.jpg'} alt="Carla Joves with camera" />
+              </div>
             </div>
-            <div className="image-glow-underlay"></div>
-            <div className="about-main-image-circular">
-              <img src={process.env.PUBLIC_URL + '/professional-photo.svg'} alt="Carla Joves" />
+
+            <div className="about-text-block">
+              <h2>Who I Am</h2>
+              <p>
+                I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
+              </p>
+              <div className="about-based-card">
+                <h3>Based In</h3>
+                <p>Philippines, available for worldwide collaboration and remote partnerships.</p>
+              </div>
             </div>
-          </div>
-
-          <div className="glass-text-container hero-bottom-left">
-            <h3>Who I Am</h3>
-            <p>
-              I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
-            </p>
-          </div>
-
-          <div className="glass-text-container hero-top-right">
-            <h3>Based In</h3>
-            <p>
-              Philippines, available for worldwide collaboration and remote partnerships.
-            </p>
           </div>
         </section>
 
@@ -275,7 +276,6 @@ function About() {
             className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
             ref={flowSectionRef}
           >
-            <a href="#contact" className="about-flow-cta-pill">Get In Touch</a>
             <h2 className="about-flow-title">
               You steadily gain <span>impactful momentum.</span>
             </h2>
@@ -295,17 +295,19 @@ function About() {
                 ))}
               </svg>
 
-              {flowPills.map((pill) => (
-                <button
-                  key={pill.label}
-                  type="button"
-                  className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
-                  style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
-                  onClick={() => setActiveFlowPill(pill.label)}
-                >
-                  {pill.label}
-                </button>
-              ))}
+              <div className="about-flow-pills-layer">
+                {flowPills.map((pill) => (
+                  <button
+                    key={pill.label}
+                    type="button"
+                    className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
+                    style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
+                    onClick={() => setActiveFlowPill(pill.label)}
+                  >
+                    {pill.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </section>
         </main>

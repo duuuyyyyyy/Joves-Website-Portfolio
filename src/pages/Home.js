@@ -118,11 +118,11 @@ function Home() {
           </h1>
           <p className="hero-scalar-subtitle reveal-on-scroll">
             Building the Web with Human <em>Touch.</em> An output focused developer who crafts meaningful user
-            experiences — bridging design thinking with what user needs.
+            experiences Ã¢â‚¬â€ bridging design thinking with what user needs.
           </p>
           <div className="hero-scalar-actions reveal-on-scroll">
             <a href="#projects-section" className="btn-scalar-primary">
-              <span>View My Works</span> <span className="btn-arrow">→</span>
+              <span>View My Works</span> <img src="/arrow-forward-outline.png" alt="" className="btn-arrow" />
             </a>
           </div>
         </div>
@@ -142,28 +142,53 @@ function Home() {
             <p className="home-projects-subtitle">Showcasing my individual works</p>
           </div>
 
-          <div className="home-projects-track" ref={trackRef}>
-            <article className="home-project-card" data-project="1" onClick={() => openModal('1')}>
-              <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}>
-              </div>
-              <div className="home-project-info">
-                <div className="home-project-meta">
-                </div>
-                <h3>Wander Blog Mockup</h3>
-                <p>Wander Luzon is an interactive travel hub that pairs curated Top 10 destination snippets with integrated mapping prototypes for seamless navigation. Its dedicated community forum anchors user discussions directly to blog content, creating a functional ecosystem for exploring Luzon’s premier landmarks.</p>
-              </div>
-            </article>
+                    <div className="home-projects-layout">
+            <div className="home-cta-stack reveal-on-scroll">
+              <a className="home-cta-card tone-1" href="#about">
+                <h3>Building Digital Experiences That Matter.</h3>
+                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+              </a>
+              <a className="home-cta-card tone-2" href="#projects-section">
+                <h3>Selected Works &amp; Technical Case Studies.</h3>
+                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+              </a>
+              <a className="home-cta-card tone-3" href="#contact">
+                <h3>Let’s Collaborate on Your Next Big Idea.</h3>
+                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+              </a>
+            </div>
 
-            <article className="home-project-card" data-project="2" onClick={() => openModal('2')}>
-              <div className="home-project-image" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}>
-              </div>
-              <div className="home-project-info">
-                <div className="home-project-meta">
+            <div className="home-projects-track" ref={trackRef}>
+              <article className="home-project-card" data-project="1" onClick={() => openModal('1')}>
+                <div className="home-project-visual" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}>
+                  <span className="home-project-badge">Travel UX</span>
+                  <div className="home-project-overlay">
+                    <div className="home-project-text">
+                      <h3>Wander Blog Mockup</h3>
+                      <p>Map-first travel journal with community threads and Top 10 destination highlights.</p>
+                    </div>
+                    <span className="home-project-icon">
+                      <img src="/arrow-forward-outline.png" alt="" />
+                    </span>
+                  </div>
                 </div>
-                <h3>J-Zone E-Commerce CMS Website</h3>
-                <p>J-Zone Motorcycle Parts is a streamlined e-commerce CMS platform designed for the efficient distribution of high-quality motorcycle components and accessories. The site leverages robust content management tools to provide riders with real-time inventory updates and a user-friendly shopping experience tailored to specific bike models.</p>
-              </div>
-            </article>
+              </article>
+
+              <article className="home-project-card" data-project="2" onClick={() => openModal('2')}>
+                <div className="home-project-visual" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}>
+                  <span className="home-project-badge">E-Commerce CMS</span>
+                  <div className="home-project-overlay">
+                    <div className="home-project-text">
+                      <h3>J-Zone CMS Website</h3>
+                      <p>Component-driven storefront with real-time inventory and model-specific filtering.</p>
+                    </div>
+                    <span className="home-project-icon">
+                      <img src="/arrow-forward-outline.png" alt="" />
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -175,3 +200,7 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
