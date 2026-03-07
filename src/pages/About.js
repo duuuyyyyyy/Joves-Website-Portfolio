@@ -109,14 +109,16 @@ function About() {
 
   const flowLines = Array.from({ length: 46 }, (_, i) => i);
   const flowPills = [
-    { label: 'capacity', x: '13%', y: '38%', delay: '0s' },
-    { label: 'clarity', x: '33%', y: '54%', delay: '0.12s' },
-    { label: 'consistency', x: '55%', y: '71%', delay: '0.24s' },
-    { label: 'momentum', x: '78%', y: '58%', delay: '0.36s' },
+    { label: 'capacity', x: '16%', y: '35%', mobileX: '14%', mobileY: '66%', delay: '0s' },
+    { label: 'clarity', x: '34%', y: '47%', mobileX: '22%', mobileY: '82%', delay: '0.12s' },
+    { label: 'focus', x: '49%', y: '39%', mobileX: '50%', mobileY: '70%', delay: '0.18s' },
+    { label: 'consistency', x: '63%', y: '55%', mobileX: '70%', mobileY: '88%', delay: '0.24s' },
+    { label: 'momentum', x: '81%', y: '42%', mobileX: '86%', mobileY: '74%', delay: '0.36s' },
   ];
   const flowPillContent = {
     capacity: 'Placeholder: Capacity grows when work is repeatable and priorities are consistently clear.',
     clarity: 'Placeholder: Clear direction reduces friction, speeds execution, and improves output quality.',
+    focus: 'Placeholder: Focus keeps energy directed toward the highest-impact work instead of scattered busywork.',
     consistency: 'Placeholder: Consistency compounds over time, creating stable progress with fewer resets.',
     momentum: 'Placeholder: Momentum forms when each completed step naturally feeds the next action.'
   };
@@ -300,6 +302,17 @@ function About() {
                           <span className="cert-sidebar-kicker">Certificate</span>
                           <h3>{cert.title}</h3>
                         </div>
+                        <div className="cert-mobile-details">
+                          <p className="cert-date">Issued: {cert.issued}</p>
+                          <p>{cert.desc}</p>
+                          <div className="cert-mobile-frame">
+                            <img
+                              src={cert.image}
+                              alt={cert.title}
+                              className={`cert-preview-image ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
+                            />
+                          </div>
+                        </div>
                       </button>
                     );
                   })}
@@ -350,7 +363,13 @@ function About() {
                       key={pill.label}
                       type="button"
                       className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
-                      style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
+                      style={{
+                        '--pill-left': pill.x,
+                        '--pill-top': pill.y,
+                        '--pill-mobile-left': pill.mobileX,
+                        '--pill-mobile-top': pill.mobileY,
+                        '--pill-delay': pill.delay
+                      }}
                       onClick={() => setActiveFlowPill(pill.label)}
                     >
                       {pill.label}

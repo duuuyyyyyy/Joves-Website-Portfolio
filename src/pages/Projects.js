@@ -79,6 +79,23 @@ function Projects() {
                 <span className="projects-mini-tag">{project.category}</span>
                 <h4>{project.title}</h4>
               </div>
+              <div className="projects-mobile-details">
+                <div
+                  className="projects-mobile-image"
+                  style={{ backgroundImage: `linear-gradient(135deg, rgba(20,32,46,0.4), rgba(20,32,46,0.18)), url(${project.image})` }}
+                ></div>
+                <p>{project.description}</p>
+                <button
+                  type="button"
+                  className="projects-hero-btn projects-mobile-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openModal(project.id);
+                  }}
+                >
+                  View project
+                </button>
+              </div>
             </article>
           ))}
         </div>
