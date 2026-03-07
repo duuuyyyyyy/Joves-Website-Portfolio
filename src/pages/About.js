@@ -32,13 +32,15 @@ function About() {
       title: 'Back End Development and APIs Certification',
       issued: 'Issue date not shown on uploaded certificate',
       desc: 'Credential focused on backend application structure, API design, and server-side JavaScript workflows.',
-      image: process.env.PUBLIC_URL + '/certifications/back-end-development-and-api-certification.png'
+      image: process.env.PUBLIC_URL + '/certifications/back-end-development-and-api-certification.png',
+      fitMode: 'wide'
     },
     {
       title: 'CCNA: Introduction to Networks Badge',
       issued: 'Issue date not shown on uploaded badge',
       desc: 'Networking credential covering core concepts such as network models, addressing, routing basics, and foundational infrastructure knowledge.',
-      image: process.env.PUBLIC_URL + '/certifications/ccna-introduction-to-networks-badge.png'
+      image: process.env.PUBLIC_URL + '/certifications/ccna-introduction-to-networks-badge.png',
+      fitMode: 'badge'
     },
     {
       title: 'Content Marketing Certification',
@@ -74,19 +76,22 @@ function About() {
       title: 'JavaScript Essentials Badge',
       issued: 'Issue date not shown on uploaded badge',
       desc: 'Badge validating JavaScript fundamentals, syntax, logic, and practical programming foundations.',
-      image: process.env.PUBLIC_URL + '/certifications/javascript-essentials-badge.png'
+      image: process.env.PUBLIC_URL + '/certifications/javascript-essentials-badge.png',
+      fitMode: 'badge'
     },
     {
       title: 'Legacy JavaScript Algorithms and Data Structures Certification',
       issued: 'Issue date not shown on uploaded certificate',
       desc: 'Credential covering core JavaScript problem solving, algorithms, data structures, and applied coding exercises.',
-      image: process.env.PUBLIC_URL + '/certifications/legacy-javascript-algorithm-and-data-structures-certification.png'
+      image: process.env.PUBLIC_URL + '/certifications/legacy-javascript-algorithm-and-data-structures-certification.png',
+      fitMode: 'wide'
     },
     {
       title: 'Responsive Web Design Certification',
       issued: 'Issue date not shown on uploaded certificate',
       desc: 'Certification focused on accessible layouts, semantic HTML, CSS, and responsive interface implementation across devices.',
-      image: process.env.PUBLIC_URL + '/certifications/responsive-web-design-certification.png'
+      image: process.env.PUBLIC_URL + '/certifications/responsive-web-design-certification.png',
+      fitMode: 'wide'
     },
     {
       title: 'SEO II Certified',
@@ -155,12 +160,7 @@ function About() {
   }, []);
 
   const handleCertClick = (index) => {
-    setActiveCert((prev) => (prev === index ? -1 : index));
-  };
-
-  const handleCertToggleClick = (e, index) => {
-    e.stopPropagation();
-    handleCertClick(index);
+    setActiveCert(index);
   };
 
   const handleCertKeyDown = (e, index) => {
@@ -170,11 +170,12 @@ function About() {
     }
   };
 
-  const currentCert = activeCert >= 0 ? certifications[activeCert] : certifications[0];
+  const currentCert = certifications[activeCert] || certifications[0];
 
   return (
-    <section id="about" className="page-section about-page">
-      <div className="about-page-grid">
+    <>
+      <section id="about" className="page-section about-page">
+        <div className="about-page-grid">
         <section className="about-hero-center-wrapper" ref={heroRef}>
           <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
           <div className="hero-orb orb-v2 orb-color-2 orb-shape-blob" style={{ bottom: '15%', left: '10%' }}></div>
@@ -266,103 +267,102 @@ function About() {
             </div>
           </div>
 
-          <section
-            className={`certifications-section cert-showcase ${certSectionVisible ? 'revealed' : ''}`}
-            ref={certSectionRef}
-          >
-            <h2>Certifications &amp; Credentials</h2>
-            <div className="cert-showcase-layout">
-              <div className="cert-list-column">
-                {certifications.map((cert, index) => {
-                  const isActive = activeCert === index;
-                  return (
-                    <div
-                      key={cert.title}
-                      className={`cert-accordion-item ${isActive ? 'active' : ''}`}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => handleCertClick(index)}
-                      onKeyDown={(e) => handleCertKeyDown(e, index)}
-                      aria-expanded={isActive}
+            <section
+              className={`certifications-section cert-showcase ${certSectionVisible ? 'revealed' : ''}`}
+              ref={certSectionRef}
+            >
+              <h2>Certifications &amp; Credentials</h2>
+              <div className="cert-showcase-layout">
+                <div className="cert-sidebar-list" role="listbox" aria-label="Certification list">
+                  {certifications.map((cert, index) => {
+                    const isActive = activeCert === index;
+
+                    return (
+                      <button
+                        key={cert.title}
+                        type="button"
+                        className={`cert-sidebar-item ${isActive ? 'active' : ''}`}
+                        onClick={() => handleCertClick(index)}
+                        onMouseEnter={() => handleCertClick(index)}
+                        onFocus={() => handleCertClick(index)}
+                        onKeyDown={(e) => handleCertKeyDown(e, index)}
+                        role="option"
+                        aria-selected={isActive}
+                      >
+                        <div className="cert-sidebar-thumb-wrap">
+                          <img
+                            src={cert.image}
+                            alt={cert.title}
+                            className={`cert-sidebar-thumb ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
+                          />
+                        </div>
+                        <div className="cert-sidebar-copy">
+                          <span className="cert-sidebar-kicker">Certificate</span>
+                          <h3>{cert.title}</h3>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+                <aside className="cert-preview-panel">
+                  <div className="cert-preview-copy">
+                    <p className="cert-date">Issued: {currentCert.issued}</p>
+                    <h3>{currentCert.title}</h3>
+                    <p>{currentCert.desc}</p>
+                  </div>
+                  <div className="cert-preview-frame">
+                    <img
+                      src={currentCert.image}
+                      alt={currentCert.title}
+                      className={`cert-preview-image ${currentCert.fitMode ? `fit-${currentCert.fitMode}` : ''}`}
+                    />
+                  </div>
+                </aside>
+              </div>
+            </section>
+
+            <section
+              className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
+              ref={flowSectionRef}
+            >
+              <h2 className="about-flow-title">
+                You steadily gain <span>impactful momentum.</span>
+              </h2>
+              <p className="about-flow-subtitle" key={activeFlowPill}>
+                {flowPillContent[activeFlowPill]}
+              </p>
+
+              <div className="about-flow-canvas">
+                <svg className="about-flow-lines" viewBox="0 0 1200 380" preserveAspectRatio="none" aria-hidden="true">
+                  {flowLines.map((line) => (
+                    <path
+                      key={line}
+                      className="about-flow-line"
+                      d={`M 0 ${124 + line * 4} C 220 ${24 + line * 2}, 430 ${258 + line * 2}, 650 ${160 + line * 2} C 830 ${88 + line * 2}, 1000 ${54 + line * 3}, 1200 ${132 + line * 2}`}
+                      style={{ opacity: 0.14 + line * 0.015 }}
+                    />
+                  ))}
+                </svg>
+
+                <div className="about-flow-pills-layer">
+                  {flowPills.map((pill) => (
+                    <button
+                      key={pill.label}
+                      type="button"
+                      className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
+                      style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
+                      onClick={() => setActiveFlowPill(pill.label)}
                     >
-                      <div className="cert-accordion-header">
-                        <h3>{cert.title}</h3>
-                        <button
-                          type="button"
-                          className="cert-toggle-btn"
-                          aria-label={isActive ? `Collapse ${cert.title}` : `Expand ${cert.title}`}
-                          onClick={(e) => handleCertToggleClick(e, index)}
-                        >
-                          {isActive ? '-' : '+'}
-                        </button>
-                      </div>
-                      <div className="cert-accordion-body">
-                        <p className="cert-date">Issued: {cert.issued}</p>
-                        <p>{cert.desc}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="cert-preview-column" key={activeCert >= 0 ? activeCert : 'default'}>
-                <div className="cert-preview-meta">
-                  <h3>{currentCert.title}</h3>
-                  <p className="cert-date">Issued: {currentCert.issued}</p>
-                  <p className="cert-preview-desc">{currentCert.desc}</p>
-                </div>
-                <div className="cert-preview-image-wrap">
-                  <img
-                    src={currentCert.image}
-                    alt={`${currentCert.title} preview`}
-                    className="cert-preview-image"
-                  />
+                      {pill.label}
+                    </button>
+                  ))}
                 </div>
               </div>
-            </div>
-          </section>
-
-          <section
-            className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
-            ref={flowSectionRef}
-          >
-            <h2 className="about-flow-title">
-              You steadily gain <span>impactful momentum.</span>
-            </h2>
-            <p className="about-flow-subtitle" key={activeFlowPill}>
-              {flowPillContent[activeFlowPill]}
-            </p>
-
-            <div className="about-flow-canvas">
-              <svg className="about-flow-lines" viewBox="0 0 1200 380" preserveAspectRatio="none" aria-hidden="true">
-                {flowLines.map((line) => (
-                  <path
-                    key={line}
-                    className="about-flow-line"
-                    d={`M 0 ${124 + line * 4} C 220 ${24 + line * 2}, 430 ${258 + line * 2}, 650 ${160 + line * 2} C 830 ${88 + line * 2}, 1000 ${54 + line * 3}, 1200 ${132 + line * 2}`}
-                    style={{ opacity: 0.14 + line * 0.015 }}
-                  />
-                ))}
-              </svg>
-
-              <div className="about-flow-pills-layer">
-                {flowPills.map((pill) => (
-                  <button
-                    key={pill.label}
-                    type="button"
-                    className={`about-flow-pill ${activeFlowPill === pill.label ? 'active' : ''}`}
-                    style={{ left: pill.x, top: pill.y, '--pill-delay': pill.delay }}
-                    onClick={() => setActiveFlowPill(pill.label)}
-                  >
-                    {pill.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </section>
-        </main>
-      </div>
-    </section>
+            </section>
+          </main>
+        </div>
+      </section>
+    </>
   );
 }
 

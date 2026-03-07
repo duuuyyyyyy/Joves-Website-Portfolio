@@ -55,7 +55,7 @@ function Footer() {
             {/* Column 3: UTC Time & Contacts */}
             <div className="footer-column">
               <h4>Contacts</h4>
-              <p><a href="mailto:carlajoves23@gmail.com">carlajoves23@gmail.com</a></p>
+              <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=carlajoves23@gmail.com" target="_blank" rel="noopener noreferrer">carlajoves23@gmail.com</a></p>
               <p>+63 998 448 8639</p>
               <h4 style={{ marginTop: 'var(--spacing-lg)' }}>UTC Time</h4>
               <p className="local-time" id="local-time">{localTime}</p>

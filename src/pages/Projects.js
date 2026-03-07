@@ -61,20 +61,19 @@ function Projects() {
           {projects.map((project) => (
             <article
               key={project.id}
-              className="projects-mini-card"
+              className={`projects-mini-card ${selectedProject.id === project.id ? 'is-active' : ''}`}
               tabIndex={0}
               role="button"
               onClick={() => {
                 setSelectedProject(project);
-                openModal(project.id);
               }}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   setSelectedProject(project);
-                  openModal(project.id);
                 }
               }}
+              aria-pressed={selectedProject.id === project.id}
             >
               <div className="projects-mini-meta">
                 <span className="projects-mini-tag">{project.category}</span>

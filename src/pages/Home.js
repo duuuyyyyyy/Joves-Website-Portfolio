@@ -118,7 +118,7 @@ function Home() {
           </h1>
           <p className="hero-scalar-subtitle reveal-on-scroll">
             Building the Web with Human <em>Touch.</em> An output focused developer who crafts meaningful user
-            experiences Ã¢â‚¬â€ bridging design thinking with what user needs.
+            experiences bridging design thinking with what user needs.
           </p>
           <div className="hero-scalar-actions reveal-on-scroll">
             <a href="#projects-section" className="btn-scalar-primary">
@@ -142,19 +142,19 @@ function Home() {
             <p className="home-projects-subtitle">Showcasing my individual works</p>
           </div>
 
-                    <div className="home-projects-layout">
+          <div className="home-projects-layout">
             <div className="home-cta-stack reveal-on-scroll">
               <a className="home-cta-card tone-1" href="#about">
                 <h3>Building Digital Experiences That Matter.</h3>
-                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+                <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
               <a className="home-cta-card tone-2" href="#projects-section">
                 <h3>Selected Works &amp; Technical Case Studies.</h3>
-                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+                <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
               <a className="home-cta-card tone-3" href="#contact">
-                <h3>Let’s Collaborate on Your Next Big Idea.</h3>
-                <span className="home-cta-arrow" style={{ backgroundImage: "url(/arrow-forward-outline.png)" }} aria-hidden="true"></span>
+                <h3>Let&apos;s Collaborate on Your Next Big Idea.</h3>
+                <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
             </div>
 
@@ -200,7 +200,3 @@ function Home() {
 }
 
 export default Home;
-
-
-
-

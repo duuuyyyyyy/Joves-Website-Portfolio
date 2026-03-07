@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import emailjs from '@emailjs/browser';
 
 function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: ''
   });
 
@@ -13,7 +13,6 @@ function Contact() {
 
   useEffect(() => {
     document.title = 'Contact | Portfolio';
-    emailjs.init('V4q5Zz_bGpZjiQJfu');
   }, []);
 
   const handleChange = useCallback((e) => {
@@ -21,46 +20,74 @@ function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }));
   }, []);
 
-  const handleSubmit = useCallback((e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+    const { name, email, subject, message } = formData;
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim().toLowerCase();
+    const trimmedSubject = subject.trim();
+    const trimmedMessage = message.trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const blockedTypos = ['gmail.cc', 'gmai.com', 'gmial.com', 'yahooo.com'];
+
+    if (!trimmedName || !trimmedEmail || !trimmedSubject || !trimmedMessage) {
+      setFormStatus('Please complete all required fields.');
+      return;
+    }
+
+    if (!emailPattern.test(trimmedEmail)) {
+      setFormStatus('Please enter a valid email address.');
+      return;
+    }
+
+    if (blockedTypos.some((typo) => trimmedEmail.endsWith(typo))) {
+      setFormStatus('That email address looks mistyped. Please check it and try again.');
+      return;
+    }
+
     setIsSubmitting(true);
     setFormStatus('Sending...');
 
-    const { name, email, message } = formData;
-
-    emailjs.send(
-      'service_s9ji23h',
-      'template_g5h5k2t',
-      {
-        from_name: name,
-        from_email: email,
-        message: message,
-        to_email: 'carlajoves23@gmail.com'
-      }
-    )
-      .then(() => {
-        setFormStatus("Message sent successfully! I'll get back to you soon.");
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setFormStatus(''), 5000);
-        setIsSubmitting(false);
-      })
-      .catch((error) => {
-        console.error('Email error:', error);
-        setFormStatus('Failed to send message. Please try again.');
-        setTimeout(() => setFormStatus(''), 5000);
-        setIsSubmitting(false);
+    try {
+      const response = await fetch('/.netlify/functions/send-contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          subject: trimmedSubject,
+          message: trimmedMessage
+        })
       });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to send message right now.');
+      }
+
+      setFormStatus("Message sent successfully! I'll get back to you soon.");
+      setFormData({ name: '', email: '', subject: '', message: '' });
+      setTimeout(() => setFormStatus(''), 5000);
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setFormStatus(error.message || 'Unable to send your message right now. Please try again later.');
+      setTimeout(() => setFormStatus(''), 7000);
+    } finally {
+      setIsSubmitting(false);
+    }
   }, [formData]);
 
   const contactCards = [
     { label: 'Phone', icon: 'fas fa-phone', text: '+63 998 446 8639', href: 'tel:+639984468639' },
-    { label: 'Email', icon: 'fas fa-envelope', text: 'carlajoves23@gmail.com', href: 'mailto:carlajoves23@gmail.com' },
-    { label: 'Location', icon: 'fas fa-map-marker-alt', text: 'Arayat, Pampanga' },
+    { label: 'Email', icon: 'fas fa-envelope', text: 'carlajoves23@gmail.com', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=carlajoves23@gmail.com', external: true },
+    { label: 'Location', icon: 'fas fa-map-marker-alt', text: 'Arayat, Pampanga', href: 'https://www.google.com/maps/search/?api=1&query=Arayat%2C+Pampanga', external: true },
     { label: 'LinkedIn', icon: 'fab fa-linkedin-in', text: 'linkedin.com/in/carla-joves-832059351/', href: 'https://www.linkedin.com/in/carla-joves-832059351/', external: true },
     { label: 'GitHub', icon: 'fab fa-github', text: 'github.com/duuuyyyyyy', href: 'https://github.com/duuuyyyyyy', external: true },
     { label: 'Facebook', icon: 'fab fa-facebook-f', text: 'facebook.com/carla.joves.71', href: 'https://www.facebook.com/carla.joves.71/', external: true }
   ];
-
   return (
     <section id="contact" className="page-section contact-page">
       <main className="contact-main" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -131,6 +158,19 @@ function Contact() {
               </div>
 
               <div className="form-group">
+                <label htmlFor="subject">Subject <span className="required">*</span></label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  placeholder="Enter your subject..."
+                  required
+                  value={formData.subject}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="message">Your Message <span className="required">*</span></label>
                 <textarea
                   id="message"
@@ -163,17 +203,15 @@ function Contact() {
         <section className="contact-info-grid social-links-bar">
           {contactCards.map(({ label, icon, text, href, external }) => {
             const isSocialProfile = ['LinkedIn', 'GitHub', 'Facebook'].includes(label);
-            const Wrapper = href ? 'a' : 'div';
-            const props = href
-              ? {
-                  href,
-                  target: external ? '_blank' : undefined,
-                  rel: external ? 'noopener noreferrer' : undefined
-                }
-              : {};
 
             return (
-              <Wrapper key={label} className="contact-card" {...props}>
+              <a
+                key={label}
+                className="contact-card contact-card-button"
+                href={href || '#'}
+                target={external ? '_blank' : undefined}
+                rel={external ? 'noopener noreferrer' : undefined}
+              >
                 <span className="contact-icon">
                   <i className={icon}></i>
                 </span>
@@ -183,7 +221,7 @@ function Contact() {
                     {isSocialProfile ? 'Carla Joves' : text}
                   </span>
                 </div>
-              </Wrapper>
+              </a>
             );
           })}
         </section>
