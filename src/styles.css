@@ -4506,6 +4506,9 @@ html:not(.dark) .skill-card:hover .skill-name {
   flex-direction: column;
   gap: 0.75rem;
   backdrop-filter: blur(3px);
+  max-height: 960px;
+  overflow-y: auto;
+  padding-right: 0.35rem;
 }
 
 .cert-accordion-item {
@@ -4589,6 +4592,8 @@ html:not(.dark) .cert-accordion-item.active {
   border-radius: 0;
   padding: 1rem;
   animation: certPreviewSlideUp 0.35s ease;
+  position: sticky;
+  top: 6.5rem;
 }
 
 .cert-preview-meta h3 {
@@ -4606,15 +4611,16 @@ html:not(.dark) .cert-accordion-item.active {
 
 .cert-preview-image {
   width: 100%;
-  height: 260px;
-  object-fit: cover;
+  height: auto;
+  max-height: 560px;
+  object-fit: contain;
   display: block;
 }
 
 .cert-preview-desc {
   color: var(--text-secondary);
   line-height: 1.6;
-  margin: 0;
+  margin: 0 0 0.8rem;
   animation: certBodySlideUp 0.32s ease;
 }
 
@@ -4645,8 +4651,18 @@ html:not(.dark) .cert-accordion-item.active {
     grid-template-columns: 1fr;
   }
 
+  .cert-list-column {
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .cert-preview-column {
+    position: static;
+  }
+
   .cert-preview-image {
-    height: 220px;
+    max-height: 420px;
   }
 }
 

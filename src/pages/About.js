@@ -29,28 +29,76 @@ function About() {
 
   const certifications = [
     {
-      title: 'Frontend Foundations Certificate',
-      issued: 'March 2024',
-      desc: 'Placeholder: Completed a structured program on modern UI development, component architecture, and accessibility fundamentals.',
-      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+      title: 'Back End Development and APIs Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Credential focused on backend application structure, API design, and server-side JavaScript workflows.',
+      image: process.env.PUBLIC_URL + '/certifications/back-end-development-and-api-certification.png'
     },
     {
-      title: 'React Development Certificate',
-      issued: 'July 2024',
-      desc: 'Placeholder: Focused on hooks, reusable state patterns, performance optimization, and scalable React project structure.',
-      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+      title: 'CCNA: Introduction to Networks Badge',
+      issued: 'Issue date not shown on uploaded badge',
+      desc: 'Networking credential covering core concepts such as network models, addressing, routing basics, and foundational infrastructure knowledge.',
+      image: process.env.PUBLIC_URL + '/certifications/ccna-introduction-to-networks-badge.png'
     },
     {
-      title: 'UX Design Fundamentals Certificate',
-      issued: 'November 2024',
-      desc: 'Placeholder: Covered user research, wireframing, interaction design, and handoff workflows for developer-ready screens.',
-      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+      title: 'Content Marketing Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Certification in content planning, audience targeting, messaging strategy, and performance-oriented marketing content.',
+      image: process.env.PUBLIC_URL + '/certifications/content-marketing-certification.png'
     },
     {
-      title: 'Web Systems Certificate',
-      issued: 'February 2025',
-      desc: 'Placeholder: Introduced deployment pipelines, project documentation standards, and practical frontend-backend integration.',
-      image: process.env.PUBLIC_URL + '/project-placeholder-4.svg'
+      title: 'Design Thinking Certification of Completion',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Training centered on problem framing, ideation, user-centered thinking, and structured solution development.',
+      image: process.env.PUBLIC_URL + '/certifications/design-thinking-certification-of-completion.png'
+    },
+    {
+      title: 'Digital Advertising Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Credential focused on campaign execution, ad strategy, platform fundamentals, and conversion-oriented promotion.',
+      image: process.env.PUBLIC_URL + '/certifications/digital-advertising-certification.png'
+    },
+    {
+      title: 'Digital Marketing Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Broad marketing certification covering digital channels, audience acquisition, campaign measurement, and online growth strategy.',
+      image: process.env.PUBLIC_URL + '/certifications/digital-marketing-certification.png'
+    },
+    {
+      title: 'Introduction to Figma Certificate of Completion',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Course completion credential for interface design workflows, wireframing, collaborative design, and prototyping in Figma.',
+      image: process.env.PUBLIC_URL + '/certifications/introduction-to-figma-certificate-of-completion.png'
+    },
+    {
+      title: 'JavaScript Essentials Badge',
+      issued: 'Issue date not shown on uploaded badge',
+      desc: 'Badge validating JavaScript fundamentals, syntax, logic, and practical programming foundations.',
+      image: process.env.PUBLIC_URL + '/certifications/javascript-essentials-badge.png'
+    },
+    {
+      title: 'Legacy JavaScript Algorithms and Data Structures Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Credential covering core JavaScript problem solving, algorithms, data structures, and applied coding exercises.',
+      image: process.env.PUBLIC_URL + '/certifications/legacy-javascript-algorithm-and-data-structures-certification.png'
+    },
+    {
+      title: 'Responsive Web Design Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Certification focused on accessible layouts, semantic HTML, CSS, and responsive interface implementation across devices.',
+      image: process.env.PUBLIC_URL + '/certifications/responsive-web-design-certification.png'
+    },
+    {
+      title: 'SEO II Certified',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Advanced SEO credential covering search visibility, optimization strategy, technical discoverability, and content performance.',
+      image: process.env.PUBLIC_URL + '/certifications/seo-2-certified.png'
+    },
+    {
+      title: 'SEO Certification',
+      issued: 'Issue date not shown on uploaded certificate',
+      desc: 'Credential focused on search engine optimization fundamentals, on-page improvements, keyword strategy, and ranking best practices.',
+      image: process.env.PUBLIC_URL + '/certifications/seo-certification.png'
     },
   ];
 
@@ -260,6 +308,8 @@ function About() {
               <div className="cert-preview-column" key={activeCert >= 0 ? activeCert : 'default'}>
                 <div className="cert-preview-meta">
                   <h3>{currentCert.title}</h3>
+                  <p className="cert-date">Issued: {currentCert.issued}</p>
+                  <p className="cert-preview-desc">{currentCert.desc}</p>
                 </div>
                 <div className="cert-preview-image-wrap">
                   <img

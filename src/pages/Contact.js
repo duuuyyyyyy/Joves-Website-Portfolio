@@ -162,15 +162,15 @@ function Contact() {
 
         <section className="contact-info-grid social-links-bar">
           {contactCards.map(({ label, icon, text, href, external }) => {
-            const isNameOnly = ['LinkedIn', 'GitHub', 'Facebook'].includes(label);
-            const Wrapper = isNameOnly ? 'div' : 'a';
-            const props = isNameOnly
-              ? {}
-              : {
+            const isSocialProfile = ['LinkedIn', 'GitHub', 'Facebook'].includes(label);
+            const Wrapper = href ? 'a' : 'div';
+            const props = href
+              ? {
                   href,
                   target: external ? '_blank' : undefined,
                   rel: external ? 'noopener noreferrer' : undefined
-                };
+                }
+              : {};
 
             return (
               <Wrapper key={label} className="contact-card" {...props}>
@@ -180,7 +180,7 @@ function Contact() {
                 <div className="contact-card-copy">
                   <span className="contact-card-label">{label}</span>
                   <span className="contact-card-value">
-                    {isNameOnly ? 'Carla Joves' : text}
+                    {isSocialProfile ? 'Carla Joves' : text}
                   </span>
                 </div>
               </Wrapper>
