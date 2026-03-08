@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ProjectModal, useProjectModal } from '../components/ProjectModal';
 
 function Projects() {
@@ -36,16 +36,20 @@ function Projects() {
 
   const [selectedProject, setSelectedProject] = useState(projects[0]);
 
-  useEffect(() => {
-    document.title = 'Projects | Portfolio';
-  }, []);
-
   return (
     <section id="projects-section" className="page-section projects-page">
+      <div className="editorial-section-header editorial-section-header-left projects-section-header">
+        <h1 className="editorial-section-title">Projects</h1>
+        <p className="editorial-section-subtitle">
+          A focused set of interface, commerce, and case study builds shaped around clarity and usability.
+        </p>
+      </div>
       <div className="projects-split-layout projects-page-split">
         <div
           className="projects-hero-panel"
           style={{ backgroundImage: `linear-gradient(135deg, rgba(20,32,46,0.55), rgba(20,32,46,0.28)), url(${selectedProject.image})` }}
+          role="img"
+          aria-label={`Preview image for ${selectedProject.title}`}
         >
           <div className="projects-hero-inner">
             <span className="projects-hero-tag">{selectedProject.category}</span>
@@ -83,6 +87,8 @@ function Projects() {
                 <div
                   className="projects-mobile-image"
                   style={{ backgroundImage: `linear-gradient(135deg, rgba(20,32,46,0.4), rgba(20,32,46,0.18)), url(${project.image})` }}
+                  role="img"
+                  aria-label={`Preview image for ${project.title}`}
                 ></div>
                 <p>{project.description}</p>
                 <button

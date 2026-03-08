@@ -146,7 +146,7 @@ function Header() {
             className="logo"
             onClick={(e) => scrollToSection(e, 'hero')}
           >
-            <img src={process.env.PUBLIC_URL + '/navy-gold-gradient-transparent-background.png'} alt="Dulay+ Logo" className="logo-mark" />
+            <img src={process.env.PUBLIC_URL + '/navy-gold-gradient-transparent-background.png'} alt="Dulay Plus portfolio logo" className="logo-mark" />
             <span className="logo-text">Dulay+</span>
           </a>
 

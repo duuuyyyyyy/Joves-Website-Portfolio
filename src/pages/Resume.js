@@ -1,8 +1,12 @@
 import React, { useEffect } from 'react';
+import { setDocumentMeta } from '../utils/seo';
 
 function Resume() {
   useEffect(() => {
-    document.title = 'Resume | Portfolio';
+    setDocumentMeta(
+      'Resume | Portfolio',
+      'View the resume of Carla Dulay Joves, including professional experience, qualifications, and downloadable credentials.'
+    );
   }, []);
 
   return (

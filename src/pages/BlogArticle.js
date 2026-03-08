@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { setDocumentMeta } from '../utils/seo';
 
 const articles = {
   'my-journey-as-a-web-developer': {
@@ -54,7 +55,12 @@ function BlogArticle() {
   const article = articles[slug];
 
   useEffect(() => {
-    document.title = article ? `${article.title} | Blog` : 'Article Not Found | Blog';
+    setDocumentMeta(
+      article ? `${article.title} | Blog` : 'Article Not Found | Blog',
+      article
+        ? `${article.title} by Carla Dulay Joves. ${article.content.split('\n\n')[0]}`
+        : 'The requested blog article could not be found in Carla Dulay Joves portfolio blog.'
+    );
     window.scrollTo(0, 0);
   }, [article]);
 

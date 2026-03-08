@@ -8,8 +8,6 @@ function Home() {
   const trackRef = useRef(null);
 
   useEffect(() => {
-    document.title = 'Home | Professional Portfolio';
-
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && activeProject) {
         closeModal();
@@ -122,7 +120,7 @@ function Home() {
           </p>
           <div className="hero-scalar-actions reveal-on-scroll">
             <a href="#projects-section" className="btn-scalar-primary">
-              <span>View My Works</span> <img src="/arrow-forward-outline.png" alt="" className="btn-arrow" />
+              <span>View My Works</span> <img src="/arrow-forward-outline.png" alt="" className="btn-arrow" aria-hidden="true" />
             </a>
           </div>
         </div>
@@ -160,7 +158,12 @@ function Home() {
 
             <div className="home-projects-track" ref={trackRef}>
               <article className="home-project-card" data-project="1" onClick={() => openModal('1')}>
-                <div className="home-project-visual" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}>
+                <div
+                  className="home-project-visual"
+                  style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}
+                  role="img"
+                  aria-label="Preview of the Wander Blog Mockup travel interface"
+                >
                   <span className="home-project-badge">Travel UX</span>
                   <div className="home-project-overlay">
                     <div className="home-project-text">
@@ -168,14 +171,19 @@ function Home() {
                       <p>Map-first travel journal with community threads and Top 10 destination highlights.</p>
                     </div>
                     <span className="home-project-icon">
-                      <img src="/arrow-forward-outline.png" alt="" />
+                      <img src="/arrow-forward-outline.png" alt="" aria-hidden="true" />
                     </span>
                   </div>
                 </div>
               </article>
 
               <article className="home-project-card" data-project="2" onClick={() => openModal('2')}>
-                <div className="home-project-visual" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}>
+                <div
+                  className="home-project-visual"
+                  style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}
+                  role="img"
+                  aria-label="Preview of the J-Zone CMS website interface"
+                >
                   <span className="home-project-badge">E-Commerce CMS</span>
                   <div className="home-project-overlay">
                     <div className="home-project-text">
@@ -183,7 +191,7 @@ function Home() {
                       <p>Component-driven storefront with real-time inventory and model-specific filtering.</p>
                     </div>
                     <span className="home-project-icon">
-                      <img src="/arrow-forward-outline.png" alt="" />
+                      <img src="/arrow-forward-outline.png" alt="" aria-hidden="true" />
                     </span>
                   </div>
                 </div>

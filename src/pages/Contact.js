@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -10,10 +10,6 @@ function Contact() {
 
   const [formStatus, setFormStatus] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    document.title = 'Contact | Portfolio';
-  }, []);
 
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -91,6 +87,13 @@ function Contact() {
   return (
     <section id="contact" className="page-section contact-page">
       <main className="contact-main" style={{ position: 'relative', overflow: 'hidden' }}>
+        <div className="editorial-section-header editorial-section-header-left contact-section-header">
+          <span className="editorial-section-kicker">Let's Collaborate</span>
+          <h1 className="editorial-section-title">Contact</h1>
+          <p className="editorial-section-subtitle">
+            Start the conversation here, then use the form for project context, walkthrough requests, or direct inquiries.
+          </p>
+        </div>
         {/* Localized Immersive Orbs */}
         <div className="hero-orb orb-v4 orb-color-1" style={{ top: '10%', left: '5%' }}></div>
         <div className="hero-orb orb-v2 orb-color-2" style={{ bottom: '20%', right: '5%' }}></div>

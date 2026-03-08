@@ -124,10 +124,6 @@ function About() {
   };
 
   useEffect(() => {
-    document.title = 'About | Portfolio';
-  }, []);
-
-  useEffect(() => {
     const section = certSectionRef.current;
     if (!section) return;
 
@@ -178,42 +174,49 @@ function About() {
     <>
       <section id="about" className="page-section about-page">
         <div className="about-page-grid">
-        <section className="about-hero-center-wrapper" ref={heroRef}>
-          <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
-          <div className="hero-orb orb-v2 orb-color-2 orb-shape-blob" style={{ bottom: '15%', left: '10%' }}></div>
-          <div className="hero-orb orb-v3 orb-color-3 orb-shape-squircle" style={{ top: '40%', left: '25%' }}></div>
-          <div className="hero-orb orb-v4 orb-color-4 orb-shape-ellipse" style={{ bottom: '25%', right: '20%' }}></div>
-          <div className="hero-orb orb-v6 orb-color-5 orb-shape-blob orb-anim-wave" style={{ top: '10%', left: '22%' }}></div>
-          <div className="hero-orb orb-v7 orb-color-6 orb-shape-squircle orb-anim-rise" style={{ bottom: '6%', left: '28%' }}></div>
-          <div className="hero-orb orb-v8 orb-color-5 orb-shape-ellipse orb-anim-orbit" style={{ top: '24%', right: '34%' }}></div>
-
-          <div className="about-hero-layout">
-            <div className="about-photo-stack">
-              <div className="broken-circle-clip">
-                <svg className="broken-circle-border" viewBox="0 0 100 100">
-                  <circle cx="50" cy="50" r="47" />
-                </svg>
-              </div>
-              <div className="about-photo-main">
-                <img src={process.env.PUBLIC_URL + '/carla-joves-public-speaking.jpg'} alt="Carla Joves speaking" />
-              </div>
-              <div className="about-photo-overlay">
-                <img src={process.env.PUBLIC_URL + '/carla-joves-posing-holding-camera.jpg'} alt="Carla Joves with camera" />
-              </div>
-            </div>
-
-            <div className="about-text-block">
-              <h2>Who I Am</h2>
-              <p>
-                I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
-              </p>
-              <div className="about-based-card">
-                <h3>Based In</h3>
-                <p>Philippines, available for worldwide collaboration and remote partnerships.</p>
-              </div>
-            </div>
+          <div className="editorial-section-header editorial-section-header-right about-section-header">
+            <span className="editorial-section-kicker">Who I Am</span>
+            <h1 className="editorial-section-title">About Me</h1>
+            <p className="editorial-section-subtitle">
+              I build thoughtful digital experiences by combining interface design, product thinking, and reliable code.
+            </p>
           </div>
-        </section>
+          <section className="about-hero-center-wrapper" ref={heroRef}>
+            <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
+            <div className="hero-orb orb-v2 orb-color-2 orb-shape-blob" style={{ bottom: '15%', left: '10%' }}></div>
+            <div className="hero-orb orb-v3 orb-color-3 orb-shape-squircle" style={{ top: '40%', left: '25%' }}></div>
+            <div className="hero-orb orb-v4 orb-color-4 orb-shape-ellipse" style={{ bottom: '25%', right: '20%' }}></div>
+            <div className="hero-orb orb-v6 orb-color-5 orb-shape-blob orb-anim-wave" style={{ top: '10%', left: '22%' }}></div>
+            <div className="hero-orb orb-v7 orb-color-6 orb-shape-squircle orb-anim-rise" style={{ bottom: '6%', left: '28%' }}></div>
+            <div className="hero-orb orb-v8 orb-color-5 orb-shape-ellipse orb-anim-orbit" style={{ top: '24%', right: '34%' }}></div>
+
+            <div className="about-hero-layout">
+              <div className="about-photo-stack">
+                <div className="broken-circle-clip">
+                  <svg className="broken-circle-border" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="47" />
+                  </svg>
+                </div>
+                <div className="about-photo-main">
+                  <img src={process.env.PUBLIC_URL + '/carla-joves-public-speaking.jpg'} alt="Carla Joves speaking at an event with a microphone" />
+                </div>
+                <div className="about-photo-overlay">
+                  <img src={process.env.PUBLIC_URL + '/carla-joves-posing-holding-camera.jpg'} alt="Carla Joves holding a camera during an event" />
+                </div>
+              </div>
+
+              <div className="about-text-block">
+                <h2>Who I Am</h2>
+                <p>
+                  I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
+                </p>
+                <div className="about-based-card">
+                  <h3>Based In</h3>
+                  <p>Philippines, available for worldwide collaboration and remote partnerships.</p>
+                </div>
+              </div>
+            </div>
+          </section>
 
         <main className="container">
           <div className="glass-container about-skills-glass">
@@ -294,7 +297,7 @@ function About() {
                         <div className="cert-sidebar-thumb-wrap">
                           <img
                             src={cert.image}
-                            alt={cert.title}
+                            alt={`Preview of ${cert.title}`}
                             className={`cert-sidebar-thumb ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
                           />
                         </div>
@@ -308,7 +311,7 @@ function About() {
                           <div className="cert-mobile-frame">
                             <img
                               src={cert.image}
-                              alt={cert.title}
+                              alt={`Preview of ${cert.title}`}
                               className={`cert-preview-image ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
                             />
                           </div>
@@ -326,7 +329,7 @@ function About() {
                   <div className="cert-preview-frame">
                     <img
                       src={currentCert.image}
-                      alt={currentCert.title}
+                      alt={`Preview of ${currentCert.title}`}
                       className={`cert-preview-image ${currentCert.fitMode ? `fit-${currentCert.fitMode}` : ''}`}
                     />
                   </div>
@@ -338,12 +341,14 @@ function About() {
               className={`about-flow-section ${flowSectionVisible ? 'revealed' : ''}`}
               ref={flowSectionRef}
             >
-              <h2 className="about-flow-title">
-                You steadily gain <span>impactful momentum.</span>
-              </h2>
-              <p className="about-flow-subtitle" key={activeFlowPill}>
-                {flowPillContent[activeFlowPill]}
-              </p>
+              <div className="about-flow-content">
+                <h2 className="about-flow-title">
+                  You steadily gain <span>impactful momentum.</span>
+                </h2>
+                <p className="about-flow-subtitle" key={activeFlowPill}>
+                  {flowPillContent[activeFlowPill]}
+                </p>
+              </div>
 
               <div className="about-flow-canvas">
                 <svg className="about-flow-lines" viewBox="0 0 1200 380" preserveAspectRatio="none" aria-hidden="true">
