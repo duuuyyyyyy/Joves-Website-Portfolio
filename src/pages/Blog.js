@@ -303,7 +303,7 @@ function Blog() {
   return (
     <>
       <section id="blog" className="page-section blog-page">
-        <section className="hero-scalar blog-hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
+        <section className="hero-scalar blog-hero-scalar" style={{ minHeight: '45vh', paddingBottom: '48px' }}>
           <div className="hero-orb orb-v3 orb-color-4" style={{ top: '-10%', right: '15%' }}></div>
           <div className="hero-orb orb-v4 orb-color-2" style={{ bottom: '10%', left: '20%' }}></div>
           <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '18%', left: '8%' }}></div>
@@ -405,3 +405,4 @@ function Blog() {
 }
 
 export default Blog;
+

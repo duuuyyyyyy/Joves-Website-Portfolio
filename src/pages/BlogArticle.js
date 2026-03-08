@@ -67,16 +67,16 @@ function BlogArticle() {
   if (!article) {
     return (
       <>
-        <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '3rem' }}>
+        <section className="hero-scalar" style={{ minHeight: '45vh', paddingBottom: '48px' }}>
           <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '-8%', right: '12%' }}></div>
           <div className="hero-orb orb-v8 orb-color-2 orb-shape-blob orb-anim-orbit" style={{ bottom: '12%', left: '16%' }}></div>
           <div className="hero-scalar-content">
             <h1 className="hero-scalar-title">Article Not Found</h1>
           </div>
         </section>
-        <main className="container" style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+        <main className="container" style={{ textAlign: 'center', padding: '64px 32px' }}>
           <p>The article you're looking for doesn't exist.</p>
-          <Link to="/blog" className="btn btn-primary" style={{ marginTop: '2rem' }}>Back to Blog</Link>
+          <Link to="/blog" className="btn btn-primary" style={{ marginTop: '32px' }}>Back to Blog</Link>
         </main>
       </>
     );
@@ -84,7 +84,7 @@ function BlogArticle() {
 
   return (
     <>
-      <section className="hero-scalar" style={{ minHeight: '40vh', paddingBottom: '3rem' }}>
+      <section className="hero-scalar" style={{ minHeight: '40vh', paddingBottom: '48px' }}>
         <div className="hero-orb orb-v5 orb-color-1 orb-shape-ellipse" style={{ top: '-10%', right: '12%' }}></div>
         <div className="hero-orb orb-v7 orb-color-5 orb-shape-blob orb-anim-wave" style={{ top: '12%', left: '10%' }}></div>
         <div className="hero-orb orb-v8 orb-color-6 orb-shape-squircle orb-anim-orbit" style={{ bottom: '14%', right: '36%' }}></div>
