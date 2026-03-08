@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const blogArticles = [
@@ -76,35 +76,57 @@ const blogArticles = [
 
 function Blog() {
   const [activeArticle, setActiveArticle] = useState(null);
+  const [carouselOffset, setCarouselOffset] = useState(0);
+  const [isDraggingCarousel, setIsDraggingCarousel] = useState(false);
+  const viewportRef = useRef(null);
   const carouselRef = useRef(null);
+  const metricsRef = useRef({
+    step: 260,
+    maxOffset: 0
+  });
+  const pressedArticleSlugRef = useRef(null);
   const suppressClickRef = useRef(false);
   const dragStateRef = useRef({
     isDragging: false,
+    pointerId: null,
     startX: 0,
-    startScrollLeft: 0,
+    startOffset: 0,
     moved: false
   });
 
-  const getCarouselStep = () => {
+  const measureCarousel = useCallback(() => {
+    const viewport = viewportRef.current;
     const track = carouselRef.current;
-    if (!track) return 260;
+    if (!viewport || !track) return metricsRef.current;
 
-    const card = track.querySelector('.blog-carousel-card');
-    if (!card) return 260;
+    const cards = track.querySelectorAll('.blog-carousel-card');
+    if (!cards.length) return metricsRef.current;
 
-    const cardWidth = card.getBoundingClientRect().width;
-    const gap = parseFloat(window.getComputedStyle(track).columnGap || window.getComputedStyle(track).gap || '18');
-    return cardWidth + gap;
-  };
+    let step = cards[0].getBoundingClientRect().width;
+    if (cards.length > 1) {
+      const measuredStep = cards[1].offsetLeft - cards[0].offsetLeft;
+      if (Number.isFinite(measuredStep) && measuredStep > 0) {
+        step = measuredStep;
+      }
+    }
+
+    const maxOffset = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    metricsRef.current = {
+      step,
+      maxOffset
+    };
+
+    return metricsRef.current;
+  }, []);
+
+  const clampCarouselOffset = useCallback((value) => {
+    const { maxOffset } = measureCarousel();
+    return Math.min(Math.max(value, 0), maxOffset);
+  }, [measureCarousel]);
 
   const scrollCarouselBy = (direction) => {
-    const track = carouselRef.current;
-    if (!track) return;
-
-    track.scrollBy({
-      left: direction * getCarouselStep(),
-      behavior: 'smooth'
-    });
+    const { step } = measureCarousel();
+    setCarouselOffset((currentOffset) => clampCarouselOffset(currentOffset + direction * step));
   };
 
   const openArticle = (article) => {
@@ -116,95 +138,137 @@ function Blog() {
   };
 
   useEffect(() => {
-    document.body.style.overflow = activeArticle ? 'hidden' : 'auto';
+    const { body, documentElement } = document;
+    if (activeArticle) {
+      body.classList.add('blog-modal-open');
+      documentElement.classList.add('blog-modal-open');
+    } else {
+      body.classList.remove('blog-modal-open');
+      documentElement.classList.remove('blog-modal-open');
+    }
 
     return () => {
-      document.body.style.overflow = 'auto';
+      body.classList.remove('blog-modal-open');
+      documentElement.classList.remove('blog-modal-open');
     };
   }, [activeArticle]);
 
   useLayoutEffect(() => {
-    const track = carouselRef.current;
-    if (!track) return;
+    const syncCarouselMetrics = () => {
+      measureCarousel();
+      setCarouselOffset((currentOffset) => clampCarouselOffset(currentOffset));
+    };
 
-    track.scrollLeft = 0;
-    const frameId = window.requestAnimationFrame(() => {
-      track.scrollLeft = 0;
-    });
+    syncCarouselMetrics();
+    window.addEventListener('resize', syncCarouselMetrics);
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      window.removeEventListener('resize', syncCarouselMetrics);
     };
-  }, []);
+  }, [clampCarouselOffset, measureCarousel]);
 
-  useEffect(() => {
-    const track = carouselRef.current;
-    if (!track) return;
+  const endPointerDrag = (pointerId) => {
+    if (!dragStateRef.current.isDragging) return;
+    if (pointerId !== undefined && dragStateRef.current.pointerId !== pointerId) return;
 
-    const clampScrollLeft = (value) => {
-      const maxScrollLeft = Math.max(0, track.scrollWidth - track.clientWidth);
-      return Math.min(Math.max(value, 0), maxScrollLeft);
+    if (dragStateRef.current.moved) {
+      suppressClickRef.current = true;
+      window.setTimeout(() => {
+        suppressClickRef.current = false;
+      }, 0);
+    }
+
+    dragStateRef.current = {
+      isDragging: false,
+      pointerId: null,
+      startX: 0,
+      startOffset: carouselOffset,
+      moved: false
     };
+    setIsDraggingCarousel(false);
+    pressedArticleSlugRef.current = null;
+    document.body.classList.remove('blog-carousel-dragging');
+  };
 
-    const handleWheel = (event) => {
-      if (window.matchMedia('(pointer: coarse)').matches) return;
-      const dominantDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
-      if (dominantDelta === 0) return;
+  const handleArticlePointerDown = (slug) => {
+    pressedArticleSlugRef.current = slug;
+  };
 
-      event.preventDefault();
-      track.scrollLeft = clampScrollLeft(track.scrollLeft + dominantDelta);
-    };
+  const handleCarouselPointerDown = (event) => {
+    if (!viewportRef.current) return;
+    if (event.pointerType === 'mouse' && event.button !== 0) return;
 
-    const handleMouseDown = (event) => {
-      if (event.button !== 0) return;
-      dragStateRef.current = {
-        isDragging: true,
-        startX: event.clientX,
-        startScrollLeft: track.scrollLeft,
-        moved: false
-      };
-      track.classList.add('is-dragging');
-      document.body.classList.add('blog-carousel-dragging');
-    };
-
-    const handleMouseMove = (event) => {
-      const dragState = dragStateRef.current;
-      if (!dragState.isDragging) return;
-
-      const deltaX = event.clientX - dragState.startX;
-      event.preventDefault();
-      if (Math.abs(deltaX) > 4) {
-        dragState.moved = true;
-      }
-      track.scrollLeft = dragState.startScrollLeft - deltaX;
+    dragStateRef.current = {
+      isDragging: true,
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startOffset: carouselOffset,
+      moved: false
     };
 
-    const endMouseDrag = () => {
-      if (!dragStateRef.current.isDragging) return;
-      if (dragStateRef.current.moved) {
+    setIsDraggingCarousel(true);
+    document.body.classList.add('blog-carousel-dragging');
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+  };
+
+  const handleCarouselPointerMove = (event) => {
+    const dragState = dragStateRef.current;
+    if (!dragState.isDragging || dragState.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - dragState.startX;
+    if (Math.abs(deltaX) > 4) {
+      dragState.moved = true;
+    }
+
+    setCarouselOffset(clampCarouselOffset(dragState.startOffset - deltaX));
+  };
+
+  const handleCarouselPointerUp = (event) => {
+    const dragState = dragStateRef.current;
+    if (
+      dragState.isDragging &&
+      dragState.pointerId === event.pointerId &&
+      !dragState.moved
+    ) {
+      const article = blogArticles.find((item) => item.slug === pressedArticleSlugRef.current);
+      if (article) {
         suppressClickRef.current = true;
         window.setTimeout(() => {
           suppressClickRef.current = false;
         }, 0);
+        setActiveArticle(article);
       }
-      dragStateRef.current.isDragging = false;
-      track.classList.remove('is-dragging');
-      document.body.classList.remove('blog-carousel-dragging');
+    }
+
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    endPointerDrag(event.pointerId);
+  };
+
+  const handleCarouselPointerCancel = (event) => {
+    event.currentTarget.releasePointerCapture?.(event.pointerId);
+    endPointerDrag(event.pointerId);
+  };
+
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const handleNativeWheel = (event) => {
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+      const dominantDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (!dominantDelta) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      setCarouselOffset((currentOffset) => clampCarouselOffset(currentOffset + dominantDelta));
     };
 
-    track.addEventListener('wheel', handleWheel, { passive: false });
-    track.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mousemove', handleMouseMove, { passive: false });
-    window.addEventListener('mouseup', endMouseDrag);
+    viewport.addEventListener('wheel', handleNativeWheel, { passive: false });
 
     return () => {
-      track.removeEventListener('wheel', handleWheel);
-      track.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', endMouseDrag);
-      document.body.classList.remove('blog-carousel-dragging');
+      viewport.removeEventListener('wheel', handleNativeWheel);
     };
-  }, []);
+  }, [clampCarouselOffset]);
 
   const articleModal = activeArticle ? (
     <div
@@ -261,41 +325,55 @@ function Blog() {
         <main className="blog-main">
           <section className="blog-carousel-section">
             <div
-              className="blog-carousel-track"
+              className={`blog-carousel-viewport${isDraggingCarousel ? ' is-dragging' : ''}`}
               aria-label="Blog articles"
               tabIndex={0}
-              ref={carouselRef}
+              ref={viewportRef}
+              onPointerDown={handleCarouselPointerDown}
+              onPointerMove={handleCarouselPointerMove}
+              onPointerUp={handleCarouselPointerUp}
+              onPointerCancel={handleCarouselPointerCancel}
             >
-              {blogArticles.map((article, index) => (
-              <article
-                key={article.slug}
-                className={`blog-carousel-card blog-carousel-card-${(index % 4) + 1}`}
-                role="button"
-                tabIndex={0}
-                onClick={() => openArticle(article)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openArticle(article);
-                  }
+              <div
+                className="blog-carousel-track"
+                ref={carouselRef}
+                style={{
+                  transform: `translate3d(${-carouselOffset}px, 0, 0)`,
+                  transition: isDraggingCarousel ? 'none' : 'transform 320ms cubic-bezier(0.22, 1, 0.36, 1)'
                 }}
-                onDragStart={(e) => e.preventDefault()}
               >
-                <div className="blog-carousel-card-inner">
-                  <div className="blog-carousel-card-visual">
-                    <img
-                      src={article.image}
-                      alt={`Placeholder preview for ${article.title}`}
-                      className="blog-carousel-image"
-                      draggable="false"
-                    />
-                  </div>
-                  <div className="blog-carousel-card-footer">
-                    <span className="blog-carousel-chip">{article.cardLabel}</span>
-                  </div>
-                </div>
-              </article>
-            ))}
+                {blogArticles.map((article, index) => (
+                  <article
+                    key={article.slug}
+                    className={`blog-carousel-card blog-carousel-card-${(index % 4) + 1}`}
+                    data-article-slug={article.slug}
+                    role="button"
+                    tabIndex={0}
+                    onPointerDown={() => handleArticlePointerDown(article.slug)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openArticle(article);
+                      }
+                    }}
+                    onDragStart={(e) => e.preventDefault()}
+                  >
+                    <div className="blog-carousel-card-inner">
+                      <div className="blog-carousel-card-visual">
+                        <img
+                          src={article.image}
+                          alt={`Placeholder preview for ${article.title}`}
+                          className="blog-carousel-image"
+                          draggable="false"
+                        />
+                      </div>
+                      <div className="blog-carousel-card-footer">
+                        <span className="blog-carousel-chip">{article.cardLabel}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
             <div className="blog-carousel-controls">
               <button
