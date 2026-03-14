@@ -26,7 +26,7 @@ const projectsData = {
     technologies: ['HTML5', 'CSS3', 'JavaScript', 'Figma', 'Frameworks/Libraries', 'MongoDB', 'GitHub'],
     images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
     liveLink: 'https://www.endlesscharms.store',
-    githubLink: 'https://github.com/duuuyyyyyy/Endless-Charms.git'
+    githubLink: 'https://github.com/GR4C3FR/Endless-Charms-Jewelries.git'
   },
   '4': {
     name: 'ShareSource',

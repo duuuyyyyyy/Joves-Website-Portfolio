@@ -303,7 +303,7 @@ function Blog() {
   return (
     <>
       <section id="blog" className="page-section blog-page">
-        <section className="hero-scalar blog-hero-scalar" style={{ minHeight: '45vh', paddingBottom: '48px' }}>
+        <section className="hero-scalar blog-hero-scalar" style={{ minHeight: '40vh' }}>
           <div className="hero-orb orb-v3 orb-color-4" style={{ top: '-10%', right: '15%' }}></div>
           <div className="hero-orb orb-v4 orb-color-2" style={{ bottom: '10%', left: '20%' }}></div>
           <div className="hero-orb orb-v7 orb-color-5 orb-shape-ellipse orb-anim-wave" style={{ top: '18%', left: '8%' }}></div>
@@ -315,7 +315,6 @@ function Blog() {
                 Notes on development, interface thinking, and the decisions behind the work. Scroll through the cards to explore each article.
               </p>
               <div className="blog-header-copy">
-                <span className="editorial-section-kicker">Resources &amp; Insights</span>
                 <h1 className="editorial-section-title">Blog</h1>
               </div>
             </div>
@@ -345,10 +344,11 @@ function Blog() {
                 {blogArticles.map((article, index) => (
                   <article
                     key={article.slug}
-                    className={`blog-carousel-card blog-carousel-card-${(index % 4) + 1}`}
+                    className={`blog-carousel-card blog-carousel-card-${(index % 4) + 1} scroll-card`}
                     data-article-slug={article.slug}
                     role="button"
                     tabIndex={0}
+                    style={{ '--slide-delay': `${Math.min(index, 4) * 0.06}s` }}
                     onPointerDown={() => handleArticlePointerDown(article.slug)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -405,4 +405,3 @@ function Blog() {
 }
 
 export default Blog;
-

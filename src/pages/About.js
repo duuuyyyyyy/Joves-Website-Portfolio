@@ -175,11 +175,7 @@ function About() {
       <section id="about" className="page-section about-page">
         <div className="about-page-grid">
           <div className="editorial-section-header editorial-section-header-right about-section-header">
-            <span className="editorial-section-kicker">Who I Am</span>
             <h1 className="editorial-section-title">About Me</h1>
-            <p className="editorial-section-subtitle">
-              I build thoughtful digital experiences by combining interface design, product thinking, and reliable code.
-            </p>
           </div>
           <section className="about-hero-center-wrapper" ref={heroRef}>
             <div className="hero-orb orb-v1 orb-color-1 orb-shape-ellipse" style={{ top: '5%', right: '5%' }}></div>
@@ -198,15 +194,11 @@ function About() {
                   </svg>
                 </div>
                 <div className="about-photo-main">
-                  <img src={process.env.PUBLIC_URL + '/carla-joves-public-speaking.jpg'} alt="Carla Joves speaking at an event with a microphone" />
-                </div>
-                <div className="about-photo-overlay">
-                  <img src={process.env.PUBLIC_URL + '/carla-joves-posing-holding-camera.jpg'} alt="Carla Joves holding a camera during an event" />
+                  <img src={process.env.PUBLIC_URL + '/carla-joves-professional-photo.svg'} alt="Carla Joves posing in a professional setting" />
                 </div>
               </div>
 
               <div className="about-text-block">
-                <h2>Who I Am</h2>
                 <p>
                   I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
                 </p>

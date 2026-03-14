@@ -5,7 +5,6 @@ function Home() {
   const { activeProject, openModal, closeModal } = useProjectModal();
   const heroRef = useRef(null);
   const projectsRef = useRef(null);
-  const trackRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -39,51 +38,6 @@ function Home() {
   }, []);
 
   // Hero parallax-like movement removed (now global)
-
-  // Horizontal scroll-driven card animation
-  useEffect(() => {
-    const section = projectsRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
-
-    const handleScroll = () => {
-      const rect = section.getBoundingClientRect();
-      const windowH = window.innerHeight;
-
-      // Cards only start appearing when section is 10-15% from viewport bottom
-      const triggerPoint = windowH * 0.85; // Trigger at 85% from top = 15% from bottom
-      const progress = Math.max(0, Math.min(1, (triggerPoint - rect.top) / (windowH * 0.3)));
-
-      const cards = track.querySelectorAll('.home-project-card');
-
-      cards.forEach((card, i) => {
-        // Only animate if we've started scrolling past trigger
-        if (progress > 0) {
-          // Stagger: each card starts slightly later (slower animation)
-          const cardStart = i * 0.12;
-          const cardProgress = Math.max(0, Math.min(1, (progress - cardStart) / 0.7));
-
-          if (cardProgress >= 1) {
-            // Once animation is complete, make it static
-            card.classList.add('visible');
-            card.style.transform = '';
-            card.style.opacity = '';
-          } else if (cardProgress > 0) {
-            // While animating - slide from right to left
-            card.classList.remove('visible');
-            const translateX = (1 - cardProgress) * 200;
-            const opacity = cardProgress;
-            card.style.transform = `translateX(${translateX}px)`;
-            card.style.opacity = opacity;
-          }
-        }
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Initial call
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
@@ -135,29 +89,33 @@ function Home() {
       <section className="home-projects-section" id="projects" ref={projectsRef}>
         <div className="glass-container">
           <div className="home-projects-header reveal-on-scroll">
-            <span className="section-label">SELECTED WORK</span>
             <h2 className="home-projects-title">Featured Projects</h2>
             <p className="home-projects-subtitle">Showcasing my individual works</p>
           </div>
 
           <div className="home-projects-layout">
             <div className="home-cta-stack reveal-on-scroll">
-              <a className="home-cta-card tone-1" href="#about">
+              <a className="home-cta-card tone-1 scroll-card" href="#about" style={{ '--slide-delay': '0.02s' }}>
                 <h3>Building Digital Experiences That Matter.</h3>
                 <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
-              <a className="home-cta-card tone-2" href="#projects-section">
+              <a className="home-cta-card tone-2 scroll-card" href="#projects-section" style={{ '--slide-delay': '0.1s' }}>
                 <h3>Selected Works &amp; Technical Case Studies.</h3>
                 <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
-              <a className="home-cta-card tone-3" href="#contact">
+              <a className="home-cta-card tone-3 scroll-card" href="#contact" style={{ '--slide-delay': '0.18s' }}>
                 <h3>Let&apos;s Collaborate on Your Next Big Idea.</h3>
                 <span className="home-cta-arrow" style={{ backgroundImage: 'url(/arrow-forward-outline.png)' }} aria-hidden="true"></span>
               </a>
             </div>
 
-            <div className="home-projects-track" ref={trackRef}>
-              <article className="home-project-card" data-project="1" onClick={() => openModal('1')}>
+            <div className="home-projects-track">
+              <article
+                className="home-project-card scroll-card"
+                data-project="1"
+                style={{ '--slide-delay': '0.08s' }}
+                onClick={() => openModal('1')}
+              >
                 <div
                   className="home-project-visual"
                   style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-1-wander.png)` }}
@@ -177,7 +135,12 @@ function Home() {
                 </div>
               </article>
 
-              <article className="home-project-card" data-project="2" onClick={() => openModal('2')}>
+              <article
+                className="home-project-card scroll-card"
+                data-project="2"
+                style={{ '--slide-delay': '0.16s' }}
+                onClick={() => openModal('2')}
+              >
                 <div
                   className="home-project-visual"
                   style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/project-images/project-2-jzone-motorcycle-red.png)` }}

@@ -88,11 +88,7 @@ function Contact() {
     <section id="contact" className="page-section contact-page">
       <main className="contact-main" style={{ position: 'relative', overflow: 'hidden' }}>
         <div className="editorial-section-header editorial-section-header-left contact-section-header">
-          <span className="editorial-section-kicker">Let's Collaborate</span>
           <h1 className="editorial-section-title">Contact</h1>
-          <p className="editorial-section-subtitle">
-            Start the conversation here, then use the form for project context, walkthrough requests, or direct inquiries.
-          </p>
         </div>
         {/* Localized Immersive Orbs */}
         <div className="hero-orb orb-v4 orb-color-1" style={{ top: '10%', left: '5%' }}></div>
@@ -128,6 +124,25 @@ function Contact() {
                 Download PDF
               </a>
             </div>
+
+            <section className="contact-compact-links" aria-label="Contact links">
+              {contactCards.map(({ label, icon, text, href, external }, index) => (
+                <a
+                  key={label}
+                  className="contact-compact-link scroll-card"
+                  href={href || '#'}
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                  style={{ '--slide-delay': `${Math.min(index, 4) * 0.05}s` }}
+                  aria-label={`${label}: ${text}`}
+                  title={`${label}: ${text}`}
+                >
+                  <span className="contact-compact-icon">
+                    <i className={icon}></i>
+                  </span>
+                </a>
+              ))}
+            </section>
           </div>
 
           <div className="contact-form-section">
@@ -201,32 +216,6 @@ function Contact() {
               )}
             </form>
           </div>
-        </section>
-
-        <section className="contact-info-grid social-links-bar">
-          {contactCards.map(({ label, icon, text, href, external }) => {
-            const isSocialProfile = ['LinkedIn', 'GitHub', 'Facebook'].includes(label);
-
-            return (
-              <a
-                key={label}
-                className="contact-card contact-card-button"
-                href={href || '#'}
-                target={external ? '_blank' : undefined}
-                rel={external ? 'noopener noreferrer' : undefined}
-              >
-                <span className="contact-icon">
-                  <i className={icon}></i>
-                </span>
-                <div className="contact-card-copy">
-                  <span className="contact-card-label">{label}</span>
-                  <span className="contact-card-value">
-                    {isSocialProfile ? 'Carla Joves' : text}
-                  </span>
-                </div>
-              </a>
-            );
-          })}
         </section>
 
       </main>

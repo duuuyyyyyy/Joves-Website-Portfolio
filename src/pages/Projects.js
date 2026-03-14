@@ -120,11 +120,22 @@ const projects = [
   }
 ];
 
+const shouldTrimScreenshotChrome = (imagePath = '') => imagePath.includes('jewelry-ecommerce-landing-page');
+
 function Projects() {
   const previewRailRef = useRef(null);
   const previewCardRefs = useRef([]);
   const animationFrameRef = useRef(null);
+  const scrollbarDragRef = useRef({
+    pointerId: null,
+    startY: 0,
+    startScrollTop: 0
+  });
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [previewScrollbar, setPreviewScrollbar] = useState({
+    thumbHeight: 0,
+    thumbTop: 0
+  });
   const [selectedScreenshots, setSelectedScreenshots] = useState(() =>
     Object.fromEntries(projects.map((project) => [project.id, 0]))
   );
@@ -133,7 +144,7 @@ function Projects() {
     const rail = previewRailRef.current;
     if (!rail) return undefined;
 
-    const syncActiveProject = () => {
+    const syncPreviewRail = () => {
       const threshold = rail.scrollTop + rail.clientHeight * 0.38;
       let nextActiveIndex = 0;
 
@@ -144,17 +155,39 @@ function Projects() {
       });
 
       setActiveProjectIndex((current) => (current === nextActiveIndex ? current : nextActiveIndex));
+
+      const maxScroll = Math.max(rail.scrollHeight - rail.clientHeight, 0);
+      const trackHeight = rail.clientHeight;
+      const thumbHeight = maxScroll > 0
+        ? Math.max((trackHeight / rail.scrollHeight) * trackHeight, 88)
+        : trackHeight;
+      const maxThumbTop = Math.max(trackHeight - thumbHeight, 0);
+      const thumbTop = maxScroll > 0 ? (rail.scrollTop / maxScroll) * maxThumbTop : 0;
+
+      setPreviewScrollbar((current) => {
+        if (
+          Math.abs(current.thumbHeight - thumbHeight) < 0.5 &&
+          Math.abs(current.thumbTop - thumbTop) < 0.5
+        ) {
+          return current;
+        }
+
+        return {
+          thumbHeight,
+          thumbTop
+        };
+      });
     };
 
     const requestSync = () => {
       if (animationFrameRef.current) return;
       animationFrameRef.current = window.requestAnimationFrame(() => {
-        syncActiveProject();
+        syncPreviewRail();
         animationFrameRef.current = null;
       });
     };
 
-    syncActiveProject();
+    syncPreviewRail();
     rail.addEventListener('scroll', requestSync, { passive: true });
     window.addEventListener('resize', requestSync);
 
@@ -166,6 +199,69 @@ function Projects() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const handlePointerMove = (event) => {
+      const rail = previewRailRef.current;
+      const dragState = scrollbarDragRef.current;
+      if (!rail || dragState.pointerId !== event.pointerId) return;
+
+      const deltaY = event.clientY - dragState.startY;
+      const maxScroll = Math.max(rail.scrollHeight - rail.clientHeight, 0);
+      const maxThumbTop = Math.max(rail.clientHeight - previewScrollbar.thumbHeight, 0);
+      if (maxScroll <= 0 || maxThumbTop <= 0) return;
+
+      const scrollRatio = maxScroll / maxThumbTop;
+      rail.scrollTop = dragState.startScrollTop + deltaY * scrollRatio;
+    };
+
+    const endDrag = (event) => {
+      if (scrollbarDragRef.current.pointerId !== event.pointerId) return;
+      scrollbarDragRef.current = {
+        pointerId: null,
+        startY: 0,
+        startScrollTop: 0
+      };
+      document.body.classList.remove('projects-scrollbar-dragging');
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', endDrag);
+      window.removeEventListener('pointercancel', endDrag);
+      document.body.classList.remove('projects-scrollbar-dragging');
+    };
+  }, [previewScrollbar.thumbHeight]);
+
+  const handleScrollbarThumbPointerDown = (event) => {
+    const rail = previewRailRef.current;
+    if (!rail) return;
+
+    scrollbarDragRef.current = {
+      pointerId: event.pointerId,
+      startY: event.clientY,
+      startScrollTop: rail.scrollTop
+    };
+    document.body.classList.add('projects-scrollbar-dragging');
+    event.preventDefault();
+  };
+
+  const handleScrollbarTrackPointerDown = (event) => {
+    const rail = previewRailRef.current;
+    if (!rail || event.target !== event.currentTarget) return;
+
+    const trackRect = event.currentTarget.getBoundingClientRect();
+    const clickOffset = event.clientY - trackRect.top - previewScrollbar.thumbHeight / 2;
+    const maxThumbTop = Math.max(trackRect.height - previewScrollbar.thumbHeight, 0);
+    const nextThumbTop = Math.min(Math.max(clickOffset, 0), maxThumbTop);
+    const maxScroll = Math.max(rail.scrollHeight - rail.clientHeight, 0);
+
+    rail.scrollTop = maxThumbTop > 0 ? (nextThumbTop / maxThumbTop) * maxScroll : 0;
+  };
 
   const renderLinkButton = (label, href, secondary = false) => {
     if (!href) {
@@ -238,7 +334,11 @@ function Projects() {
                     aria-pressed={shotIndex === selectedScreenshotIndex}
                     aria-label={`Show ${shot.alt}`}
                   >
-                    <img src={shot.image} alt={shot.alt} />
+                    <img
+                      src={shot.image}
+                      alt={shot.alt}
+                      className={shouldTrimScreenshotChrome(shot.image) ? 'projects-image-trim-right' : ''}
+                    />
                   </button>
                 ))}
               </div>
@@ -273,7 +373,11 @@ function Projects() {
                   >
                     <div className="projects-preview-stage">
                       <div className="projects-preview-layer is-current">
-                        <img src={leadImage.image} alt={leadImage.alt || project.previewAlt} />
+                        <img
+                          src={leadImage.image}
+                          alt={leadImage.alt || project.previewAlt}
+                          className={shouldTrimScreenshotChrome(leadImage.image) ? 'projects-image-trim-right' : ''}
+                        />
                         <p className="projects-preview-title">{project.title}</p>
                       </div>
                     </div>
@@ -281,15 +385,37 @@ function Projects() {
                 );
               })}
             </div>
+            <div
+              className="projects-preview-scrollbar"
+              onPointerDown={handleScrollbarTrackPointerDown}
+              aria-hidden="true"
+            >
+              <div
+                className="projects-preview-scrollbar-thumb"
+                style={{
+                  height: `${previewScrollbar.thumbHeight}px`,
+                  transform: `translateY(${previewScrollbar.thumbTop}px)`
+                }}
+                onPointerDown={handleScrollbarThumbPointerDown}
+              />
+            </div>
           </aside>
         </div>
       </div>
 
       <div className="projects-mobile-stack" aria-label="Projects list">
         {projects.map((project) => (
-          <article key={project.id} className="projects-mobile-case">
+          <article
+            key={project.id}
+            className="projects-mobile-case scroll-card"
+            style={{ '--slide-delay': `${Math.min(Number(project.id) - 1, 3) * 0.08}s` }}
+          >
             <div className="projects-mobile-preview">
-              <img src={project.previewImage} alt={project.previewAlt} />
+              <img
+                src={project.previewImage}
+                alt={project.previewAlt}
+                className={shouldTrimScreenshotChrome(project.previewImage) ? 'projects-image-trim-right' : ''}
+              />
             </div>
             <div className="projects-mobile-copy">
               <h2 className="projects-case-title">{project.title}</h2>
@@ -316,7 +442,11 @@ function Projects() {
                 <div className="projects-case-shots">
                   {project.screenshots.map((shot) => (
                     <div key={shot.alt} className="projects-case-shot">
-                      <img src={shot.image} alt={shot.alt} />
+                      <img
+                        src={shot.image}
+                        alt={shot.alt}
+                        className={shouldTrimScreenshotChrome(shot.image) ? 'projects-image-trim-right' : ''}
+                      />
                     </div>
                   ))}
                 </div>
