@@ -30,82 +30,124 @@ function About() {
   const certifications = [
     {
       title: 'Back End Development and APIs Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'October 4, 2025',
+      issuedDate: '2025-10-04',
+      kicker: 'Certificate',
       desc: 'Credential focused on backend application structure, API design, and server-side JavaScript workflows.',
       image: process.env.PUBLIC_URL + '/certifications/back-end-development-and-api-certification.png',
       fitMode: 'wide'
     },
     {
       title: 'CCNA: Introduction to Networks Badge',
-      issued: 'Issue date not shown on uploaded badge',
+      issued: 'May 16, 2025',
+      issuedDate: '2025-05-16',
+      kicker: 'Badge',
       desc: 'Networking credential covering core concepts such as network models, addressing, routing basics, and foundational infrastructure knowledge.',
       image: process.env.PUBLIC_URL + '/certifications/ccna-introduction-to-networks-badge.png',
       fitMode: 'badge'
     },
     {
+      title: 'AWS Cloud Foundation Certificate of Completion',
+      issued: 'March 13, 2026',
+      issuedDate: '2026-03-13',
+      kicker: 'Certificate',
+      desc: 'Cloud foundation training focused on core AWS concepts, cloud service models, platform fundamentals, and introductory cloud infrastructure knowledge.',
+      image: process.env.PUBLIC_URL + '/certifications/aws-cloud-foundation-certificate-of-completion.png',
+      fitMode: 'wide'
+    },
+    {
+      title: 'CompTIA IT Fundamentals (ITF+) Certification',
+      issued: 'November 23, 2023',
+      issuedDate: '2023-11-23',
+      kicker: 'Badge',
+      desc: 'Entry-level IT credential covering computing basics, software and hardware concepts, troubleshooting fundamentals, and general technology literacy.',
+      image: process.env.PUBLIC_URL + '/certifications/comptia-it-fundamentals-itf-certification.1.png',
+      fitMode: 'badge'
+    },
+    {
       title: 'Content Marketing Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'August 27, 2025',
+      issuedDate: '2025-08-27',
+      kicker: 'Certificate',
       desc: 'Certification in content planning, audience targeting, messaging strategy, and performance-oriented marketing content.',
       image: process.env.PUBLIC_URL + '/certifications/content-marketing-certification.png'
     },
     {
       title: 'Design Thinking Certification of Completion',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'July 28, 2025',
+      issuedDate: '2025-07-28',
+      kicker: 'Certificate',
       desc: 'Training centered on problem framing, ideation, user-centered thinking, and structured solution development.',
       image: process.env.PUBLIC_URL + '/certifications/design-thinking-certification-of-completion.png'
     },
     {
       title: 'Digital Advertising Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'September 28, 2025',
+      issuedDate: '2025-09-28',
+      kicker: 'Certificate',
       desc: 'Credential focused on campaign execution, ad strategy, platform fundamentals, and conversion-oriented promotion.',
       image: process.env.PUBLIC_URL + '/certifications/digital-advertising-certification.png'
     },
     {
       title: 'Digital Marketing Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'July 28, 2025',
+      issuedDate: '2025-07-28',
+      kicker: 'Certificate',
       desc: 'Broad marketing certification covering digital channels, audience acquisition, campaign measurement, and online growth strategy.',
       image: process.env.PUBLIC_URL + '/certifications/digital-marketing-certification.png'
     },
     {
       title: 'Introduction to Figma Certificate of Completion',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'September 19 2024',
+      issuedDate: '2024-09-19',
+      kicker: 'Certificate',
       desc: 'Course completion credential for interface design workflows, wireframing, collaborative design, and prototyping in Figma.',
       image: process.env.PUBLIC_URL + '/certifications/introduction-to-figma-certificate-of-completion.png'
     },
     {
       title: 'JavaScript Essentials Badge',
-      issued: 'Issue date not shown on uploaded badge',
+      issued: 'October 25, 2024',
+      issuedDate: '2024-10-25',
+      kicker: 'Badge',
       desc: 'Badge validating JavaScript fundamentals, syntax, logic, and practical programming foundations.',
       image: process.env.PUBLIC_URL + '/certifications/javascript-essentials-badge.png',
       fitMode: 'badge'
     },
     {
       title: 'Legacy JavaScript Algorithms and Data Structures Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'October 2, 2025',
+      issuedDate: '2025-10-02',
+      kicker: 'Certificate',
       desc: 'Credential covering core JavaScript problem solving, algorithms, data structures, and applied coding exercises.',
       image: process.env.PUBLIC_URL + '/certifications/legacy-javascript-algorithm-and-data-structures-certification.png',
       fitMode: 'wide'
     },
     {
       title: 'Responsive Web Design Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'September 8, 2024',
+      issuedDate: '2024-09-08',
+      kicker: 'Certificate',
       desc: 'Certification focused on accessible layouts, semantic HTML, CSS, and responsive interface implementation across devices.',
       image: process.env.PUBLIC_URL + '/certifications/responsive-web-design-certification.png',
       fitMode: 'wide'
     },
     {
       title: 'SEO II Certified',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'February 9, 2026',
+      issuedDate: '2026-02-09',
+      kicker: 'Certificate',
       desc: 'Advanced SEO credential covering search visibility, optimization strategy, technical discoverability, and content performance.',
       image: process.env.PUBLIC_URL + '/certifications/seo-2-certified.png'
     },
     {
       title: 'SEO Certification',
-      issued: 'Issue date not shown on uploaded certificate',
+      issued: 'January 7, 2026',
+      issuedDate: '2026-01-07',
+      kicker: 'Certificate',
       desc: 'Credential focused on search engine optimization fundamentals, on-page improvements, keyword strategy, and ranking best practices.',
       image: process.env.PUBLIC_URL + '/certifications/seo-certification.png'
-    },
-  ];
+    }
+  ].sort((a, b) => new Date(b.issuedDate) - new Date(a.issuedDate));
 
   const flowLines = Array.from({ length: 46 }, (_, i) => i);
   const flowPills = [
@@ -116,11 +158,11 @@ function About() {
     { label: 'momentum', x: '81%', y: '42%', mobileX: '86%', mobileY: '74%', delay: '0.36s' },
   ];
   const flowPillContent = {
-    capacity: 'Placeholder: Capacity grows when work is repeatable and priorities are consistently clear.',
-    clarity: 'Placeholder: Clear direction reduces friction, speeds execution, and improves output quality.',
-    focus: 'Placeholder: Focus keeps energy directed toward the highest-impact work instead of scattered busywork.',
-    consistency: 'Placeholder: Consistency compounds over time, creating stable progress with fewer resets.',
-    momentum: 'Placeholder: Momentum forms when each completed step naturally feeds the next action.'
+    capacity: 'Capacity grows when work is repeatable and priorities are consistently clear.',
+    clarity: 'Clear direction reduces friction, speeds execution, and improves output quality.',
+    focus: 'Focus keeps energy directed toward the highest-impact work instead of scattered busywork.',
+    consistency: 'Consistency compounds over time, creating stable progress with fewer resets.',
+    momentum: 'Momentum forms when each completed step naturally feeds the next action.'
   };
 
   useEffect(() => {
@@ -199,13 +241,27 @@ function About() {
               </div>
 
               <div className="about-text-block">
-                <p>
-                  I'm a product-minded developer driven by the intersection of design and functionality. I bridge the gap between beautiful interfaces and robust code, creating seamless digital experiences that solve real-world problems.
+                <p className="about-intro-copy">
+                  I am a <span className="about-inline-highlight">Carla Dulay Joves</span>, a UI/UX designer and aspiring front-end developer passionate about creating
+                  user-centered digital experiences that combine thoughtful design with functional
+                  code.{' '}
+                  
+                  <span className="about-inline-highlight">
+                    Based in the Philippines and available for worldwide collaboration and remote
+                    partnerships
+                  </span>
+                  , I am currently pursuing{' '}
+                  <span className="about-inline-highlight">
+                    a Bachelor of Science in Information Technology majoring in Web Development at
+                    Holy Angel University
+                  </span>
+                  . I work with tools and technologies such as Figma, HTML, CSS, JavaScript,
+                  Tailwind CSS, GitHub, and Visual Studio Code to design and develop responsive,
+                  accessible web interfaces. With experience in UI design, front-end development,
+                  and digital asset creation, my goal is to specialize in UI/UX and front-end
+                  development while building intuitive and visually engaging products that solve
+                  real-world user needs.
                 </p>
-                <div className="about-based-card">
-                  <h3>Based In</h3>
-                  <p>Philippines, available for worldwide collaboration and remote partnerships.</p>
-                </div>
               </div>
             </div>
           </section>
@@ -268,7 +324,7 @@ function About() {
               className={`certifications-section cert-showcase ${certSectionVisible ? 'revealed' : ''}`}
               ref={certSectionRef}
             >
-              <h2>Certifications &amp; Credentials</h2>
+              <h2>Credentials</h2>
               <div className="cert-showcase-layout">
                 <div className="cert-sidebar-list" role="listbox" aria-label="Certification list">
                   {certifications.map((cert, index) => {
@@ -294,7 +350,7 @@ function About() {
                           />
                         </div>
                         <div className="cert-sidebar-copy">
-                          <span className="cert-sidebar-kicker">Certificate</span>
+                          <span className="cert-sidebar-kicker">{cert.kicker}</span>
                           <h3>{cert.title}</h3>
                         </div>
                         <div className="cert-mobile-details">

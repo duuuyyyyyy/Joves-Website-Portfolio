@@ -2,39 +2,46 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href=".\navy-gold-gradient-transparent-background.png" />
+    <link rel="icon" href="%PUBLIC_URL%/navy-gold-gradient-transparent-background.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Professional Portfolio - Web Developer crafting elegant digital solutions" />
+    <meta name="theme-color" content="#f9f5f0" />
+    <meta name="description" content="Portfolio of Carla Dulay Joves, a UI/UX designer and aspiring front-end developer showcasing projects, credentials, blog posts, and contact information." />
     <!-- SEO Meta Tags -->
-    <meta name="keywords" content="Carla Joves, Portfolio, Web Developer, Frontend, Backend, React, JavaScript, HTML, CSS, Full Stack, Projects, Blog, Resume, Contact" />
+    <meta name="keywords" content="Carla Dulay Joves, Carla Joves portfolio, UI UX designer portfolio, front-end developer portfolio, web development projects, responsive web design, Holy Angel University" />
     <meta name="author" content="Carla Dulay Joves" />
-    <meta property="og:title" content="Carla Joves | Professional Portfolio" />
-    <meta property="og:description" content="Web Developer crafting elegant digital solutions. Explore my projects, blog, and resume." />
+    <meta property="og:title" content="Carla Dulay Joves | UI/UX Designer and Front-End Developer Portfolio" />
+    <meta property="og:description" content="Explore the portfolio of Carla Dulay Joves, featuring UI/UX and front-end projects, certifications, blog articles, and contact details." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://your-portfolio-url.com/" />
-    <meta property="og:image" content="%PUBLIC_URL%/about-me-image.png" />
+    <meta property="og:url" content="https://joveswebsiteportfolio.netlify.app/" />
+    <meta property="og:image" content="%PUBLIC_URL%/carla-joves-portfolio-homepage.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Carla Joves | Professional Portfolio" />
-    <meta name="twitter:description" content="Web Developer crafting elegant digital solutions. Explore my projects, blog, and resume." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/about-me-image.png" />
-
-    <!-- Google Analytics -->
-    <!-- Replace G-XXXXXXXXXX with your actual GA4 Measurement ID -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-XXXXXXXXXX');
-    </script>
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <meta name="twitter:title" content="Carla Dulay Joves | UI/UX Designer and Front-End Developer Portfolio" />
+    <meta name="twitter:description" content="Explore the portfolio of Carla Dulay Joves, featuring UI/UX and front-end projects, certifications, blog articles, and contact details." />
+    <meta name="twitter:image" content="%PUBLIC_URL%/carla-joves-portfolio-homepage.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/navy-gold-gradient-transparent-background.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <title>Professional Portfolio</title>
+    <script>
+      (function () {
+        try {
+          var savedTheme = window.localStorage.getItem('theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var shouldUseDark = savedTheme ? savedTheme === 'dark' : prefersDark;
+
+          if (shouldUseDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (error) {
+          document.documentElement.classList.remove('dark');
+        }
+      })();
+    </script>
+    <title>Carla Dulay Joves | UI/UX Designer and Front-End Developer Portfolio</title>
 
   </head>
   <body>

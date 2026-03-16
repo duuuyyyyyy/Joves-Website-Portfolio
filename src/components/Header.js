@@ -1,23 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 function Header() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
+
+    const savedTheme = window.localStorage.getItem('theme');
+    if (savedTheme === 'dark') return true;
+    if (savedTheme === 'light') return false;
+
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  });
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const navRef = useRef(null);
   const highlightRef = useRef(null);
   const sectionIds = ['hero', 'about', 'projects-section', 'blog', 'contact'];
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDark(savedTheme === 'dark');
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDark(prefersDark);
-    }
-  }, []);
 
   useEffect(() => {
     if (isDark) {

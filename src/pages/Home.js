@@ -6,6 +6,12 @@ function Home() {
   const heroRef = useRef(null);
   const projectsRef = useRef(null);
 
+  const handleFeaturedProjectKeyDown = (event, projectId) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    openModal(projectId);
+  };
+
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && activeProject) {
@@ -115,6 +121,11 @@ function Home() {
                 data-project="1"
                 style={{ '--slide-delay': '0.08s' }}
                 onClick={() => openModal('1')}
+                onKeyDown={(event) => handleFeaturedProjectKeyDown(event, '1')}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
+                aria-label="Open Wander Blog Mockup project details"
               >
                 <div
                   className="home-project-visual"
@@ -140,6 +151,11 @@ function Home() {
                 data-project="2"
                 style={{ '--slide-delay': '0.16s' }}
                 onClick={() => openModal('2')}
+                onKeyDown={(event) => handleFeaturedProjectKeyDown(event, '2')}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
+                aria-label="Open J-Zone E-Commerce CMS project details"
               >
                 <div
                   className="home-project-visual"

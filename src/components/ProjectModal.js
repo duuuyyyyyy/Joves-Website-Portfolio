@@ -1,88 +1,137 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { projectsById, shouldTrimScreenshotChrome } from '../data/projects';
 
-const projectsData = {
-  '1': {
-    name: 'Wander',
-    purpose: 'The purpose of Wander Luzon is to provide an all-in-one digital toolkit that seamlessly bridges the gap between travel inspiration, navigation, and community-based advice for Luzons top destinations.',
-    features: ['Curated "Top 10" Showcase', 'Interactive Info Snippets', 'Map Integration Prototype', 'Linked Community Forum', 'Responsive Navigation'],
-    technologies: ['Figma', 'External Integration (Mocked)'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://www.figma.com/proto/gkKdqo5oP8w45e1gkrJBC8/Wander?node-id=1-2&t=0F7N4gmyIADJGLwN-1',
-    githubLink: 'https://github.com/duuuyyyyyy/Wander.git'
-  },
-  '2': {
-    name: 'J-Zone Motorcycle Parts',
-    purpose: 'Provide a professional, easy-to-manage digital storefront that centralizes product information and connects the motorcycling community to high-quality components across multiple online marketplaces.',
-    features: ['Dynamic Product Catalog', 'Administrative Dashboard', 'Social Commerce Integration', 'Built-in Engagement Tools', 'Search Engine Optimization (SEO)'],
-    technologies: ['WordPress CMS', 'PHP & MySQL', 'Gutenberg / Block Editor', 'Jetpack', 'HTML5/CSS3'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://jzonemotorparts.wordpress.com/',
-    githubLink: 'https://github.com/yourname/task-management'/* N/A */
-  },
-  '3': {
-    name: 'Endless Charms',
-    purpose: 'A sleek and user-centric e-commerce platform that simplifies the discovery and purchase of unique accessories while offering a seamless administrative workflow for inventory management.',
-    features: ['Dynamic Product Catalog', 'Interactive Shopping Cart', 'Customer Account Management', 'Responsive UI/UX', 'Search and Discovery'],
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'Figma', 'Frameworks/Libraries', 'MongoDB', 'GitHub'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://www.endlesscharms.store',
-    githubLink: 'https://github.com/GR4C3FR/Endless-Charms-Jewelries.git'
-  },
-  '4': {
-    name: 'ShareSource',
-    purpose: 'A collaborative open-source platform that enables users to easily upload, categorize, and share valuable digital resources within a community.',
-    features: ['File Upload & Categorization', 'Collaborative Contribution', 'User Authentication', 'Search and Filter', 'Responsive Dashboard'],
-    technologies: ['HTML5', 'CSS3', 'JavaScript', 'MySQL', 'GitHub', 'Bootstrap', 'Node.js'],
-    images: ['Screenshot 1', 'Screenshot 2', 'Screenshot 3'],
-    liveLink: 'https://example-analytics.com', /* N/A */
-    githubLink: 'https://github.com/GR4C3FR/Sharesource.git'
+function renderLinkButton(label, href, secondary = false) {
+  if (!href) {
+    return (
+      <span
+        className={`project-link-btn${secondary ? ' secondary' : ''} is-disabled`}
+        aria-disabled="true"
+      >
+        {label}
+      </span>
+    );
   }
-};
+
+  return (
+    <a
+      href={href}
+      className={`project-link-btn${secondary ? ' secondary' : ''}`}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {label}
+    </a>
+  );
+}
 
 function ProjectModal({ projectId, onClose }) {
-  if (!projectId) return null;
-  const data = projectsData[projectId];
-  if (!data) return null;
+  const closeButtonRef = useRef(null);
+  const [activeScreenshotIndex, setActiveScreenshotIndex] = useState(0);
 
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
+  useEffect(() => {
+    setActiveScreenshotIndex(0);
+  }, [projectId]);
+
+  useEffect(() => {
+    if (!projectId) return;
+    closeButtonRef.current?.focus();
+  }, [projectId]);
+
+  if (!projectId) return null;
+
+  const project = projectsById[projectId];
+  if (!project) return null;
+
+  const activeScreenshot = project.screenshots[activeScreenshotIndex] ?? project.screenshots[0];
+
+  const handleBackdropClick = (event) => {
+    if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
   return (
     <div className="project-modal active" id="project-modal" onClick={handleBackdropClick}>
-      <div className="project-modal-content">
-        <button className="project-modal-close" id="modal-close" onClick={onClose}>×</button>
+      <div
+        className="project-modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-project-name"
+      >
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="project-modal-close"
+          id="modal-close"
+          onClick={onClose}
+          aria-label={`Close ${project.title} details`}
+        >
+          &times;
+        </button>
 
         <div className="project-modal-header">
-          <h2 className="project-modal-title" id="modal-project-name">{data.name}</h2>
-          <p className="project-modal-description" id="modal-project-purpose">{data.purpose}</p>
+          <h2 className="project-modal-title" id="modal-project-name">
+            {project.title}
+          </h2>
+          <div className="project-modal-summary">
+            <p className="project-modal-description" id="modal-project-purpose">
+              {project.description}
+            </p>
+            <p className="project-modal-description">{project.purpose}</p>
+            {project.role ? (
+              <p className="project-modal-description">
+                <strong>Role:</strong> {project.role}
+              </p>
+            ) : null}
+          </div>
         </div>
 
         <div className="project-modal-section" data-section="gallery">
-          <h3 className="project-modal-section-title">Gallery</h3>
+          <h3 className="project-modal-section-title">Screenshots</h3>
+          <div className="project-modal-hero-shot">
+            <img
+              src={activeScreenshot.image}
+              alt={activeScreenshot.alt}
+              className={shouldTrimScreenshotChrome(activeScreenshot.image) ? 'projects-image-trim-right' : ''}
+            />
+          </div>
           <div className="project-gallery" id="modal-gallery">
-            {data.images.map((img, i) => (
-              <div className="project-gallery-item" key={i}>{img}</div>
+            {project.screenshots.map((shot, index) => (
+              <button
+                key={shot.alt}
+                type="button"
+                className={`project-gallery-item${index === activeScreenshotIndex ? ' is-active' : ''}`}
+                onClick={() => setActiveScreenshotIndex(index)}
+                aria-pressed={index === activeScreenshotIndex}
+                aria-label={`Show ${shot.alt}`}
+              >
+                <img
+                  src={shot.image}
+                  alt={shot.alt}
+                  className={shouldTrimScreenshotChrome(shot.image) ? 'projects-image-trim-right' : ''}
+                />
+              </button>
             ))}
           </div>
         </div>
 
         <div className="project-modal-section" data-section="features">
           <h3 className="project-modal-section-title">Features</h3>
-          <ul style={{ listStylePosition: 'inside', color: 'var(--text-secondary)', paddingLeft: 0, listStyleType: 'none' }}>
-            {data.features.map((feature, i) => (
-              <li key={i} style={{ marginBottom: '8px' }}>• {feature}</li>
+          <ul className="project-modal-list">
+            {project.features.map((feature) => (
+              <li key={feature}>{feature}</li>
             ))}
           </ul>
         </div>
 
         <div className="project-modal-section">
-          <h3 className="project-modal-section-title">Technologies & Tools</h3>
+          <h3 className="project-modal-section-title">Technologies &amp; Tools</h3>
           <div className="project-tools" id="modal-tools">
-            {data.technologies.map((tech, i) => (
-              <span className="project-tool-tag" key={i}>{tech}</span>
+            {project.technologies.map((tech) => (
+              <span className="project-tool-tag" key={tech}>
+                {tech}
+              </span>
             ))}
           </div>
         </div>
@@ -90,8 +139,8 @@ function ProjectModal({ projectId, onClose }) {
         <div className="project-modal-section">
           <h3 className="project-modal-section-title">Links</h3>
           <div className="project-links">
-            <a href={data.liveLink} className="project-link-btn" id="modal-live-demo" target="_blank" rel="noopener noreferrer">View Live Demo</a>
-            <a href={data.githubLink} className="project-link-btn secondary" id="modal-github" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+            {renderLinkButton('View Live Demo', project.liveLink)}
+            {renderLinkButton('Source Code', project.sourceLink, true)}
           </div>
         </div>
       </div>
@@ -102,17 +151,33 @@ function ProjectModal({ projectId, onClose }) {
 function useProjectModal() {
   const [activeProject, setActiveProject] = useState(null);
 
+  useEffect(() => {
+    const body = document.body;
+    const documentElement = document.documentElement;
+
+    if (activeProject) {
+      body.classList.add('project-modal-open');
+      documentElement.classList.add('project-modal-open');
+    } else {
+      body.classList.remove('project-modal-open');
+      documentElement.classList.remove('project-modal-open');
+    }
+
+    return () => {
+      body.classList.remove('project-modal-open');
+      documentElement.classList.remove('project-modal-open');
+    };
+  }, [activeProject]);
+
   const openModal = (projectId) => {
     setActiveProject(projectId);
-    document.body.style.overflow = 'hidden';
   };
 
   const closeModal = () => {
     setActiveProject(null);
-    document.body.style.overflow = 'auto';
   };
 
   return { activeProject, openModal, closeModal, ProjectModal };
 }
 
-export { ProjectModal, useProjectModal, projectsData };
+export { ProjectModal, useProjectModal };

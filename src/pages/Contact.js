@@ -82,6 +82,7 @@ function Contact() {
     { label: 'Location', icon: 'fas fa-map-marker-alt', text: 'Arayat, Pampanga', href: 'https://www.google.com/maps/search/?api=1&query=Arayat%2C+Pampanga', external: true },
     { label: 'LinkedIn', icon: 'fab fa-linkedin-in', text: 'linkedin.com/in/carla-joves-832059351/', href: 'https://www.linkedin.com/in/carla-joves-832059351/', external: true },
     { label: 'GitHub', icon: 'fab fa-github', text: 'github.com/duuuyyyyyy', href: 'https://github.com/duuuyyyyyy', external: true },
+    { label: 'Credly', icon: 'fas fa-certificate', text: 'credly.com/users/carla-joves', href: 'https://www.credly.com/users/carla-joves', external: true },
     { label: 'Facebook', icon: 'fab fa-facebook-f', text: 'facebook.com/carla.joves.71', href: 'https://www.facebook.com/carla.joves.71/', external: true }
   ];
   return (
@@ -110,7 +111,7 @@ function Contact() {
             <div className="contact-cta-row">
               <a
                 className="btn btn-primary hero-cta-top"
-                href={process.env.PUBLIC_URL + '/Resume.pdf'}
+                href={process.env.PUBLIC_URL + '/carla-joves-creative-resume.pdf'}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -118,7 +119,7 @@ function Contact() {
               </a>
               <a
                 className="btn btn-secondary"
-                href={process.env.PUBLIC_URL + '/Resume.pdf'}
+                href={process.env.PUBLIC_URL + '/carla-joves-creative-resume.pdf'}
                 download
               >
                 Download PDF
