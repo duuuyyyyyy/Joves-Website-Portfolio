@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
+const SECTION_IDS = ['hero', 'about', 'projects-section', 'blog', 'contact'];
+
 function Header() {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window === 'undefined') return false;
@@ -15,7 +17,6 @@ function Header() {
   const [activeSection, setActiveSection] = useState('hero');
   const navRef = useRef(null);
   const highlightRef = useRef(null);
-  const sectionIds = ['hero', 'about', 'projects-section', 'blog', 'contact'];
 
   useEffect(() => {
     if (isDark) {
@@ -96,7 +97,7 @@ function Header() {
   useEffect(() => {
     const handleSectionTracking = () => {
       let current = 'hero';
-      for (const id of sectionIds) {
+      for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
         if (!el) continue;
         const rect = el.getBoundingClientRect();
