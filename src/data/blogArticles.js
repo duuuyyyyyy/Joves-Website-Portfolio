@@ -16,6 +16,57 @@ const estimateReadingTime = (sections) => {
 
 const rawBlogArticles = [
   {
+    slug: 'my-internship-and-ojt-journey-at-a2k-group',
+    cardLabel: 'Internship',
+    title: 'My Internship and OJT Journey at A2K Group',
+    date: 'November 1, 2026',
+    excerpt: 'A personal reflection on my time as an intern and OJT trainee at A2K Group, and what working on real design tasks taught me.',
+    thumbnailImage: `${process.env.PUBLIC_URL}/carla-joves-a2k-group-internship-ojt-journey.png`,
+    articleImage: `${process.env.PUBLIC_URL}/carla-joves-a2k-group-internship-ojt-journey.png`,
+    articleImageContained: true,
+    tags: ['Internship', 'OJT', 'UI/UX Design', 'Career Growth'],
+    sections: [
+      {
+        id: 'starting-as-an-intern',
+        title: 'Starting as an Intern',
+        blocks: [
+          paragraph('My time at A2K Group came in two parts. I first joined as an intern from April to May 2026, then returned from July to October 2026 to complete my on-the-job training as a UI/UX design intern, finishing 486 hours in total.'),
+          paragraph('My first stretch was a mix of graphic design and UI/UX work in Figma. Until then, most of my design work had come from school projects and student organizations. Working inside a company felt different, because the work was now meant to serve a real purpose beyond a grade or a personal portfolio.')
+        ]
+      },
+      {
+        id: 'moving-into-ojt',
+        title: 'Moving Into On-the-Job Training',
+        blocks: [
+          paragraph('Coming back for my OJT gave me the chance to focus more fully on UI/UX design. Most of that time went into a redesign project in Figma. I am keeping the details of the work private, but the process itself is what stayed with me.'),
+          paragraph('A redesign makes you slow down before you start drawing screens. You have to understand what already exists and what people need from it, then decide what is worth changing. I found that making something look better was only one part of the job. The harder part was being able to explain why each change made sense.')
+        ]
+      },
+      {
+        id: 'what-the-experience-taught-me',
+        title: 'What the Experience Taught Me',
+        blocks: [
+          paragraph('Spending that many hours on real design tasks changed how I look at my own work. These are the habits I want to carry forward:'),
+          list([
+            'Understand the goal before opening Figma.',
+            'Keep layouts, spacing, and components consistent so the design holds together as it grows.',
+            'Be ready to explain design decisions instead of relying on how they look.',
+            'Treat revisions as a normal part of the work, not as a sign of failure.',
+            'Respect confidentiality. Not everything I work on is mine to share publicly.'
+          ])
+        ]
+      },
+      {
+        id: 'where-i-am-headed',
+        title: 'Where I Am Headed',
+        blocks: [
+          paragraph('My internship and OJT at A2K Group strengthened my goal of specializing in UI/UX and front-end development. Since I also build interfaces in code, designing in Figma made me think more about how a screen will actually be built, and that connection between design and development is the space I enjoy most.'),
+          paragraph('I am grateful to A2K Group for the opportunity. I came away with a clearer picture of how I want to work and what I still want to improve, and I am looking forward to applying that to whatever I build next.')
+        ]
+      }
+    ]
+  },
+  {
     slug: 'how-i-built-my-portfolio-website-from-scratch',
     cardLabel: 'Frontend',
     title: 'How I Built My Portfolio Website from Scratch',
@@ -309,54 +360,6 @@ const selectedScreenshotIndex = selectedScreenshots[activeProject.id] ?? 0;`, 'T
           paragraph('The biggest mindset shift for me is that security is not separate from user experience. A trustworthy product validates responsibly, stores sensitive values in the right place, uses HTTPS, and avoids exposing more than it needs to expose. Those are product decisions as much as technical ones.'),
           paragraph('This is also where E-E-A-T becomes useful in a grounded way. Experience means understanding where real mistakes happen. Expertise means knowing how to reduce those risks through implementation. Authority grows when security choices are visible in the structure of the app. Trust is what the user feels when the site behaves responsibly.'),
           paragraph('I am still learning, but that is exactly why I take security basics seriously. Strong habits built early are easier to scale than panic-driven fixes added too late.')
-        ]
-      }
-    ]
-  },
-  {
-    slug: 'lessons-i-learned-from-building-real-projects',
-    cardLabel: 'Growth',
-    title: 'Lessons I Learned from Building Real Projects',
-    date: 'March 6, 2026',
-    excerpt: 'A more personal reflection on mistakes, debugging, documentation, and the habits that helped me improve through real work.',
-    thumbnailImage: `${process.env.PUBLIC_URL}/carla-joves-public-speaking.jpg`,
-    articleImage: `${process.env.PUBLIC_URL}/carla-joves-public-speaking.jpg`,
-    tags: ['Lessons', 'Growth', 'Workflow', 'Developer Journey'],
-    sections: [
-      {
-        id: 'the-mistakes-that-stayed-with-me',
-        title: 'The Mistakes That Stayed With Me',
-        blocks: [
-          paragraph('One of the biggest lessons I learned from real projects is that polish can hide weak thinking. I used to feel relieved once a screen looked finished, but real work kept teaching me that visual completion does not mean structural completion. A feature can look great and still contain duplicated data, awkward state handling, or unclear content that becomes a problem later.'),
-          paragraph('That happened to me more than once while improving this portfolio. Project content appeared in multiple places. Images behaved differently depending on context. Small UI decisions that looked harmless started creating maintenance friction. Those moments were frustrating, but they were also honest. They showed me exactly where my habits still needed to grow.')
-        ]
-      },
-      {
-        id: 'debugging-and-learning-under-pressure',
-        title: 'Debugging and Learning Under Pressure',
-        blocks: [
-          paragraph('The hardest bugs were not dramatic crashes. They were usually mismatches between data, layout, and expectation. Something might look correct in one section but feel inconsistent in another. A modal might work visually while still using the wrong source content. A responsive layout might technically fit while still feeling clumsy.'),
-          paragraph('What helped me most was changing how I debug. I try to trace the problem in order now: data first, layout second, visuals last. That keeps me from wasting time styling around the symptom instead of fixing the source. I also learned to trust slower debugging. Rushing usually created more noise than progress.')
-        ]
-      },
-      {
-        id: 'tools-documentation-and-growth',
-        title: 'Tools, Documentation, and Growth',
-        blocks: [
-          paragraph('Real projects also changed how I think about tools. React, Git, Figma, Netlify functions, and even simple shared data files started making much more sense once they were solving actual problems instead of being isolated concepts. I think that is why project-based learning stays with me more than abstract tutorials.'),
-          code('js', `const projectsById = Object.fromEntries(
-  projects.map((project) => [project.id, project])
-);`, 'Small patterns like this reduced repeated edits and made the content model easier to maintain.'),
-          paragraph('Documentation became more important too. I do not mean formal documentation only. I mean naming things clearly, keeping content centralized, running builds after meaningful changes, and making sure the project tells the truth about itself. Those habits are not flashy, but they reduce confusion and make future work easier.')
-        ]
-      },
-      {
-        id: 'the-advice-i-would-give-now',
-        title: 'The Advice I Would Give Now',
-        blocks: [
-          paragraph('If I were giving advice to someone starting out, I would say this: build real things early, and let those projects expose your weak spots. It is much better to discover where your structure is weak, where your debugging is shaky, or where your communication is vague while working on something real than to stay comfortable in endless preparation.'),
-          paragraph('I would also say: do not wait until you feel fully ready to claim ownership of your work. Real growth happens when you finish imperfect projects, reflect on them honestly, and improve the next version with more care. That is how I have learned the most.'),
-          paragraph('What I appreciate most now is that real projects do not just show what I can build. They show how I respond when something is incomplete, messy, or harder than expected. That response is where a lot of professional growth really happens.')
         ]
       }
     ]

@@ -250,7 +250,7 @@ function Blog() {
           ))}
         </div>
         <div className="blog-article-visual">
-          <img src={activeArticle.articleImage} alt={`${activeArticle.title} preview`} className="blog-article-image" />
+          <img src={activeArticle.articleImage} alt={`${activeArticle.title} preview`} className={`blog-article-image${activeArticle.articleImageContained ? ' is-contained' : ''}`} />
         </div>
         <div className="blog-article-detail-grid">
           <aside className="blog-article-toc">
