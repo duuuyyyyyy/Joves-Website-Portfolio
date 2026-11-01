@@ -102,8 +102,8 @@ const projects = [
         alt: 'Endless Charms engagement rings page preview'
       }
     ],
-    liveLink: 'https://www.endlesscharms.store',
-    sourceLink: 'https://github.com/duuuyyyyyy/Endless-Charms.git'
+    liveLink: null, // Site down: https://www.endlesscharms.store
+    sourceLink: null // Repo returns 404: https://github.com/duuuyyyyyy/Endless-Charms.git
   },
   {
     id: '4',
@@ -172,7 +172,7 @@ const projects = [
         alt: 'AWEB Prelim Badging partners page preview'
       }
     ],
-    liveLink: 'https://695c6b4f7eb47f6e18974585--jovesprelimbadge.netlify.app/',
+    liveLink: null, // Site down: https://695c6b4f7eb47f6e18974585--jovesprelimbadge.netlify.app/
     sourceLink: 'https://github.com/duuuyyyyyy/AWEB-PrelimBadging.git'
   }
 ];

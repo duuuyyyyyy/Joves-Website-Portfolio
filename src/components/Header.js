@@ -17,6 +17,8 @@ function Header() {
   const [activeSection, setActiveSection] = useState('hero');
   const navRef = useRef(null);
   const highlightRef = useRef(null);
+  const navClickLockRef = useRef(false);
+  const navClickTimerRef = useRef(null);
 
   useEffect(() => {
     if (isDark) {
@@ -95,7 +97,19 @@ function Header() {
 
   // Track visible section for nav highlighting
   useEffect(() => {
+    const releaseNavClickLock = () => {
+      navClickLockRef.current = false;
+      window.clearTimeout(navClickTimerRef.current);
+    };
+
     const handleSectionTracking = () => {
+      // While a nav click is smooth-scrolling, keep the clicked item highlighted.
+      if (navClickLockRef.current) {
+        window.clearTimeout(navClickTimerRef.current);
+        navClickTimerRef.current = window.setTimeout(releaseNavClickLock, 200);
+        return;
+      }
+
       let current = 'hero';
       for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
@@ -113,7 +127,12 @@ function Header() {
     handleSectionTracking();
     window.addEventListener('scroll', handleSectionTracking, { passive: true });
     window.addEventListener('resize', handleSectionTracking);
+    window.addEventListener('wheel', releaseNavClickLock, { passive: true });
+    window.addEventListener('touchstart', releaseNavClickLock, { passive: true });
     return () => {
+      releaseNavClickLock();
+      window.removeEventListener('wheel', releaseNavClickLock);
+      window.removeEventListener('touchstart', releaseNavClickLock);
       window.removeEventListener('scroll', handleSectionTracking);
       window.removeEventListener('resize', handleSectionTracking);
     };
@@ -123,6 +142,12 @@ function Header() {
     e.preventDefault();
     const el = document.getElementById(id);
     if (!el) return;
+    setActiveSection(id);
+    navClickLockRef.current = true;
+    window.clearTimeout(navClickTimerRef.current);
+    navClickTimerRef.current = window.setTimeout(() => {
+      navClickLockRef.current = false;
+    }, 400);
     const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
     window.scrollTo({ top: y, behavior: 'smooth' });
     closeMenu();

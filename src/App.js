@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import GlobalBackground from './components/GlobalBackground';
+import ScrollToTopButton from './components/ScrollToTopButton';
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -98,6 +99,7 @@ function App() {
         <Contact />
       </div>
       <Footer />
+      <ScrollToTopButton className="scroll-top-page" />
     </>
   );
 }

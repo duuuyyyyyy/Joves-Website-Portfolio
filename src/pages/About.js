@@ -1,8 +1,34 @@
 import React, { useEffect, useState, useRef } from 'react';
 
+const renderCertDate = (cert) =>
+  cert.issued ? <p className="cert-date">{cert.dateLabel || 'Issued'}: {cert.issued}</p> : null;
+
+const renderCertImage = (cert) => {
+  const image = (
+    <img
+      src={cert.image}
+      alt={`Preview of ${cert.title}`}
+      className={`cert-preview-image ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
+    />
+  );
+
+  if (!cert.link) return image;
+
+  return (
+    <a
+      href={cert.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="cert-image-link"
+      aria-label={`View ${cert.title} credential (opens in a new tab)`}
+    >
+      {image}
+    </a>
+  );
+};
+
 function About() {
   const [activeFilter, setActiveFilter] = useState('technical');
-  const [expandedSkill, setExpandedSkill] = useState(null);
   const [activeCert, setActiveCert] = useState(0);
   const [certSectionVisible, setCertSectionVisible] = useState(false);
   const [flowSectionVisible, setFlowSectionVisible] = useState(false);
@@ -29,7 +55,65 @@ function About() {
 
   const certifications = [
     {
+      title: 'Intermediate Machine Learning',
+      link: 'https://www.kaggle.com/learn/certification/carlajoves/intermediate-machine-learning',
+      issued: 'October 30, 2026',
+      issuedDate: '2026-10-30',
+      kicker: 'Certificate',
+      desc: 'Kaggle course covering missing values, categorical variables, pipelines, cross-validation, XGBoost, and data leakage.',
+      image: process.env.PUBLIC_URL + '/certifications/kaggle-intermediate-machine-learning-certificate.png',
+      fitMode: 'wide'
+    },
+    {
+      title: 'Intro to Machine Learning',
+      link: 'https://www.kaggle.com/learn/certification/carlajoves/intro-to-machine-learning',
+      issued: 'October 29, 2026',
+      issuedDate: '2026-10-29',
+      kicker: 'Certificate',
+      desc: 'Kaggle course covering core machine learning concepts, including decision trees, random forests, model validation, and underfitting and overfitting.',
+      image: process.env.PUBLIC_URL + '/certifications/kaggle-intro-to-machine-learning-certificate.png',
+      fitMode: 'wide'
+    },
+    {
+      title: 'Introduction to Modern AI',
+      link: 'https://www.credly.com/badges/6bc6c434-b129-421a-ad3c-3bc4d2f2c4da/public_url',
+      issued: 'October 30, 2026',
+      issuedDate: '2026-10-30',
+      kicker: 'Certificate',
+      desc: 'Cisco Networking Academy course covering foundational concepts in modern artificial intelligence.',
+      image: process.env.PUBLIC_URL + '/certifications/cisco-introduction-to-modern-ai-certificate.png',
+      fitMode: 'wide'
+    },
+    {
+      title: 'Website UI/UX Designing using ChatGPT',
+      link: 'https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIzMjM3IiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvODg2NzE2M184MDAyMjA1MTc1NjMwNTc0ODI1Mi5wbmciLCJ1c2VybmFtZSI6IkNhcmxhIEQuIEpvdmVzIn0%3D',
+      issued: 'August 27, 2025',
+      issuedDate: '2025-08-27',
+      kicker: 'Certificate',
+      desc: 'Simplilearn SkillUp course on using ChatGPT to support website UI/UX design work.',
+      image: process.env.PUBLIC_URL + '/certifications/website-ui-ux-designing-using-chatgpt-certificate.png'
+    },
+    {
+      title: 'A2K Group Corporation Internship (486 Hours)',
+      issued: 'July 13, 2026 - October 7, 2026',
+      issuedDate: '2026-10-07',
+      dateLabel: 'Duration',
+      kicker: 'Internship',
+      desc: 'Certificate of internship awarded by A2K Group Corporation for completing a 486-hour internship.',
+      image: process.env.PUBLIC_URL + '/certifications/a2k-group-internship-certificate-july-october-2026.jpg'
+    },
+    {
+      title: 'A2K Group Corporation Internship (April - May 2026)',
+      issued: 'April 6, 2026 - May 27, 2026',
+      issuedDate: '2026-05-27',
+      dateLabel: 'Duration',
+      kicker: 'Internship',
+      desc: 'Certificate of internship awarded by A2K Group Corporation for completing an internship with the company.',
+      image: process.env.PUBLIC_URL + '/certifications/a2k-group-internship-certificate-april-may-2026.jpg'
+    },
+    {
       title: 'Back End Development and APIs Certification',
+      link: 'https://www.freecodecamp.org/certification/jovescarla/back-end-development-and-apis',
       issued: 'October 4, 2025',
       issuedDate: '2025-10-04',
       kicker: 'Certificate',
@@ -38,16 +122,18 @@ function About() {
       fitMode: 'wide'
     },
     {
-      title: 'CCNA: Introduction to Networks Badge',
+      title: 'CCNA: Introduction to Networks',
+      link: 'https://www.credly.com/badges/b8d44ce5-153a-4ad3-b970-f96ecc701bf6/public_url',
       issued: 'May 16, 2025',
       issuedDate: '2025-05-16',
-      kicker: 'Badge',
+      kicker: 'Certificate',
       desc: 'Networking credential covering core concepts such as network models, addressing, routing basics, and foundational infrastructure knowledge.',
-      image: process.env.PUBLIC_URL + '/certifications/ccna-introduction-to-networks-badge.png',
-      fitMode: 'badge'
+      image: process.env.PUBLIC_URL + '/certifications/cisco-ccna-introduction-to-networks-certificate.png',
+      fitMode: 'wide'
     },
     {
       title: 'AWS Cloud Foundation Certificate of Completion',
+      link: 'https://www.credly.com/badges/8b296f11-83de-401e-9540-ab9bfa68a170/public_url',
       issued: 'March 13, 2026',
       issuedDate: '2026-03-13',
       kicker: 'Certificate',
@@ -57,6 +143,7 @@ function About() {
     },
     {
       title: 'CompTIA IT Fundamentals (ITF+) Certification',
+      link: 'https://www.credly.com/badges/4325336d-8e50-4c62-885e-5d2504f88a68/public_url',
       issued: 'November 23, 2023',
       issuedDate: '2023-11-23',
       kicker: 'Badge',
@@ -81,22 +168,6 @@ function About() {
       image: process.env.PUBLIC_URL + '/certifications/design-thinking-certification-of-completion.png'
     },
     {
-      title: 'Digital Advertising Certification',
-      issued: 'September 28, 2025',
-      issuedDate: '2025-09-28',
-      kicker: 'Certificate',
-      desc: 'Credential focused on campaign execution, ad strategy, platform fundamentals, and conversion-oriented promotion.',
-      image: process.env.PUBLIC_URL + '/certifications/digital-advertising-certification.png'
-    },
-    {
-      title: 'Digital Marketing Certification',
-      issued: 'July 28, 2025',
-      issuedDate: '2025-07-28',
-      kicker: 'Certificate',
-      desc: 'Broad marketing certification covering digital channels, audience acquisition, campaign measurement, and online growth strategy.',
-      image: process.env.PUBLIC_URL + '/certifications/digital-marketing-certification.png'
-    },
-    {
       title: 'Introduction to Figma Certificate of Completion',
       issued: 'September 19 2024',
       issuedDate: '2024-09-19',
@@ -105,16 +176,18 @@ function About() {
       image: process.env.PUBLIC_URL + '/certifications/introduction-to-figma-certificate-of-completion.png'
     },
     {
-      title: 'JavaScript Essentials Badge',
+      title: 'JavaScript Essentials 1',
+      link: 'https://www.credly.com/badges/5b55c3d9-28d0-4fdc-a8bf-1d7b2b44755a/public_url',
       issued: 'October 25, 2024',
       issuedDate: '2024-10-25',
-      kicker: 'Badge',
-      desc: 'Badge validating JavaScript fundamentals, syntax, logic, and practical programming foundations.',
-      image: process.env.PUBLIC_URL + '/certifications/javascript-essentials-badge.png',
-      fitMode: 'badge'
+      kicker: 'Certificate',
+      desc: 'Cisco Networking Academy course covering JavaScript fundamentals, syntax, logic, and practical programming foundations.',
+      image: process.env.PUBLIC_URL + '/certifications/cisco-javascript-essentials-1-certificate.png',
+      fitMode: 'wide'
     },
     {
       title: 'Legacy JavaScript Algorithms and Data Structures Certification',
+      link: 'https://www.freecodecamp.org/certification/jovescarla/javascript-algorithms-and-data-structures',
       issued: 'October 2, 2025',
       issuedDate: '2025-10-02',
       kicker: 'Certificate',
@@ -124,6 +197,7 @@ function About() {
     },
     {
       title: 'Responsive Web Design Certification',
+      link: 'https://www.freecodecamp.org/certification/carlajoves/responsive-web-design',
       issued: 'September 8, 2024',
       issuedDate: '2024-09-08',
       kicker: 'Certificate',
@@ -133,6 +207,7 @@ function About() {
     },
     {
       title: 'SEO II Certified',
+      link: 'https://app-na2.hubspot.com/academy/achievements/m1dvwbfn/en/1/carla-joves/seo-ii',
       issued: 'February 9, 2026',
       issuedDate: '2026-02-09',
       kicker: 'Certificate',
@@ -141,13 +216,14 @@ function About() {
     },
     {
       title: 'SEO Certification',
+      link: 'https://app-na2.hubspot.com/academy/achievements/wch2nddl/en/1/carla-joves/seo',
       issued: 'January 7, 2026',
       issuedDate: '2026-01-07',
       kicker: 'Certificate',
       desc: 'Credential focused on search engine optimization fundamentals, on-page improvements, keyword strategy, and ranking best practices.',
       image: process.env.PUBLIC_URL + '/certifications/seo-certification.png'
     }
-  ].sort((a, b) => new Date(b.issuedDate) - new Date(a.issuedDate));
+  ].sort((a, b) => new Date(b.issuedDate || 0) - new Date(a.issuedDate || 0));
 
   const flowLines = Array.from({ length: 46 }, (_, i) => i);
   const flowPills = [
@@ -204,6 +280,7 @@ function About() {
   };
 
   const handleCertKeyDown = (e, index) => {
+    if (e.target !== e.currentTarget) return;
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleCertClick(index);
@@ -272,19 +349,13 @@ function About() {
               <div className="skills-nav">
                 <button
                   className={`nav-btn ${activeFilter === 'technical' ? 'active' : ''}`}
-                  onClick={() => {
-                    setActiveFilter('technical');
-                    setExpandedSkill(null);
-                  }}
+                  onClick={() => setActiveFilter('technical')}
                 >
                   Technical Skills
                 </button>
                 <button
                   className={`nav-btn ${activeFilter === 'soft' ? 'active' : ''}`}
-                  onClick={() => {
-                    setActiveFilter('soft');
-                    setExpandedSkill(null);
-                  }}
+                  onClick={() => setActiveFilter('soft')}
                 >
                   Soft Skills
                 </button>
@@ -298,25 +369,19 @@ function About() {
             </div>
 
             <div className="skills-list-container">
-              {displayedSkills.map((skill, index) => {
-                const isActive = expandedSkill?.title === skill.title;
-                return (
-                  <div key={`${activeFilter}-${index}`} className={`skill-dropdown ${isActive ? 'open' : ''}`}>
-                    <button
-                      type="button"
-                      className={`skill-item-row skill-item-btn ${isActive ? 'active' : ''}`}
-                      style={{ animationDelay: `${index * 0.1}s` }}
-                      onClick={() => setExpandedSkill(isActive ? null : skill)}
-                    >
-                      <i className={`${skill.icon}`}></i>
-                      <span>{skill.title}</span>
-                    </button>
-                    <div className="skill-inline-details" role="region" aria-live="polite">
-                      <div className="skill-detail-text">{skill.details}</div>
-                    </div>
+              {displayedSkills.map((skill, index) => (
+                <div
+                  key={`${activeFilter}-${index}`}
+                  className="skill-item-row"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <i className={skill.icon} aria-hidden="true"></i>
+                  <div className="skill-item-copy">
+                    <span>{skill.title}</span>
+                    <p className="skill-detail-text">{skill.details}</p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -331,9 +396,9 @@ function About() {
                     const isActive = activeCert === index;
 
                     return (
-                      <button
+                      <div
                         key={cert.title}
-                        type="button"
+                        tabIndex={0}
                         className={`cert-sidebar-item ${isActive ? 'active' : ''}`}
                         onClick={() => handleCertClick(index)}
                         onMouseEnter={() => handleCertClick(index)}
@@ -354,33 +419,28 @@ function About() {
                           <h3>{cert.title}</h3>
                         </div>
                         <div className="cert-mobile-details">
-                          <p className="cert-date">Issued: {cert.issued}</p>
+                          {renderCertDate(cert)}
                           <p>{cert.desc}</p>
-                          <div className="cert-mobile-frame">
-                            <img
-                              src={cert.image}
-                              alt={`Preview of ${cert.title}`}
-                              className={`cert-preview-image ${cert.fitMode ? `fit-${cert.fitMode}` : ''}`}
-                            />
-                          </div>
+                          <div className="cert-mobile-frame">{renderCertImage(cert)}</div>
                         </div>
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
                 <aside className="cert-preview-panel">
-                  <div className="cert-preview-copy">
-                    <p className="cert-date">Issued: {currentCert.issued}</p>
-                    <h3>{currentCert.title}</h3>
-                    <p>{currentCert.desc}</p>
+                  <div className="cert-preview-copy-stack">
+                    {certifications.map((cert) => (
+                      <div
+                        key={cert.title}
+                        className={`cert-preview-copy${cert === currentCert ? ' is-current' : ''}`}
+                      >
+                        {renderCertDate(cert)}
+                        <h3>{cert.title}</h3>
+                        <p>{cert.desc}</p>
+                      </div>
+                    ))}
                   </div>
-                  <div className="cert-preview-frame">
-                    <img
-                      src={currentCert.image}
-                      alt={`Preview of ${currentCert.title}`}
-                      className={`cert-preview-image ${currentCert.fitMode ? `fit-${currentCert.fitMode}` : ''}`}
-                    />
-                  </div>
+                  <div className="cert-preview-frame">{renderCertImage(currentCert)}</div>
                 </aside>
               </div>
             </section>

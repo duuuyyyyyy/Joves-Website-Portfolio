@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { blogArticles } from '../data/blogArticles';
+import ScrollToTopButton from '../components/ScrollToTopButton';
 
 function Blog() {
   const [activeArticle, setActiveArticle] = useState(null);
@@ -276,6 +277,9 @@ function Blog() {
               </section>
             ))}
           </div>
+        </div>
+        <div className="scroll-top-modal-anchor">
+          <ScrollToTopButton scrollRef={modalContentRef} label="Scroll to top of article" />
         </div>
       </div>
     </div>

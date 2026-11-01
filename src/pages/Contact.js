@@ -77,8 +77,8 @@ function Contact() {
   }, [formData]);
 
   const contactCards = [
-    { label: 'Phone', icon: 'fas fa-phone', text: '+63 998 446 8639', href: 'tel:+639984468639' },
-    { label: 'Email', icon: 'fas fa-envelope', text: 'carlajoves23@gmail.com', href: 'https://mail.google.com/mail/?view=cm&fs=1&to=carlajoves23@gmail.com', external: true },
+    { label: 'Phone', icon: 'fas fa-phone', text: '+63 998 448 8639', href: 'tel:+639984488639' },
+    { label: 'Email', icon: 'fas fa-envelope', text: 'carlajoves23@gmail.com', href: 'mailto:carlajoves23@gmail.com' },
     { label: 'Location', icon: 'fas fa-map-marker-alt', text: 'Arayat, Pampanga', href: 'https://www.google.com/maps/search/?api=1&query=Arayat%2C+Pampanga', external: true },
     { label: 'LinkedIn', icon: 'fab fa-linkedin-in', text: 'linkedin.com/in/carla-joves-832059351/', href: 'https://www.linkedin.com/in/carla-joves-832059351/', external: true },
     { label: 'GitHub', icon: 'fab fa-github', text: 'github.com/duuuyyyyyy', href: 'https://github.com/duuuyyyyyy', external: true },
