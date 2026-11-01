@@ -38,7 +38,7 @@ function About() {
   const flowSectionRef = useRef(null);
 
   const technicalSkills = [
-    { title: 'Frontend Development', details: 'HTML, CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
+    { title: 'Frontend Development', details: 'HTML, CSS, Tailwind CSS, JavaScript, React.js', icon: 'fas fa-code', category: 'technical' },
     { title: 'Design & UI', details: 'Responsive Web Design, UI/UX Implementation', icon: 'fas fa-paint-brush', category: 'technical' },
     { title: 'Backend Development', details: 'Node.js, Express.js, RESTful API Development', icon: 'fas fa-server', category: 'technical' },
     { title: 'Database Management', details: 'MongoDB, Mongoose, Database Design and Management', icon: 'fas fa-database', category: 'technical' },
